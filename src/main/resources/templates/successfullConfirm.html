@@ -3,28 +3,15 @@
 
 <head>
         <title>MBox verify</title>
-        <style>
-        input {
-            float: right;
-            margin-top: 17%;
-            margin-right: 16%;
-            width: 139px;
-        }
-
-        h1 {
-            margin: 10%;
-            color: green;
-
-        }
-    </style>
+        <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
 </head>
 
 <body>
 
-        <h1>Your account has been verified! </h1>
-        <h1>Please continue to the login form </h1>
+        <h1 class="confirmationH1">Your account has been verified! </h1>
+        <h1 class="confirmationH1">Please continue to the login form </h1>
 
-        <input type="button" onclick="redirect()" value="Log in">
+        <input type="button" onclick="redirect()" value="Log in" class="confirmationInput">
 
 
         <script th:inline="javascript">

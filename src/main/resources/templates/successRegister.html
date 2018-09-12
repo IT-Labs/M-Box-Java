@@ -5,28 +5,15 @@
 
 
     <title>MBox</title>
-    <style>
-        input {
-            float: right;
-            margin-top: 17%;
-            margin-right: 16%;
-            width: 139px;
-        }
-
-        h1 {
-            margin: 10%;
-            color: green;
-
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
 
 </head>
 <body>
 
 
-<h1>Verification mail has been sent please follow the instructions to finish registration </h1>
+<h1 class="confirmationH1">Verification mail has been sent please follow the instructions to finish registration </h1>
 
-<input type="button" onclick="redirect()" value="Finish">
+<input type="button" onclick="redirect()" value="Finish" class="confirmationInput">
 
 
 

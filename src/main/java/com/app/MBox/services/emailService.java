@@ -1,6 +1,7 @@
 package com.app.MBox.services;
 
 import com.app.MBox.aditional.properties;
+import com.app.MBox.dto.sendEmailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class emailService {
     @Autowired
     private configurationServiceImpl configurationServiceImpl;
 
-    void sendMail(String fromUserFullName, String toEmail, String subject, String body) {
+    void sendMail(sendEmailDto sendEmail) {
         try {
             Properties props = System.getProperties();
             props.put("mail.transport.protocol", "smtp");
@@ -42,10 +43,10 @@ public class emailService {
             Session session = Session.getDefaultInstance(props);
 
             MimeMessage msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(configurationServiceImpl.findByKey(properties.getFromUserEmail()).getValue(), fromUserFullName));
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-            msg.setSubject(subject);
-            msg.setContent(body, "text/html");
+            msg.setFrom(new InternetAddress(configurationServiceImpl.findByKey(properties.getFromUserEmail()).getValue(), sendEmail.getFromUserFullName()));
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(sendEmail.getToEmail()));
+            msg.setSubject(sendEmail.getSubject());
+            msg.setContent(sendEmail.getBody(), "text/html");
 
             Transport transport = session.getTransport();
             transport.connect(configurationServiceImpl.findByKey(properties.getSmtpServerHost()).getValue(),configurationServiceImpl.findByKey(properties.getSmtpUserName()).getValue(),configurationServiceImpl.findByKey(properties.getSmtpUserPassword()).getValue());

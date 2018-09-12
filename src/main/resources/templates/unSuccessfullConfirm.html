@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Account confirm page</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/css/errorRegister.css}">
 </head>
 <body>
 
-    <h1>Your link has expired!</h1>
-    <h1>Please register again!</h1>
+    <h1 class="errorH1">Your link has expired!</h1>
+    <h1 class="errorH1">Please register again!</h1>
 
-    <input type="button" onclick="redirect()" value="Register">
+    <input type="button" onclick="redirect()" value="Register" class="errorInput">
 
 
     <script th:inline="javascript">

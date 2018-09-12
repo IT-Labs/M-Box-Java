@@ -87,9 +87,24 @@ public class adminController  {
         }
 
     @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    @ResponseBody
     public String processDeleteRecordLabelGet(@RequestParam("email") String email) {
         recordLabelServiceImpl.deleteRecordLabel(email);
         return "OK";
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    @ResponseBody
+    public List<recordLabelDto> processSearch(@RequestParam String searchParam) {
+        List<recordLabelDto> recordLabels=new LinkedList<>();
+           if(!searchParam.equals("")) {
+               recordLabels = userServiceImpl.search(searchParam);
+               return recordLabels;
+           }    else {
+               return null;
+           }
+
+
     }
 
 

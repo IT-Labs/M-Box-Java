@@ -5,22 +5,11 @@
     <title>MBox</title>
     <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script th:src="@{jquery/jquery.min.js}"></script>
-    <script th:src="@{bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/js/joinIfInvitedValidation.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-
-        .error {
-            color:red;
-        }
-
-        .star {
-            float: right;
-            margin-right: -3%;
-            margin-top: -10%;
-             }
-
-    </style>
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
 </head>
 <body>
 
@@ -76,46 +65,6 @@
 
     </div>
 </div>
-
-
-<script th:inline="javascript">
-
-/*<![CDATA[*/
-var serverContext = [[@{/}]];
-$(document).ready(function () {
-	$('form').submit(function(event) {
-	$("#errorPassword").show().html("");
-	 $("#errorConfirmPassword").show().html("");
-		       if (checkPwd($("#password").val())==0) {
-        $("#errorPassword").show().html("Your password must contain least 8 characters and be alphanumeric");
-    	event.preventDefault();
-    	return;
-    }
-
-    if($("#password").val() != $("#signup-password-confirm").val()){
-    	$("#errorConfirmPassword").show().html("passwords does not match");
-    	event.preventDefault();
-    	return;
-    }
-
-	})
-    function checkPwd(str) {
-    if (str.length < 8) {
-        return 0;
-    } else if (str.length > 50) {
-        return 0;
-    } else if (str.search(/[a-zA-Z]/) == -1) {
-       return 0;
-    } else if (str.search(/\d/) == -1 && str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) == -1) {
-        return 0;
-    }
-     return 1;
-}
-	})
-
-/*]]>*/
-
-</script>
 
 </body>
 </html>

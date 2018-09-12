@@ -5,6 +5,8 @@ import com.app.MBox.aditional.properties;
 import com.app.MBox.aditional.rolesEnum;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.recordLabelRepository;
+import com.app.MBox.dto.emailBodyDto;
+import com.app.MBox.dto.sendEmailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,15 +58,20 @@ public class recordLabelServiceImpl implements recordLabelService {
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
 
         String appUrl=String.format("%s://%s%sjoinIfInvited?token=%s",request.getScheme(),request.getServerName(),properties.getPORT(),verificationToken.getToken()); //part :8080 wont be needed in stage
-        List<String> list=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
-        emailService.sendMail(user.getName(),user.getEmail(),list.get(1),list.get(0));
+        emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
+        sendEmailDto sendEmail=new sendEmailDto();
+        sendEmail.setBody(emailBodyDto.getBody());
+        sendEmail.setSubject(emailBodyDto.getSubject());
+        sendEmail.setFromUserFullName(user.getName());
+        sendEmail.setToEmail(user.getEmail());
+        emailService.sendMail(sendEmail);
 
         return recordLabel;
     }
 
 
     public users createUser(String name,String email) {
-        // create new user and add role
+        // create new authenticatedUser and add role
         users user=new users();
         user.setEmail(email);
         user.setName(name);
@@ -95,18 +102,27 @@ public class recordLabelServiceImpl implements recordLabelService {
             artist.setDeleted(true);
             emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteArtistMail.toString());
             String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-            emailService.sendMail("MBox",artist.getUser().getEmail(),emailTemplate.getSubject(),body);
+            sendEmailDto sendEmail=new sendEmailDto();
+            sendEmail.setBody(body);
+            sendEmail.setSubject(emailTemplate.getSubject());
+            sendEmail.setFromUserFullName(user.getName());
+            sendEmail.setToEmail(user.getEmail());
+            emailService.sendMail(sendEmail);
             artistServiceImpl.save(artist);
         }
         emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteRecordLabelMail.toString());
         String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-        emailService.sendMail("MBox",user.getEmail(),emailTemplate.getSubject(),body);
+        sendEmailDto sendEmail=new sendEmailDto();
+        sendEmail.setBody(body);
+        sendEmail.setSubject(emailTemplate.getSubject());
+        sendEmail.setFromUserFullName(user.getName());
+        sendEmail.setToEmail(user.getEmail());
+        emailService.sendMail(sendEmail);
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
             }
         recordLabelRepository.delete(recordLabel);
 
-        // Null exception because the record labels are not created by the rules meaning directly in the database
     }
 }

@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 @Controller
 public class registerController {
 
@@ -46,21 +45,30 @@ public class registerController {
         users registered = new users();
 
         if (!result.hasErrors()) {
+                try {
                     registered = userServiceImpl.registerNewUserAccount(accountDto, request);
+                    return new ModelAndView("success", "user", accountDto);
+                }
+                catch (Exception e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                    return new ModelAndView("registration", "user", accountDto);
+                }
 
         }
-        if (registered == null) {
-            result.rejectValue("email", "message.regError");
-        }
 
-        if (result.hasErrors()) {
+        return new ModelAndView("registration", "user", accountDto);
+//        if (registered == null) {
+//            result.rejectValue("email", "message.regError");
+//        }
 
-            return new ModelAndView("registration", "user", accountDto);
-
-        }
-        else {
-            return new ModelAndView("success", "user", accountDto);
-        }
+//        if (result.hasErrors()) {
+//
+//            return new ModelAndView("registration", "user", accountDto);
+//
+//        }
+//        else {
+//            return new ModelAndView("success", "user", accountDto);
+//        }
 
     }
 

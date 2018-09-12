@@ -1,0 +1,24 @@
+ .error {
+        color:red;
+        display: inline-block;
+        margin-left: 28%
+        }
+
+ .star {
+        float: right;
+        margin-right: -3%;
+        margin-top: -10%;
+        }
+
+
+  .confirmationInput {
+             float: right;
+             margin-top: 17%;
+             margin-right: 16%;
+             width: 139px;
+         }
+
+ .confirmationH1 {
+             margin: 10%;
+             color: green;
+         }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service("verificationTokenServiceImpl")
 public class verificationTokenServiceImpl implements verificationTokenService {
 
-    private static int EXPIRETIME=24*3600*1000;
+    private static int EXPIRE_TIME=24*3600*1000;
 
     @Autowired
     private verificationTokenRepository verificationTokenRepository ;
@@ -57,7 +57,7 @@ public class verificationTokenServiceImpl implements verificationTokenService {
         users user=verificationToken.getUser();
         Date today=new Date();
         Date dateCreated=verificationToken.getDateCreated();
-        Date newDate=new Date(dateCreated.getTime()+EXPIRETIME);
+        Date newDate=new Date(dateCreated.getTime()+EXPIRE_TIME);
 
         if(today.compareTo(newDate)<=0) {
             user.setActivated(true);
@@ -94,7 +94,7 @@ public class verificationTokenServiceImpl implements verificationTokenService {
 
     public boolean checkIfExpiredDate(Date dateCreated) {
         Date today = new Date();
-        Date expirationDate = new Date(dateCreated.getTime() + EXPIRETIME);
+        Date expirationDate = new Date(dateCreated.getTime() + EXPIRE_TIME);
 
         if (today.compareTo(expirationDate) <= 0) {
             return false;
