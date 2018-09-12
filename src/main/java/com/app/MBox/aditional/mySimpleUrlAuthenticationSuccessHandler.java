@@ -51,7 +51,7 @@ public class mySimpleUrlAuthenticationSuccessHandler
             } else if (grantedAuthority.getAuthority().equals("ADMIN")) {
                 isAdmin = true;
                 break;
-            }   else if (grantedAuthority.getAuthority().equals("RECODLABEL")) {
+            }   else if (grantedAuthority.getAuthority().equals("RECORDLABEL")) {
                 isRecordLabel=true;
                 break;
             }   else if (grantedAuthority.getAuthority().equals("ARTIST")) {
@@ -65,7 +65,7 @@ public class mySimpleUrlAuthenticationSuccessHandler
         } else if (isAdmin) {
             return "/admin/dashboard";
         }   else if (isRecordLabel) {
-            return "/recordLabelAccount";
+            return "/recordLabelDashboard";
         }   else if (isArtist) {
             return "/artistAccount";
         }

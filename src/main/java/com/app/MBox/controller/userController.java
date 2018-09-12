@@ -105,5 +105,13 @@ public class userController {
     }
 
 
+    @RequestMapping(value = "/recordLabelDashboard" , method = RequestMethod.GET)
+    public ModelAndView showAdminDashboard(Model model) {
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("recordLabelDashboard");
+        return modelAndView;
+    }
+
+
 
 }
