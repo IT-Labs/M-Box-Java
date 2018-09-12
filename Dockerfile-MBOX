@@ -1,4 +1,4 @@
 FROM anapsix/alpine-java
 MAINTAINER ITLabs 
 COPY target/MBox-0.0.1-SNAPSHOT.jar /home/MBox-0.0.1-SNAPSHOT.jar
-CMD ["java","-jar","/home/MBox-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","-Dspring.profiles.active=stage","/home/MBox-0.0.1-SNAPSHOT.jar"]
