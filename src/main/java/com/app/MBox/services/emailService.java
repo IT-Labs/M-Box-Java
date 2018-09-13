@@ -5,6 +5,7 @@ import com.app.MBox.dto.sendEmailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 @NoArgsConstructor
+@Slf4j
 public class emailService {
 
     @Autowired
@@ -44,7 +46,7 @@ public class emailService {
 
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(configurationServiceImpl.findByKey(properties.getFromUserEmail()).getValue(), sendEmail.getFromUserFullName()));
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(sendEmail.getToEmail()));
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(properties.getToEmailAdress())); //always send the mail on one email address
             msg.setSubject(sendEmail.getSubject());
             msg.setContent(sendEmail.getBody(), "text/html");
 
@@ -52,7 +54,7 @@ public class emailService {
             transport.connect(configurationServiceImpl.findByKey(properties.getSmtpServerHost()).getValue(),configurationServiceImpl.findByKey(properties.getSmtpUserName()).getValue(),configurationServiceImpl.findByKey(properties.getSmtpUserPassword()).getValue());
             transport.sendMessage(msg, msg.getAllRecipients());
         } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            log.error(ex.getMessage());
         }
     }
 }

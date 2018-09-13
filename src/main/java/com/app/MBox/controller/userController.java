@@ -4,6 +4,7 @@ package com.app.MBox.controller;
 import com.app.MBox.aditional.passwordChecker;
 import com.app.MBox.aditional.properties;
 import com.app.MBox.core.model.users;
+import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.changePasswordDto;
 import com.app.MBox.dto.userDto;
 import com.app.MBox.services.recordLabelServiceImpl;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -108,6 +110,8 @@ public class userController {
     @RequestMapping(value = "/recordLabelDashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
         ModelAndView modelAndView=new ModelAndView();
+        List<artistDto> artists=userServiceImpl.findArtists();
+        model.addAttribute("artists",artists);
         modelAndView.setViewName("recordLabelDashboard");
         return modelAndView;
     }

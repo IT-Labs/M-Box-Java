@@ -1,9 +1,11 @@
 package com.app.MBox.controller;
 
+import com.app.MBox.aditional.emailAlreadyExistsException;
 import com.app.MBox.dto.userDto;
 import com.app.MBox.core.model.*;
 import com.app.MBox.services.userServiceImpl;
 import com.app.MBox.services.verificationTokenServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Controller
+@Slf4j
 public class registerController {
 
     @Autowired
@@ -49,26 +52,14 @@ public class registerController {
                     registered = userServiceImpl.registerNewUserAccount(accountDto, request);
                     return new ModelAndView("success", "user", accountDto);
                 }
-                catch (Exception e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                catch (emailAlreadyExistsException e) {
+                    log.error(e.getMessage());
                     return new ModelAndView("registration", "user", accountDto);
                 }
 
         }
 
         return new ModelAndView("registration", "user", accountDto);
-//        if (registered == null) {
-//            result.rejectValue("email", "message.regError");
-//        }
-
-//        if (result.hasErrors()) {
-//
-//            return new ModelAndView("registration", "user", accountDto);
-//
-//        }
-//        else {
-//            return new ModelAndView("success", "user", accountDto);
-//        }
 
     }
 
