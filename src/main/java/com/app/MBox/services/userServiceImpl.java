@@ -1,9 +1,7 @@
 package com.app.MBox.services;
 
 
-import com.app.MBox.aditional.emailAlreadyExistsException;
-import com.app.MBox.aditional.emailTemplateEnum;
-import com.app.MBox.aditional.properties;
+import com.app.MBox.aditional.*;
 import com.app.MBox.dto.*;
 import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.app.MBox.core.repository.userRepository;
-import com.app.MBox.aditional.rolesEnum;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private artistServiceImpl artistServiceImpl;
     @Autowired
-    private Environment environment;
+    private springProfileCheck springProfileCheck;
 
     public users findByEmail(String email) {
 
@@ -134,8 +132,7 @@ public class userServiceImpl implements userService {
         String newBody1=newBody.replace(properties.getEMAILADRESS(),user.getEmail());
         String body=newBody1.replace(properties.getAPPURL(),appUrl);
         emailBodyDto emailBodyDto=new emailBodyDto();
-        String [] profiles=environment.getActiveProfiles();
-        if(profiles.length>0 && profiles[0].equals("production")) {
+        if(springProfileCheck.isProductionProfile()) {
             emailBodyDto.setBody(body);
         }   else {
             String qaDevBody=String.format("%s <h1> Sent from email %s </h1>",body,user.getEmail());

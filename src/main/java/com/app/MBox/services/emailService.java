@@ -1,6 +1,7 @@
 package com.app.MBox.services;
 
 import com.app.MBox.aditional.properties;
+import com.app.MBox.aditional.springProfileCheck;
 import com.app.MBox.dto.sendEmailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +37,7 @@ public class emailService {
     private configurationServiceImpl configurationServiceImpl;
 
     @Autowired
-    private Environment environment;
+    private springProfileCheck springProfileCheck;
 
     void sendMail(sendEmailDto sendEmail) {
         try {
@@ -50,8 +51,7 @@ public class emailService {
 
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(configurationServiceImpl.findByKey(properties.getFromUserEmail()).getValue(), sendEmail.getFromUserFullName()));
-            String [] profiles=environment.getActiveProfiles();
-                if(profiles.length>0 && profiles[0].equals("production")) {
+                if(springProfileCheck.isProductionProfile()) {
                     msg.setRecipient(Message.RecipientType.TO, new InternetAddress(sendEmail.getToEmail()));
                 }   else {
                     msg.setRecipient(Message.RecipientType.TO, new InternetAddress(properties.getToEmailAdress()));
