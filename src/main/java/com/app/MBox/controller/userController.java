@@ -1,6 +1,7 @@
 package com.app.MBox.controller;
 
 
+import com.app.MBox.aditional.authenticatedUser;
 import com.app.MBox.aditional.passwordChecker;
 import com.app.MBox.aditional.properties;
 import com.app.MBox.core.model.users;
@@ -110,7 +111,8 @@ public class userController {
     @RequestMapping(value = "/recordLabelDashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
         ModelAndView modelAndView=new ModelAndView();
-        List<artistDto> artists=userServiceImpl.findArtists();
+        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId());
         model.addAttribute("artists",artists);
         modelAndView.setViewName("recordLabelDashboard");
         return modelAndView;

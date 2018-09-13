@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -34,6 +35,9 @@ public class emailService {
     @Autowired
     private configurationServiceImpl configurationServiceImpl;
 
+    @Autowired
+    private Environment environment;
+
     void sendMail(sendEmailDto sendEmail) {
         try {
             Properties props = System.getProperties();
@@ -46,7 +50,12 @@ public class emailService {
 
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(configurationServiceImpl.findByKey(properties.getFromUserEmail()).getValue(), sendEmail.getFromUserFullName()));
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(properties.getToEmailAdress())); //always send the mail on one email address
+            String [] profiles=environment.getActiveProfiles();
+                if(profiles.length>0 && profiles[0].equals("production")) {
+                    msg.setRecipient(Message.RecipientType.TO, new InternetAddress(sendEmail.getToEmail()));
+                }   else {
+                    msg.setRecipient(Message.RecipientType.TO, new InternetAddress(properties.getToEmailAdress()));
+                }
             msg.setSubject(sendEmail.getSubject());
             msg.setContent(sendEmail.getBody(), "text/html");
 

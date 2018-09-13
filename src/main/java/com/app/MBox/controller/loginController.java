@@ -2,15 +2,10 @@ package com.app.MBox.controller;
 
 import com.app.MBox.aditional.passwordChecker;
 import com.app.MBox.aditional.properties;
-import com.app.MBox.aditional.rolesEnum;
-import com.app.MBox.core.model.users;
 import com.app.MBox.services.userServiceImpl;
 import com.app.MBox.services.verificationTokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.regex.Pattern;
+
 
 
 @Controller
