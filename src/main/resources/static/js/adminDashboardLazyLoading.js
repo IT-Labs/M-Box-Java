@@ -5,9 +5,9 @@ jQuery(document).ready(
 		$("#bodyScroll").scroll(function () {
 
             var scrolltop=$('#bodyScroll').scrollTop();
-
+            console.log(scrolltop);
 		    if(scrolltop==pixelsScrolled) {
-		    pixelsScrolled+=430;
+		    pixelsScrolled+=860;
             var page=document.getElementById("row_no").value;
 
 			$.get("/admin/lazyLoad", {

@@ -45,7 +45,7 @@
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
                 <form role="form" th:action="@{delete}" method="post" id="form">
-                    <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 15%;" /></td>
+                    <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 11%;" /></td>
                     <td th:text="${artist.name}" style="width: 15%;"></td>
                     <td th:text="${artist.email}" style="width: 15%;"></td>
                     <input type="hidden" name="email" th:value=${artist.email}>

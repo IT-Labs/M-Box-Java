@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script th:src="@{/js/adminDashboardSearchDelete.js}"></script>
     <script th:src="@{/js/adminDashboardLazyLoading.js}"></script>
+    <script th:src="@{/js/adminDashboardSort.js}"></script>
 </head>
 <body>
 
@@ -45,10 +46,10 @@
         <table st-table="rowCollection" class="table table-striped" style="border: 1px solid gray;">
             <thead class="fixedHeader">
             <tr style="display: block">
-                <th style="width: 19%;">Record Label Name</th>
-                <th style="width: 19%;">Record Label Email address</th>
-                <th style="width: 19%;">Number of artists</th>
-                <th style="width: 19%;">Delete Record Label</th>
+                <th style="width: 19%;" id="recordLabelName">Record Label Name <img th:src="@{/images/downArrow.png}"\ style="width:7%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;" id="upName"\></th>
+                <th style="width: 19%;" id="recordLabelEmail">Record Label Email address <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
+                <th style="width: 19%;" id="recordLabelNumber">Number of artists <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upNumber"\></th>
+                <th style="width: 19%;">Delete Record Label <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"\></th>
             </tr>
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">

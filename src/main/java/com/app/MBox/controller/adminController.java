@@ -108,6 +108,14 @@ public class adminController  {
     }
 
 
+    @RequestMapping(value = "/sort",method = RequestMethod.GET)
+    @ResponseBody
+    public List<recordLabelDto> processSort(@RequestParam String sortParam,@RequestParam int page,@RequestParam int direction) {
+        List<recordLabelDto> recordLabels=new LinkedList<>();
+        recordLabels=userServiceImpl.findAndSortRecordLabels(sortParam,page,direction);
+        return recordLabels;
+    }
+
 
 
 }

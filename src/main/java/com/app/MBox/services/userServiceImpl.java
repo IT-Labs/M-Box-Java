@@ -7,11 +7,13 @@ import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.app.MBox.core.repository.userRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -188,5 +190,49 @@ public class userServiceImpl implements userService {
         }
         return artistsDto;
     }
+
+
+    public List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int direction) {
+        List<recordLabelDto> recordLabelDtos=new LinkedList<>();
+        List<users> users;
+        if(!sortParam.equals("number")) {
+            if (direction == 0) {
+                users = userRepository.findRecordLabels(PageRequest.of(0, page*20+20, Sort.Direction.DESC, sortParam));
+            } else {
+                users = userRepository.findRecordLabels(PageRequest.of(0, page*20+20, Sort.Direction.ASC, sortParam));
+            }
+            for (int i = 0; i < users.size(); i++) {
+                recordLabelDto recordLabelDto = new recordLabelDto();
+                recordLabelDto.setEmail(users.get(i).getEmail());
+                recordLabelDto.setName(users.get(i).getName());
+                recordLabel recordLabel = recordLabelServiceImpl.findByUserId(users.get(i).getId());
+                int number = recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
+                recordLabelDto.setNumber(number);
+                recordLabelDtos.add(recordLabelDto);
+            }
+        }   else {
+                users = userRepository.findRecordLabels(PageRequest.of(0, page*20+20));
+                for (int i = 0; i < users.size(); i++) {
+                    recordLabelDto recordLabelDto = new recordLabelDto();
+                    recordLabelDto.setEmail(users.get(i).getEmail());
+                    recordLabelDto.setName(users.get(i).getName());
+                    recordLabel recordLabel = recordLabelServiceImpl.findByUserId(users.get(i).getId());
+                    int number = recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
+                    recordLabelDto.setNumber(number);
+                    recordLabelDtos.add(recordLabelDto);
+                }
+
+                if(direction==0) {
+                    Collections.sort(recordLabelDtos,Collections.reverseOrder());
+                }   else {
+                    Collections.sort(recordLabelDtos);
+                }
+
+
+        }
+        return recordLabelDtos;
+    }
+
+
 }
 
