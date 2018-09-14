@@ -1,17 +1,12 @@
-$(document).ready(function () {
+ $(document).ready(function () {
             var counterName=0;
             var counterEmail=0;
-            var counterNumber=0;
-            $("#recordLabelName").click(function() {
+            $("#artistName").click(function() {
                 handle(1);
             });
 
-            $("#recordLabelEmail").click(function() {
+            $("#artistEmail").click(function() {
                 handle(2);
-            });
-
-            $("#recordLabelNumber").click(function() {
-                handle(3);
             });
 
 
@@ -43,21 +38,6 @@ $(document).ready(function () {
                  counterEmail--;
               }
 
-            }   else {
-                var number="number";
-            if(counterNumber%2==0) {
-                $("#downNumber").show();
-                $("#upNumber").hide();
-                sort(number,counterNumber);
-                counterNumber++;
-              } else {
-                $("#downNumber").hide();
-                $("#upNumber").show();
-                sort(number,counterNumber);
-                counterNumber--;
-              }
-
-
             }
         }
 
@@ -65,7 +45,7 @@ $(document).ready(function () {
         function sort(sortParam,direction) {
         var page=document.getElementById("row_no").value;
         page=Number(page)-1;
-        $.get("/admin/sort", {
+        $.get("/sort", {
             sortParam:sortParam,
 			page:page,
 			direction:direction
@@ -74,9 +54,9 @@ $(document).ready(function () {
 			var html="";
             for(i=0 ; i<data.length ; i++) {
                 html=html+'<tr><form role="form" action="delete" method="post" id="form1">';
-                html=html+'<td style="width: 30%;">' + data[i].name + '</td>';
-                html=html+'<td style="width: 27%;">' + data[i].email + '</td>';
-                html=html+'<td style="width: 36%;">' + data[i].number + '</td>';
+                html=html+'<td style="width: 30%;">' + '<img src="' + data[i].pictureUrl + '" style="width:8%;"</img></td>';
+                html=html+'<td style="width: 27%;">' + data[i].name + '</td>';
+                html=html+'<td style="width: 36%;">' + data[i].email + '</td>';
                 html=html+'<input type="hidden" name="email" value=' + data[i].email + '>';
                 html=html+'<input type="hidden" name="name" value=' + data[i].name +'>';
                 html=html+'<td style="width: 15%;"><input type="submit" value="DELETE" id="' + data[i].name + '" name="' + data[i].email + '" onclick="deleteFunction(this.id,this.name)"></td>';

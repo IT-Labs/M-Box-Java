@@ -39,7 +39,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/successfullConfirm","/unSuccessfullConfirm","/resetPassword","/joinIfInvited").permitAll()
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/admin/**").hasAnyAuthority(rolesEnum.ADMIN.toString()).anyRequest().authenticated()
-                .antMatchers("/recordLabelDashboard").hasAnyAuthority(rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
+                .antMatchers("/recordLabelDashboard","/inviteArtist").hasAnyAuthority(rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
                 .antMatchers("/changePassword").hasAnyAuthority(rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString(),rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").loginProcessingUrl("/app-login").usernameParameter("app_username").passwordParameter("app_password").permitAll().successHandler(myAuthenticationSuccessHandler())
                 .and().logout().logoutUrl("/app-logout").logoutSuccessUrl("/login")

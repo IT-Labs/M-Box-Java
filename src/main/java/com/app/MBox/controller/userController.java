@@ -17,13 +17,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -112,12 +110,48 @@ public class userController {
     public ModelAndView showAdminDashboard(Model model) {
         ModelAndView modelAndView=new ModelAndView();
         authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId());
+        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId(),0);
         model.addAttribute("artists",artists);
         modelAndView.setViewName("recordLabelDashboard");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/sort",method = RequestMethod.GET)
+    @ResponseBody
+    public List<artistDto> processSort(@RequestParam String sortParam,@RequestParam int page,@RequestParam int direction) {
+        List<artistDto> artists=new LinkedList<>();
+        artists=userServiceImpl.findAndSortArtists(sortParam,page,direction);
+        return artists;
+    }
 
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    @ResponseBody
+    public List<artistDto> processSearch(@RequestParam String searchParam) {
+        List<artistDto> artists=new LinkedList<>();
+        if(!searchParam.equals("")) {
+            artists = userServiceImpl.searchArtists(searchParam);
+            return artists;
+        }    else {
+            return null;
+        }
+
+    }
+
+
+    @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
+    @ResponseBody
+    public List<artistDto> processLazyLoading(@RequestParam int page) {
+        List<artistDto> artistDtos=new LinkedList<>();
+        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        artistDtos=userServiceImpl.findArtists(authenticatedUser.getUserId(),page);
+        return artistDtos;
+    }
+
+    @RequestMapping(value = "/inviteArtist",method = RequestMethod.GET)
+    public ModelAndView showInviteArtistPage() {
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("inviteArtist");
+        return modelAndView;
+    }
 
 }

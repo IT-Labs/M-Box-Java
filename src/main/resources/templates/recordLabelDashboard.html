@@ -9,6 +9,9 @@
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/recordLabelDashboardSort.js}"></script>
+    <script th:src="@{/js/recordLabelDashboardSearchAndDelete.js}"></script>
+    <script th:src="@{/js/recordLabelDashboardLazyLoading.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,7 +23,7 @@
 
     <div class="row">
         <div class="col-sm-4 col-md-4">
-            <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; margin-bottom:5px; width:100%" >Add New Artist</button>
+            <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; margin-bottom:5px; width:100%" onclick="redirectToInvite()">Add New Artist</button>
             <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%" >Add Multiple Artists</button>
         </div>
         <div class="col-sm-8 col-md-8">
@@ -37,15 +40,15 @@
             <thead class="fixedHeader">
             <tr style="display: block">
                 <th style="width: 19%;">Profile Picture</th>
-                <th style="width: 19%;">Artist Name</th>
-                <th style="width: 19%;">Artist E-mail</th>
-                <th style="width: 19%;">Delete Artist</th>
+                <th style="width: 19%;" id="artistName">Artist Name<img th:src="@{/images/downArrow.png}"\ style="width:4%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:4%;display:none;" id="upName"\></th>
+                <th style="width: 19%;" id="artistEmail">Artist E-mail<img th:src="@{/images/downArrow.png}"style="width:4%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:4%;display:none;"id="upEmail"\></th>
+                <th style="width: 10%;">Delete Artist</th>
             </tr>
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
                 <form role="form" th:action="@{delete}" method="post" id="form">
-                    <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 11%;" /></td>
+                    <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
                     <td th:text="${artist.name}" style="width: 15%;"></td>
                     <td th:text="${artist.email}" style="width: 15%;"></td>
                     <input type="hidden" name="email" th:value=${artist.email}>
@@ -63,6 +66,21 @@
 
 
 </div>
+
+<script th:inline="javascript">
+               /*<![CDATA[*/
+                var serverContext = [[@{/}]];
+                 function redirectToDashboard() {
+                window.location.href = serverContext + "recordLabelDashboard";
+                }
+
+                function redirectToInvite() {
+                window.location.href = serverContext + "inviteArtist";
+                }
+
+
+                /*]]>*/
+   </script>
 
 </body>
 </html>
