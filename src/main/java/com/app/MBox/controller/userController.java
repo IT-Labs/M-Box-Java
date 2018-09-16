@@ -2,16 +2,19 @@ package com.app.MBox.controller;
 
 
 import com.app.MBox.aditional.authenticatedUser;
+import com.app.MBox.aditional.emailAlreadyExistsException;
 import com.app.MBox.aditional.passwordChecker;
 import com.app.MBox.aditional.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.changePasswordDto;
 import com.app.MBox.dto.userDto;
+import com.app.MBox.services.artistServiceImpl;
 import com.app.MBox.services.recordLabelServiceImpl;
 import com.app.MBox.services.userServiceImpl;
 import com.app.MBox.services.verificationTokenServiceImpl;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +31,7 @@ import java.util.regex.Pattern;
 
 
 @Controller
+@Slf4j
 public class userController {
     @Autowired
     userServiceImpl userServiceImpl;
@@ -40,6 +45,8 @@ public class userController {
     recordLabelServiceImpl recordLabelServiceImpl;
     @Autowired
     verificationTokenServiceImpl verificationTokenServiceImpl;
+    @Autowired
+    artistServiceImpl artistServiceImpl;
 
     @RequestMapping(value = "/changePassword",method = RequestMethod.GET)
     public Model showChangePassword(Model model) {
@@ -100,8 +107,9 @@ public class userController {
             return modelAndView;
 
         }
-        recordLabelServiceImpl.setRecordLabelPassword(token,password);
-        modelAndView.setViewName("recordLabelAccount");
+        userServiceImpl.setUserPassword(token,password);
+        //see in brd maybe you should redirect them on diferent pages
+        modelAndView.setViewName("login");
         return modelAndView;
     }
 
@@ -148,9 +156,35 @@ public class userController {
     }
 
     @RequestMapping(value = "/inviteArtist",method = RequestMethod.GET)
-    public ModelAndView showInviteArtistPage() {
-        ModelAndView modelAndView=new ModelAndView();
+    public ModelAndView showInviteArtistPage(ModelAndView modelAndView) {
         modelAndView.setViewName("inviteArtist");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/inviteArtist",method = RequestMethod.POST)
+    public ModelAndView processArtistInvite(ModelAndView modelAndView, @RequestParam("name") String name, @RequestParam("email") String email, HttpServletRequest request) {
+        try {
+                users user=artistServiceImpl.inviteArtist(name,email,request);
+                if(user==null) {
+                    modelAndView.addObject("artistNumberError","You have reached your limit");
+                    modelAndView.setViewName("inviteArtist");
+                    return modelAndView;
+                }
+                modelAndView.addObject("inviteArtistMessage","You have successfully invited " + name);
+                modelAndView.setViewName("confirmationInviteArtist");
+                return modelAndView;
+        } catch (emailAlreadyExistsException e) {
+            log.error(e.getMessage());
+            modelAndView.addObject("emailAlreadyExistsError","email already exists");
+            modelAndView.setViewName("inviteArtist");
+            return modelAndView;
+        }
+
+    }
+
+    @RequestMapping(value = "/addMultipleArtists",method = RequestMethod.GET)
+    public ModelAndView showAddMultipleArtistPage(ModelAndView modelAndView) {
+        modelAndView.setViewName("addMultipleArtists");
         return modelAndView;
     }
 

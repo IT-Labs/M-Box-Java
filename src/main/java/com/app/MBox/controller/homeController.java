@@ -17,7 +17,9 @@ public class homeController {
 
     @GetMapping("/homepage")
     public String home() {
+        System.out.println(bCryptPasswordEncoder.encode("recordlabel") + " the password");
         return "home";
+
     }
 
     @RequestMapping(value = "/artists")

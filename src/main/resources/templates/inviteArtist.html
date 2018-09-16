@@ -19,7 +19,7 @@
 <div th:insert="shared/dashboardHeader :: dashboardHeader"></div>
 <br>
 
-<div class="row" style="margin-top:200px">
+<div class="row" style="margin-top:100px">
 
     <div class="col-md-4">
 
@@ -47,9 +47,9 @@
                 <input name="email" type="email" id="email"
                        placeholder="Email" class="form-control" />
                 <p class="star">*</p>
-                <p class="error" id="emailError">
-
-                </p>
+                <p class="error" id="emailError"></p>
+                <p th:text="${artistNumberError}" class="error">You have reached your limit</p>
+                <p th:text="${emailAlreadyExistsError}" class="error">Email already exists</p>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Invite Artist

@@ -157,7 +157,7 @@ public class userServiceImpl implements userService {
             recordLabelDto.setEmail(users.get(i).getEmail());
             recordLabelDto.setName(users.get(i).getName());
             recordLabel recordLabel=recordLabelServiceImpl.findByUserId(users.get(i).getId());
-            int number= recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
+            int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
             recordLabelDto.setNumber(number);
             recordLabelDtos.add(recordLabelDto);
         }
@@ -245,8 +245,7 @@ public class userServiceImpl implements userService {
     public List<artistDto> findAndSortArtists(String sortParam, int page, int direction) {
 
         List<artistDto> artistDtos=new LinkedList<>();
-        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recordLabel recordLabel=recordLabelServiceImpl.findByUserId(authenticatedUser.getUserId());
+        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
         List<users> artists;
         if(direction==0) {
            artists = userRepository.findArtists(recordLabel.getId(), PageRequest.of(0, page * 20 + 20, Sort.Direction.DESC, sortParam));
@@ -270,8 +269,7 @@ public class userServiceImpl implements userService {
     }
 
     public List<artistDto> searchArtists(String searchParam) {
-        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recordLabel recordLabel=recordLabelServiceImpl.findByUserId(authenticatedUser.getUserId());
+        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
         List<artistDto> artistDtos=new LinkedList<>();
         for(int i=0 ; i<artists.size();i++) {
@@ -289,5 +287,15 @@ public class userServiceImpl implements userService {
 
         return artistDtos;
     }
+
+    public void setUserPassword(String token, String password) {
+        users user=verificationTokenServiceImpl.findByToken(token);
+        user.setActivated(true);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        saveUser(user);
+        verificationTokenServiceImpl.delete(token);
+    }
+
+
 }
 

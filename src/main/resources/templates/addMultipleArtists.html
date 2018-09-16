@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
 </head>
 <body>
+
+    <h1>Adding multiple artists is done by uploading a csv file with the artists information in format:</h1>
+    <h1>Artist Email,Artist Name</h1>
+    <h1 id="fileName"></h1>
+    <input type="button"  value="Upload CSV file" onclick="document.getElementById('fileSelect').click();" />
+    <input id="file" accept=".csv" name="file" style="display:none"/>
+    <input type="submit" value="Add" disabled>
 
 </body>
 </html>

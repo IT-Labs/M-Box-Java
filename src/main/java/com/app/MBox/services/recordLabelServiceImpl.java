@@ -1,5 +1,6 @@
 package com.app.MBox.services;
 
+import com.app.MBox.aditional.emailAlreadyExistsException;
 import com.app.MBox.aditional.emailTemplateEnum;
 import com.app.MBox.aditional.properties;
 import com.app.MBox.aditional.rolesEnum;
@@ -49,15 +50,19 @@ public class recordLabelServiceImpl implements recordLabelService {
 
 
 
-    public recordLabel createRecordLabel(String name,String email,HttpServletRequest request) {
+    public recordLabel createRecordLabel(String name,String email,HttpServletRequest request) throws emailAlreadyExistsException {
         //create record label generate token and send mail
-        users user=createUser(name,email);
+        users user=userServiceImpl.findByEmail(email);
+        if(user!=null) {
+            throw new emailAlreadyExistsException("record label already exists");
+        }
+        user=createUser(name,email);
         recordLabel recordLabel=new recordLabel();
         recordLabel.setUser(user);
         recordLabel=saveRecordLabel(recordLabel);
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
 
-        String appUrl=String.format("%s://%s%sjoinIfInvited?token=%s",request.getScheme(),request.getServerName(),properties.getPORT(),verificationToken.getToken()); //part :8080 wont be needed in stage
+        String appUrl=String.format("%s://%s%sjoinIfInvited?token=%s",request.getScheme(),request.getServerName(),properties.getPORT(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
         sendEmailDto sendEmail=new sendEmailDto();
         sendEmail.setBody(emailBodyDto.getBody());
@@ -86,13 +91,7 @@ public class recordLabelServiceImpl implements recordLabelService {
     }
 
 
-    public void setRecordLabelPassword(String token, String password) {
-        users user=verificationTokenServiceImpl.findByToken(token);
-        user.setActivated(true);
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        userServiceImpl.saveUser(user);
-        verificationTokenServiceImpl.delete(token);
-    }
+
 
     public void deleteRecordLabel(String email) {
         users user=userServiceImpl.findByEmail(email);

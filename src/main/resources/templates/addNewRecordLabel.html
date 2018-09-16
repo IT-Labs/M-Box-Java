@@ -49,9 +49,8 @@
                 <input name="email" type="email" id="email"
                        placeholder="Email" class="form-control" />
                 <p class="star">*</p>
-                <p class="error" id="emailError">
-
-                </p>
+                <p class="error" id="emailError"></p>
+                <p th:text="${emailAlreadyExistsError}" class="error">Email already exists</p>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Add
