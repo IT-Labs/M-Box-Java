@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
 </head>
 <body>
 
+<h1 th:text="${artistAdded}" class="confirmationH1"></h1>
+<input type="button" onclick="redirect()" value="Finish" class="confirmationInput">
+
+<script th:inline="javascript">
+               /*<![CDATA[*/
+                var serverContext = [[@{/}]];
+                function redirect() {
+
+                window.location.href = serverContext + "recordLabelDashboard";
+                }
+                /*]]>*/
+        </script>
 </body>
 </html>

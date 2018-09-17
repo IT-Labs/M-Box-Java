@@ -6,10 +6,8 @@ import com.app.MBox.core.repository.artistRepository;
 import com.app.MBox.dto.*;
 import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.app.MBox.core.repository.userRepository;
@@ -41,7 +39,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private properties properties;
     @Autowired
-    private recordLabelArtistsServiceServiceImpl recordLabelArtistsServiceImpl;
+    private com.app.MBox.services.recordLabelArtistsServiceImpl recordLabelArtistsServiceImpl;
     @Autowired
     private recordLabelServiceImpl recordLabelServiceImpl;
     @Autowired

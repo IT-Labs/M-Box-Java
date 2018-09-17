@@ -3,15 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>MBox</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/addMultipleArtists.js}"></script>
 </head>
 <body>
+    <div class="row" style="margin-top:100px">
+    <div class="text-primary lead text-center" >Adding multiple artists is done by uploading a csv file with the artists information in format:</div>
+    <div class="text-primary lead text-center" >Artist Email,Artist Name</div>
+    <div id="fileName" class="text-primary lead text-center" style="margin-top:7%">No file is selected</div>
+    </div>
+     <div class="row" style="margin-top:100px">
+         <div class="col-md-4">
 
-    <h1>Adding multiple artists is done by uploading a csv file with the artists information in format:</h1>
-    <h1>Artist Email,Artist Name</h1>
-    <h1 id="fileName"></h1>
-    <input type="button"  value="Upload CSV file" onclick="document.getElementById('fileSelect').click();" />
-    <input id="file" accept=".csv" name="file" style="display:none"/>
-    <input type="submit" value="Add" disabled>
+         </div>
+         <div class="col-md-4">
+    <form th:action="@{/addMultipleArtists}" method="post" id="form" enctype="multipart/form-data">
+        <input type="button" onclick="document.getElementById('file').click()" class="file btn btn-lg btn-primary text-center" value="Upload CSV file">
+        <input type="file" name="file" id="file" accept=".csv" style="display:none"/>
+        <p th:text="${artistLimitExceded}" class="error"></p>
+        <p th:text="${invalidEmailFormat}" class="error"></p>
+        <p th:text="${invalidFormatDetected}" class="error"></p>
+        <p th:text="${maxLengthOfArtistName}" class="error"></p>
+        <p th:text="${maxLengthOfArtistEmail}" class="error"></p>
+        <p th:text="${emptyFile}" class="error"></p>
+        <p th:text="${invalidExtension}" class="error"></p>
+        <input type="submit" name="submit" value="Add" class="btn btn-primary btn-block text-center" />
+
+    </form>
+         </div>
+
+
+    <div class="col-md-4">
+
+    </div>
+     </div>
+
 
 </body>
 </html>

@@ -8,6 +8,7 @@ import com.app.MBox.aditional.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.changePasswordDto;
+import com.app.MBox.dto.csvErrorsDto;
 import com.app.MBox.dto.userDto;
 import com.app.MBox.services.artistServiceImpl;
 import com.app.MBox.services.recordLabelServiceImpl;
@@ -21,10 +22,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -166,7 +171,7 @@ public class userController {
         try {
                 users user=artistServiceImpl.inviteArtist(name,email,request);
                 if(user==null) {
-                    modelAndView.addObject("artistNumberError","You have reached your limit");
+                    modelAndView.addObject("artistNumberError","Artist limit (50) exceeded");
                     modelAndView.setViewName("inviteArtist");
                     return modelAndView;
                 }
@@ -185,6 +190,49 @@ public class userController {
     @RequestMapping(value = "/addMultipleArtists",method = RequestMethod.GET)
     public ModelAndView showAddMultipleArtistPage(ModelAndView modelAndView) {
         modelAndView.setViewName("addMultipleArtists");
+        return modelAndView;
+    }
+    @PostMapping(value = "/addMultipleArtists" , consumes = "multipart/form-data")
+    public ModelAndView processCsv(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,HttpServletRequest request) {
+        if(file.isEmpty()) {
+            modelAndView.addObject("emptyFile","Please select a .csv file");
+            modelAndView.setViewName("addMultipleArtists");
+            return modelAndView;
+        }
+        String [] extension=file.getOriginalFilename().split("\\.");
+        if(!extension[extension.length-1].equals("csv")) {
+            modelAndView.addObject("invalidExtension","Uploaded file must be .csv");
+            modelAndView.setViewName("addMultipleArtists");
+            return modelAndView;
+        }
+
+        try {
+              csvErrorsDto errors=artistServiceImpl.parseCsv(file,request);
+              if(errors.isErrorFlag()) {
+                  modelAndView.addObject("artistLimitExceded",errors.getArtistLimitExceded());
+                  modelAndView.addObject("invalidEmailFormat",errors.getInvalidEmailFormatDetectedRows());
+                  modelAndView.addObject("invalidFormatDetected",errors.getInvalidFormatDetectedRows());
+                  modelAndView.addObject("maxLengthOfArtistName",errors.getMaxLengthOfArtistNameRows());
+                  modelAndView.addObject("maxLengthOfArtistEmail",errors.getMaxLengthOfEmailRows());
+                  modelAndView.setViewName("addMultipleArtists");
+                return modelAndView;
+              }
+            modelAndView.addObject("artistAdded" ,String.format("%d new artists successfully added. Current artist status %d/50",errors.getArtistAdded(),errors.getArtistAdded()+errors.getNumber()));
+            modelAndView.setViewName("confirmationAddMultipleArtists");
+            return modelAndView;
+
+
+            }   catch (Exception e ) {
+                log.error(e.getMessage());
+            }
+
+        modelAndView.setViewName("addMultipleArtists");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/confirmationAddMultipleArtists",method = RequestMethod.GET)
+    public ModelAndView showConfirmationAddMultipleArtists(ModelAndView modelAndView) {
+        modelAndView.setViewName("confirmationAddMultipleArtists");
         return modelAndView;
     }
 

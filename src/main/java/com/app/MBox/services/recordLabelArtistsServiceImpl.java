@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("recordLabelArtistsImpl")
-public class recordLabelArtistsServiceServiceImpl implements recordLabelArtistsService {
+public class recordLabelArtistsServiceImpl implements recordLabelArtistsService {
 
     @Autowired
     private recordLabelArtistsRepository recordLabelArtistsRepository;
