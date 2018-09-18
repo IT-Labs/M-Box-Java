@@ -49,7 +49,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private artistServiceImpl artistServiceImpl;
     @Autowired
-    private springProfileCheck springProfileCheck;
+    private springChecks springChecks;
 
 
     public users findByEmail(String email) {
@@ -62,6 +62,9 @@ public class userServiceImpl implements userService {
         return userRepository.save(user);
     }
 
+    public void delete (users user) {
+        userRepository.delete(user);
+    }
 
 
 
@@ -137,7 +140,7 @@ public class userServiceImpl implements userService {
         String newBody1=newBody.replace(properties.getEMAILADRESS(),user.getEmail());
         String body=newBody1.replace(properties.getAPPURL(),appUrl);
         emailBodyDto emailBodyDto=new emailBodyDto();
-        if(springProfileCheck.isProductionProfile()) {
+        if(springChecks.isProductionProfile()) {
             emailBodyDto.setBody(body);
         }   else {
             String qaDevBody=String.format("%s <h1> Sent from email %s </h1>",body,user.getEmail());
@@ -243,7 +246,7 @@ public class userServiceImpl implements userService {
     public List<artistDto> findAndSortArtists(String sortParam, int page, int direction) {
 
         List<artistDto> artistDtos=new LinkedList<>();
-        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getAuthenticatedUser();
         List<users> artists;
         if(direction==0) {
            artists = userRepository.findArtists(recordLabel.getId(), PageRequest.of(0, page * 20 + 20, Sort.Direction.DESC, sortParam));
@@ -267,7 +270,7 @@ public class userServiceImpl implements userService {
     }
 
     public List<artistDto> searchArtists(String searchParam) {
-        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getAuthenticatedUser();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
         List<artistDto> artistDtos=new LinkedList<>();
         for(int i=0 ; i<artists.size();i++) {
@@ -295,5 +298,14 @@ public class userServiceImpl implements userService {
     }
 
 
+    public String getView(String token) {
+         users user=verificationTokenServiceImpl.findByToken(token);
+         artist artist=artistServiceImpl.findByUserId(user.getId());
+         if(artist!=null) {
+             return "artistAccount";
+         }  else {
+             return "recordLabelDashboard";
+         }
+    }
 }
 

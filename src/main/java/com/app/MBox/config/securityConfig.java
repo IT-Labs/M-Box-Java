@@ -35,7 +35,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests().antMatchers("jquery/**/","bootstrap/**/","css/**","images/**","js/**").permitAll()
-                .antMatchers("/home/**").permitAll().antMatchers("/successRegister","/forgotPassword","/confirm").permitAll()
+                .antMatchers("/home/**").hasAnyAuthority("ROLE_ANONYMOUS",rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString()).antMatchers("/successRegister","/forgotPassword","/confirm").permitAll()
                 .antMatchers("/successfullConfirm","/unSuccessfullConfirm","/resetPassword","/joinIfInvited").permitAll()
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/admin/**").hasAnyAuthority(rolesEnum.ADMIN.toString()).anyRequest().authenticated()

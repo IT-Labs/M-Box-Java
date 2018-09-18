@@ -17,7 +17,7 @@ public class homeController {
 
     @GetMapping("/homepage")
     public String home() {
-        System.out.println(bCryptPasswordEncoder.encode("recordlabel") + " the password");
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities() + " authorityy");
         return "home";
 
     }

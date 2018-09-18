@@ -31,7 +31,7 @@
     <div class="col-md-4">
         <h1>Registration form</h1>
         <br/>
-        <form action="#" method="POST" enctype="utf8" th:action="@{/registration}" >
+        <form method="POST" enctype="utf8" th:action="@{/registration}" >
             <div class="form-group" >
                 <label>Name</label>
                 <span><input class="form-control" id="name" name="name" value=""/></span>
@@ -47,6 +47,7 @@
                 <p class="star">*</p>
                 <br>
                 <span id="emailError" class="error" style="display:none"></span>
+                <p th:text="${userAlreadyExists}" class="error"></p>
 
             </div>
             <div class="form-group ">
@@ -56,7 +57,7 @@
                 <br>
                 <span id="passwordError" class="error" style="display:none"></span>
             </div>
-            <div class="form-group ">
+            <div class="form-group">
                 <label >Confirm Password</label>
                 <span><input id="matchPassword" class="form-control" name="matchingPassword" value="" type="password"/></span>
                 <p class="star">*</p>
@@ -90,9 +91,8 @@ $(document).ready(function () {
 
 });
 function register(event){
-	event.preventDefault();
     counter=0;
-    if ($("#name").val()<2 || $("#name").val()>50) {
+    if ($("#name").val().length<2 || $("#name").val().length>50) {
         $("#firstNameError").show().html("Name must be between 1 and 50 characters");
     	counter++;
     }
@@ -109,7 +109,7 @@ function register(event){
     }
 
     if(counter>0) {
-
+        event.preventDefault();
         return;
     }
 
@@ -117,18 +117,9 @@ function register(event){
     $(".error-list").html("");
     if($("#password").val() != $("#matchPassword").val()){
     	$("#globalError").show().html("password does not match");
+    	event.preventDefault();
     	return;
     }
-    var formData= $('form').serialize();
-    $.post(serverContext + "registration",formData ,function(data){
-        console.log(data);
-        if(data == "test"){
-            window.location.href = serverContext + "successRegister";
-        } else {
-                  $("#emailError").show().html("User already exists");
-        }
-
-    })
 
     function checkPwd(str) {
     if (str.length < 8) {

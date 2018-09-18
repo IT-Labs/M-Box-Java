@@ -36,10 +36,11 @@ public class registerController {
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String showRegistrationForm(WebRequest request, Model model) {
+    public ModelAndView showRegistrationForm(ModelAndView modelAndView,WebRequest request, Model model) {
         userDto userDto = new userDto();
         model.addAttribute("user", userDto);
-        return "registration";
+        modelAndView.setViewName("registration");
+        return modelAndView;
     }
 
 
@@ -50,11 +51,15 @@ public class registerController {
         if (!result.hasErrors()) {
                 try {
                     registered = userServiceImpl.registerNewUserAccount(accountDto, request);
-                    return new ModelAndView("success", "user", accountDto);
+                    return new ModelAndView("successRegister");
                 }
                 catch (emailAlreadyExistsException e) {
                     log.error(e.getMessage());
-                    return new ModelAndView("registration", "user", accountDto);
+                    ModelAndView modelAndView=new ModelAndView();
+                    modelAndView.addObject("userAlreadyExists","user already exists");
+                    modelAndView.addObject("user",accountDto);
+                    modelAndView.setViewName("registration");
+                    return modelAndView;
                 }
 
         }

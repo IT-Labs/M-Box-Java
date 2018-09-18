@@ -82,6 +82,15 @@
                 window.location.href = serverContext + "addMultipleArtists";
                 }
 
+                  $('form').submit(function(event) {
+	         var values = $(this).serialize();
+	         rez=values.split("=")
+                    if(!confirm("Are you sure you want to delete " + rez[rez.length-1] )) {
+                            event.preventDefault();
+                             return;
+                    }
+
+	        })
 
                 /*]]>*/
    </script>

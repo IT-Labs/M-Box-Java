@@ -38,6 +38,8 @@ public class recordLabelServiceImpl implements recordLabelService {
     emailService emailService;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    recordLabelArtistsServiceImpl recordLabelArtistsServiceImpl;
 
     public recordLabel findByUserId(int userId) {
         return recordLabelRepository.findByUserId(userId);
@@ -121,7 +123,12 @@ public class recordLabelServiceImpl implements recordLabelService {
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
             }
+        recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByRecordLabelId(recordLabel.getId());
+            if(recordLabelArtists!=null) {
+                recordLabelArtistsServiceImpl.delete(recordLabelArtists);
+            }
         recordLabelRepository.delete(recordLabel);
+        userServiceImpl.delete(user);
 
     }
 }

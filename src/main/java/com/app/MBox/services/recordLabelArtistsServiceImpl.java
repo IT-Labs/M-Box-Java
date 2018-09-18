@@ -18,4 +18,16 @@ public class recordLabelArtistsServiceImpl implements recordLabelArtistsService 
     public recordLabelArtists save(recordLabelArtists recordLabelArtists) {
         return recordLabelArtistsRepository.save(recordLabelArtists);
     }
+
+    public recordLabelArtists findByRecordLabelId(int recordLabelId) {
+        return recordLabelArtistsRepository.findByRecordLabelId(recordLabelId);
+    }
+
+    public void delete(recordLabelArtists recordLabelArtists) {
+        recordLabelArtistsRepository.delete(recordLabelArtists);
+    }
+
+    public recordLabelArtists findByArtistId(int id) {
+        return recordLabelArtistsRepository.findByArtistId(id);
+    }
 }

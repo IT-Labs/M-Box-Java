@@ -1,3 +1,21 @@
+ function deleteFunction(name,email) {
+     if(confirm("Are you sure you want do delete " + name)) {
+
+           $.get("/delete", {
+ 			email:email
+ 		}, function(data) {
+             redirectToDashboard();
+ 		}).done(function() {
+ 		}).fail(function(xhr, textStatus, errorThrown) {
+ 		}).complete(function() {
+             redirectToDashboard();
+ 		});
+
+     }
+             }
+
+
+
  function mySearch() {
             var searchParam=document.getElementById("search").value
             $.get("/search", {

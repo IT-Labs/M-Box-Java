@@ -11,8 +11,9 @@ public interface recordLabelArtistsRepository extends CrudRepository <recordLabe
 
 
     @Query(value="select count(*) from record_label_artists r where r.record_label_id=?1" , nativeQuery = true)
-    public int findNumberOfArtistsInRecordLabel(int recordLabelId);
+     int findNumberOfArtistsInRecordLabel(int recordLabelId);
 
+     recordLabelArtists findByRecordLabelId(int recordLabelId);
 
-
+     recordLabelArtists findByArtistId(int artistId);
 }

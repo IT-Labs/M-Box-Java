@@ -22,7 +22,7 @@ public class recordLabelArtists extends audit {
     @Column(nullable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "recordLabelId" , foreignKey = @ForeignKey(name = "FK_recordLabelArtists_recordLabel"))
     private recordLabel recordLabel;
 

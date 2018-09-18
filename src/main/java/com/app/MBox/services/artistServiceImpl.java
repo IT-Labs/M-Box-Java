@@ -26,7 +26,7 @@ public class artistServiceImpl implements artistService {
     @Autowired
     userServiceImpl userServiceImpl;
     @Autowired
-    springProfileCheck springProfileCheck;
+    springChecks springChecks;
     @Autowired
     com.app.MBox.services.recordLabelArtistsServiceImpl recordLabelArtistsServiceImpl;
     @Autowired
@@ -39,6 +39,8 @@ public class artistServiceImpl implements artistService {
     emailService emailService;
     @Autowired
     userRolesServiceImpl userRolesServiceImpl;
+    @Autowired
+    emailTemplateService emailTemplateService;
 
 
     @Override
@@ -63,7 +65,7 @@ public class artistServiceImpl implements artistService {
         if(user!=null) {
             throw new emailAlreadyExistsException("email already exists");
         }
-        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getAuthenticatedUser();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
         if(number>49) {
             return null;
@@ -121,10 +123,11 @@ public class artistServiceImpl implements artistService {
         while ((line = reader.readLine()) != null) {
             lines.add(line);
             String [] artistsDetails=line.split(",");
-            if(artistsDetails.length<2 && artistsDetails.length>2) {
+            if(artistsDetails.length<2 || artistsDetails.length>2) {
                 invalidFormatDetectedRows=String.format("%srow%d",invalidFormatDetectedRows,counterRows);
                 hasErrors=true;
                 invalidFormatRows=true;
+                counterRows++;
                 continue;
             }
 
@@ -148,7 +151,7 @@ public class artistServiceImpl implements artistService {
             counterRows++;
         }
         csvErrorsDto errors=new csvErrorsDto();
-        recordLabel recordLabel=springProfileCheck.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getAuthenticatedUser();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
         if(lines.size() + number>50) {
             errors.setArtistLimitExceded("Artist limit (50) exceeded");
@@ -195,5 +198,24 @@ public class artistServiceImpl implements artistService {
         errors.setNumber(number);
         errors.setErrorFlag(false);
         return errors;
+    }
+
+    public void deleteArtist(String email) {
+        users user=userServiceImpl.findByEmail(email);
+        artist artist=artistRepository.findByUserId(user.getId());
+        artist.setDeleted(true);
+        emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteArtistMail.toString());
+        String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
+        sendEmailDto sendEmail=new sendEmailDto();
+        sendEmail.setBody(body);
+        sendEmail.setSubject(emailTemplate.getSubject());
+        sendEmail.setFromUserFullName(user.getName());
+        sendEmail.setToEmail(user.getEmail());
+        emailService.sendMail(sendEmail);
+        save(artist);
+        recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+        if(recordLabelArtists!=null) {
+            recordLabelArtistsServiceImpl.delete(recordLabelArtists);
+        }
     }
 }

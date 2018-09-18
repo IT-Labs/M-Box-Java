@@ -15,7 +15,7 @@ import javax.mail.internet.InternetAddress;
 
 @Component
 @NoArgsConstructor
-public class springProfileCheck {
+public class springChecks {
 
     @Autowired
     private Environment environment;

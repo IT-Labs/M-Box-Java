@@ -113,8 +113,8 @@ public class userController {
 
         }
         userServiceImpl.setUserPassword(token,password);
-        //see in brd maybe you should redirect them on diferent pages
-        modelAndView.setViewName("login");
+        String view=userServiceImpl.getView(token);
+        modelAndView.setViewName(view);
         return modelAndView;
     }
 
@@ -233,6 +233,20 @@ public class userController {
     @RequestMapping(value = "/confirmationAddMultipleArtists",method = RequestMethod.GET)
     public ModelAndView showConfirmationAddMultipleArtists(ModelAndView modelAndView) {
         modelAndView.setViewName("confirmationAddMultipleArtists");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public ModelAndView processDeleteArtist(ModelAndView modelAndView,@RequestParam("email") String email) {
+        artistServiceImpl.deleteArtist(email);
+        modelAndView.setViewName("redirect:recordLabelDashboard");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    public ModelAndView processDeleteArtistGet(ModelAndView modelAndView,@RequestParam("email") String email) {
+        artistServiceImpl.deleteArtist(email);
+        modelAndView.setViewName("redirect:recordLabelDashboard");
         return modelAndView;
     }
 
