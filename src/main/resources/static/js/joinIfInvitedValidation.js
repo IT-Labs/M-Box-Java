@@ -18,7 +18,7 @@ $(document).ready(function () {
     function checkPwd(str) {
     if (str.length < 8) {
         return 0;
-    } else if (str.length > 50) {
+    } else if (str.length > 64) {
         return 0;
     } else if (str.search(/[a-zA-Z]/) == -1) {
        return 0;
