@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common.enumeration;
 
 public enum rolesEnum {
     ARTIST,

@@ -1,9 +1,13 @@
 package com.app.MBox.services;
 
-import com.app.MBox.aditional.*;
+import com.app.MBox.common.customException.emailAlreadyExistsException;
+import com.app.MBox.common.customHandler.springChecks;
+import com.app.MBox.common.enumeration.emailTemplateEnum;
+import com.app.MBox.common.enumeration.rolesEnum;
+import com.app.MBox.common.properties;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.artistRepository;
-import com.app.MBox.dto.csvErrorsDto;
+import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.sendEmailDto;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -24,23 +28,23 @@ public class artistServiceImpl implements artistService {
     @Autowired
     artistRepository artistRepository;
     @Autowired
-    userServiceImpl userServiceImpl;
+    userService userServiceImpl;
     @Autowired
     springChecks springChecks;
     @Autowired
-    com.app.MBox.services.recordLabelArtistsServiceImpl recordLabelArtistsServiceImpl;
+    recordLabelArtistsService recordLabelArtistsServiceImpl;
     @Autowired
-    roleServiceImpl roleServiceImpl;
+    roleService roleServiceImpl;
     @Autowired
-    verificationTokenServiceImpl verificationTokenServiceImpl;
+    verificationTokenService verificationTokenServiceImpl;
     @Autowired
     properties properties;
     @Autowired
     emailService emailService;
     @Autowired
-    userRolesServiceImpl userRolesServiceImpl;
+    userRolesService userRolesServiceImpl;
     @Autowired
-    emailTemplateService emailTemplateService;
+    emailTemplateService emailTemplateServiceImpl;
 
 
     @Override
@@ -67,7 +71,7 @@ public class artistServiceImpl implements artistService {
         }
         recordLabel recordLabel= springChecks.getAuthenticatedUser();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-        if(number>49) {
+        if(number>=properties.getArtistLimit()) {
             return null;
         }
         user=createUser(name,email);
@@ -81,14 +85,9 @@ public class artistServiceImpl implements artistService {
         recordLabelArtistsServiceImpl.save(recordLabelArtists);
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
 
-        String appUrl=String.format("%s://%s%sjoinIfInvited?token=%s",request.getScheme(),request.getServerName(),properties.getPORT(),verificationToken.getToken());
+        String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl, emailTemplateEnum.artistSignUpMail.toString());
-        sendEmailDto sendEmail=new sendEmailDto();
-        sendEmail.setBody(emailBodyDto.getBody());
-        sendEmail.setSubject(emailBodyDto.getSubject());
-        sendEmail.setFromUserFullName(user.getName());
-        sendEmail.setToEmail(user.getEmail());
-        emailService.sendMail(sendEmail);
+        emailService.setEmail(emailBodyDto,user);
         return user;
     }
 
@@ -106,7 +105,7 @@ public class artistServiceImpl implements artistService {
         return user;
     }
 
-    public csvErrorsDto parseCsv(MultipartFile file, HttpServletRequest request) throws Exception {
+    public csvParseResultDto parseCsv(MultipartFile file, HttpServletRequest request) throws Exception {
         BufferedReader reader=new BufferedReader(new InputStreamReader(file.getInputStream()));
         String line;
         String invalidFormatDetectedRows="Invalid format detected (has to be: Artist Email, Artist Name), row(s):";
@@ -150,10 +149,10 @@ public class artistServiceImpl implements artistService {
             }
             counterRows++;
         }
-        csvErrorsDto errors=new csvErrorsDto();
+        csvParseResultDto errors=new csvParseResultDto();
         recordLabel recordLabel= springChecks.getAuthenticatedUser();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-        if(lines.size() + number>50) {
+        if(lines.size() + number>properties.getArtistLimit()) {
             errors.setArtistLimitExceded("Artist limit (50) exceeded");
             hasErrors=true;
         }
@@ -202,16 +201,20 @@ public class artistServiceImpl implements artistService {
 
     public void deleteArtist(String email) {
         users user=userServiceImpl.findByEmail(email);
+        if(user==null) {
+            return;
+        }
         artist artist=artistRepository.findByUserId(user.getId());
+        if(artist==null) {
+            return;
+        }
         artist.setDeleted(true);
-        emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteArtistMail.toString());
+        emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteArtistMail.toString());
         String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-        sendEmailDto sendEmail=new sendEmailDto();
-        sendEmail.setBody(body);
-        sendEmail.setSubject(emailTemplate.getSubject());
-        sendEmail.setFromUserFullName(user.getName());
-        sendEmail.setToEmail(user.getEmail());
-        emailService.sendMail(sendEmail);
+        emailBodyDto emailBodyDto=new emailBodyDto();
+        emailBodyDto.setBody(body);
+        emailBodyDto.setSubject(emailTemplate.getSubject());
+        emailService.setEmail(emailBodyDto,user);
         save(artist);
         recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
         if(recordLabelArtists!=null) {

@@ -1,9 +1,9 @@
 package com.app.MBox.services;
 
-import com.app.MBox.aditional.emailAlreadyExistsException;
-import com.app.MBox.aditional.emailTemplateEnum;
-import com.app.MBox.aditional.properties;
-import com.app.MBox.aditional.rolesEnum;
+import com.app.MBox.common.customException.emailAlreadyExistsException;
+import com.app.MBox.common.enumeration.emailTemplateEnum;
+import com.app.MBox.common.properties;
+import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.recordLabelRepository;
 import com.app.MBox.dto.emailBodyDto;
@@ -21,25 +21,24 @@ public class recordLabelServiceImpl implements recordLabelService {
     @Autowired
     recordLabelRepository recordLabelRepository;
     @Autowired
-    userServiceImpl userServiceImpl;
+    userService userServiceImpl;
     @Autowired
-    roleServiceImpl roleServiceImpl;
+    roleService roleServiceImpl;
     @Autowired
-    userRolesServiceImpl userRolesServiceImpl;
+    userRolesService userRolesServiceImpl;
     @Autowired
-    verificationTokenServiceImpl verificationTokenServiceImpl;
+    verificationTokenService verificationTokenServiceImpl;
     @Autowired
-    artistServiceImpl artistServiceImpl;
+    artistService artistServiceImpl;
     @Autowired
-    emailTemplateService emailTemplateService;
+    emailTemplateService emailTemplateServiceImpl;
     @Autowired
     properties properties;
     @Autowired
     emailService emailService;
+
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    recordLabelArtistsServiceImpl recordLabelArtistsServiceImpl;
+    recordLabelArtistsService recordLabelArtistsServiceImpl;
 
     public recordLabel findByUserId(int userId) {
         return recordLabelRepository.findByUserId(userId);
@@ -64,14 +63,9 @@ public class recordLabelServiceImpl implements recordLabelService {
         recordLabel=saveRecordLabel(recordLabel);
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
 
-        String appUrl=String.format("%s://%s%sjoinIfInvited?token=%s",request.getScheme(),request.getServerName(),properties.getPORT(),verificationToken.getToken());
+        String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
-        sendEmailDto sendEmail=new sendEmailDto();
-        sendEmail.setBody(emailBodyDto.getBody());
-        sendEmail.setSubject(emailBodyDto.getSubject());
-        sendEmail.setFromUserFullName(user.getName());
-        sendEmail.setToEmail(user.getEmail());
-        emailService.sendMail(sendEmail);
+        emailService.setEmail(emailBodyDto,user);
 
         return recordLabel;
     }
@@ -101,24 +95,20 @@ public class recordLabelServiceImpl implements recordLabelService {
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId());
         for (artist artist:artists) {
             artist.setDeleted(true);
-            emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteArtistMail.toString());
+            emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteArtistMail.toString());
             String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-            sendEmailDto sendEmail=new sendEmailDto();
-            sendEmail.setBody(body);
-            sendEmail.setSubject(emailTemplate.getSubject());
-            sendEmail.setFromUserFullName(user.getName());
-            sendEmail.setToEmail(user.getEmail());
-            emailService.sendMail(sendEmail);
+            emailBodyDto emailBodyDto=new emailBodyDto();
+            emailBodyDto.setBody(body);
+            emailBodyDto.setSubject(emailTemplate.getSubject());
+            emailService.setEmail(emailBodyDto,user);
             artistServiceImpl.save(artist);
         }
-        emailTemplate emailTemplate=emailTemplateService.findByName(emailTemplateEnum.deleteRecordLabelMail.toString());
+        emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteRecordLabelMail.toString());
         String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-        sendEmailDto sendEmail=new sendEmailDto();
-        sendEmail.setBody(body);
-        sendEmail.setSubject(emailTemplate.getSubject());
-        sendEmail.setFromUserFullName(user.getName());
-        sendEmail.setToEmail(user.getEmail());
-        emailService.sendMail(sendEmail);
+        emailBodyDto emailBodyDto=new emailBodyDto();
+        emailBodyDto.setBody(body);
+        emailBodyDto.setSubject(emailTemplate.getSubject());
+        emailService.setEmail(emailBodyDto,user);
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);

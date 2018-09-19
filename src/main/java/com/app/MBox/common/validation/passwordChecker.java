@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common.validation;
 
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;

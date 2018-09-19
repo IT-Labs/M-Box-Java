@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +25,9 @@ public class properties {
     private  String EMAILADRESS;
     private  String PORT;
     private  String toEmailAdress;
+    private  int artistLimit;
+    private  String artistDefaultPicture;
+    private String confirmUrl;
+    private String resetPasswordUrl;
+    private String joinUrl;
 }

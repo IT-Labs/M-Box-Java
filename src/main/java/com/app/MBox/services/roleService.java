@@ -1,13 +1,15 @@
 package com.app.MBox.services;
 
 import com.app.MBox.core.model.role;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface roleService {
 
 
-    public role findByName(String name);
+     role findByName(String name);
 
-    public void saveRole(role role);
+     void saveRole(role role);
 
-    public role findById(int id);
+     role findById(int id);
 }

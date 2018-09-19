@@ -1,7 +1,9 @@
 package com.app.MBox.services;
 
-import com.app.MBox.aditional.properties;
-import com.app.MBox.aditional.springChecks;
+import com.app.MBox.common.properties;
+import com.app.MBox.common.customHandler.springChecks;
+import com.app.MBox.core.model.users;
+import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.sendEmailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +30,7 @@ public class emailService {
     private properties properties;
 
     @Autowired
-    private configurationServiceImpl configurationServiceImpl;
+    private configurationService configurationServiceImpl;
 
     @Autowired
     private springChecks springChecks;
@@ -59,5 +61,17 @@ public class emailService {
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
+    }
+
+
+    public void setEmail(emailBodyDto emailBodyDto, users user) {
+
+        sendEmailDto sendEmail=new sendEmailDto();
+        sendEmail.setBody(emailBodyDto.getBody());
+        sendEmail.setSubject(emailBodyDto.getSubject());
+        sendEmail.setFromUserFullName(user.getName());
+        sendEmail.setToEmail(user.getEmail());
+        sendMail(sendEmail);
+
     }
 }

@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common.customException;
 
 public class emailAlreadyExistsException extends Exception {
 

@@ -1,11 +1,58 @@
 package com.app.MBox.services;
 
+import com.app.MBox.common.customException.emailAlreadyExistsException;
+import com.app.MBox.core.model.role;
 import com.app.MBox.core.model.users;
+import com.app.MBox.dto.artistDto;
+import com.app.MBox.dto.emailBodyDto;
+import com.app.MBox.dto.recordLabelDto;
+import com.app.MBox.dto.userDto;
+import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+@Component
 public interface userService {
 
-    public users findByEmail(String email);
+     users findByEmail(String email);
 
-    public users saveUser(users user);
+     users saveUser(users user);
+
+     void delete (users user);
+
+
+
+     users registerNewUserAccount(userDto accountDto, HttpServletRequest request) throws emailAlreadyExistsException;
+
+     users createUser(userDto accountDto,role role) ;
+
+
+
+     void savePassword(String password, String token) ;
+
+
+     boolean forgotPassword(String email,HttpServletRequest request) ;
+
+
+
+     emailBodyDto parsingEmailBody(users user, String appUrl, String templateName) ;
+
+     List<recordLabelDto> findRecordLabels(int page, int size) ;
+
+
+     List<recordLabelDto> search(String searchParam) ;
+
+     List<artistDto> findArtists(int userId, int page) ;
+
+
+     List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int direction) ;
+
+
+     List<artistDto> findAndSortArtists(String sortParam, int page, int direction) ;
+
+     List<artistDto> searchArtists(String searchParam) ;
+
+     void setUserPassword(String token, String password) ;
+
 
 }

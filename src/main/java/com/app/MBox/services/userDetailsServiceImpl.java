@@ -1,7 +1,7 @@
 package com.app.MBox.services;
 
 
-import com.app.MBox.aditional.authenticatedUser;
+import com.app.MBox.common.customHandler.authenticatedUser;
 import com.app.MBox.core.model.users;
 import com.app.MBox.core.model.userRoles;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,17 +1,15 @@
 package com.app.MBox.controller;
 
-import com.app.MBox.aditional.emailAlreadyExistsException;
+import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.dto.userDto;
 import com.app.MBox.core.model.*;
-import com.app.MBox.services.userServiceImpl;
-import com.app.MBox.services.verificationTokenServiceImpl;
+import com.app.MBox.services.userService;
+import com.app.MBox.services.verificationTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,18 +19,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Controller
 @Slf4j
 public class registerController {
 
     @Autowired
-    private userServiceImpl userServiceImpl;
+    private userService userServiceImpl;
 
     @Autowired
-    private verificationTokenServiceImpl verificationTokenServiceImpl;
+    private verificationTokenService verificationTokenServiceImpl;
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -69,7 +65,7 @@ public class registerController {
     }
 
 
-    @RequestMapping(value = "/successRegister")
+    @RequestMapping(value = "/success-register")
     public String success () {
 
         return "successRegister";

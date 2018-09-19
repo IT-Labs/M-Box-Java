@@ -1,6 +1,7 @@
 package com.app.MBox.config;
 
-import com.app.MBox.aditional.authenticatedUser;
+import com.app.MBox.common.customHandler.authenticatedUser;
+import com.app.MBox.services.userService;
 import com.app.MBox.services.userServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public class auditorAwareImpl implements AuditorAware<Integer> {
 @Autowired
-    userServiceImpl userServiceImpl;
+userService userServiceImpl;
     @Override
 
     public Optional<Integer> getCurrentAuditor() {

@@ -23,7 +23,7 @@ public class verificationTokenServiceImpl implements verificationTokenService {
     @Autowired
     private userRepository userRepository;
     @Autowired
-    private userRolesServiceImpl userRolesServiceImpl;
+    private userRolesService userRolesServiceImpl;
 
 
     public verificationToken findByUserId(int id) {

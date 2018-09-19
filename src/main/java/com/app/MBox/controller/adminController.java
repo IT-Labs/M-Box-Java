@@ -1,13 +1,9 @@
 package com.app.MBox.controller;
 
 
-import com.app.MBox.aditional.emailAlreadyExistsException;
-import com.app.MBox.aditional.passwordChecker;
-import com.app.MBox.aditional.properties;
+import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.dto.recordLabelDto;
-import com.app.MBox.services.recordLabelServiceImpl;
-import com.app.MBox.services.userServiceImpl;
-import com.app.MBox.services.verificationTokenServiceImpl;
+import com.app.MBox.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -26,21 +21,17 @@ import java.util.Optional;
 public class adminController  {
 
     @Autowired
-    userServiceImpl userServiceImpl;
+    userService userServiceImpl;
     @Autowired
-    recordLabelServiceImpl recordLabelServiceImpl;
-    @Autowired
-    verificationTokenServiceImpl verificationTokenServiceImpl;
-    @Autowired
-    passwordChecker passwordChecker;
-    @Autowired
-    properties properties;
+    recordLabelService recordLabelServiceImpl;
+    public static int RECORD_LABEL_LAZY_LOAD_SIZE=20;
+    public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
 
 
     @RequestMapping(value = "/dashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
     List<recordLabelDto> recordLabels=new LinkedList<>();
-    recordLabels=userServiceImpl.findRecordLabels(0,20);
+    recordLabels=userServiceImpl.findRecordLabels(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE,RECORD_LABEL_LAZY_LOAD_SIZE);
     model.addAttribute("recordLabels",recordLabels);
     ModelAndView modelAndView=new ModelAndView();
     modelAndView.setViewName("adminDashboard");
@@ -51,11 +42,11 @@ public class adminController  {
     @ResponseBody
     public List<recordLabelDto> processLazyLoading(@RequestParam int page) {
         List<recordLabelDto> recordLabels=new LinkedList<>();
-        recordLabels=userServiceImpl.findRecordLabels(page,20);
+        recordLabels=userServiceImpl.findRecordLabels(page,RECORD_LABEL_LAZY_LOAD_SIZE);
         return recordLabels;
     }
 
-    @RequestMapping(value = "/addNewRecordLabel",method = RequestMethod.GET)
+    @RequestMapping(value = "/record-label",method = RequestMethod.GET)
     public ModelAndView showAddNewRecordLabelForm() {
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.setViewName("addNewRecordLabel");
@@ -63,7 +54,7 @@ public class adminController  {
     }
 
 
-    @RequestMapping(value = "/addNewRecordLabel" , method = RequestMethod.POST)
+    @RequestMapping(value = "/record-label" , method = RequestMethod.POST)
     public ModelAndView processAddNewRecordLabelForm(ModelAndView modelAndView,@RequestParam("name") String recordLabelName,@RequestParam("email") String recordLabelEmail,HttpServletRequest request) {
         if(recordLabelName.length()<2 || recordLabelName.length()>50) {
             modelAndView.addObject("errorNameMessage","Name must be between 2 and 50 characters");

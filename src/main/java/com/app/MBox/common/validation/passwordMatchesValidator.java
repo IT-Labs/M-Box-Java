@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common.validation;
 
 import com.app.MBox.dto.userDto;
 

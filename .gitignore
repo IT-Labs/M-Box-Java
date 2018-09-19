@@ -15,7 +15,7 @@
 *.iws
 *.iml
 *.ipr
-
+/src/main/resources/application-stage.properties
 
 ### NetBeans ###
 /nbproject/private/

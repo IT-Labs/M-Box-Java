@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class csvErrorsDto {
+public class csvParseResultDto {
 
     private String invalidFormatDetectedRows;
 

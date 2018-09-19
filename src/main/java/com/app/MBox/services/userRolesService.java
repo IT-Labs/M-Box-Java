@@ -1,15 +1,18 @@
 package com.app.MBox.services;
 
 import com.app.MBox.core.model.userRoles;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
-
+@Component
 public interface userRolesService {
 
-    public userRoles findByUserId(Integer userId);
+     userRoles findByUserId(Integer userId);
 
-    public Set<userRoles> findByRoleId(Integer roleId);
+     Set<userRoles> findByRoleId(Integer roleId);
 
-    public void saveUserRoles(userRoles userRoles);
+     void saveUserRoles(userRoles userRoles);
+
+     void deleteUserRoles(userRoles userRoles);
 
 }

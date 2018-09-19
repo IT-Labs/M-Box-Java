@@ -1,8 +1,10 @@
 package com.app.MBox.controller;
 
-import com.app.MBox.aditional.passwordChecker;
-import com.app.MBox.aditional.properties;
+import com.app.MBox.common.validation.passwordChecker;
+import com.app.MBox.common.properties;
+import com.app.MBox.services.userService;
 import com.app.MBox.services.userServiceImpl;
+import com.app.MBox.services.verificationTokenService;
 import com.app.MBox.services.verificationTokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class loginController {
 
     @Autowired
-    userServiceImpl userServiceImpl;
+    userService userServiceImpl;
     @Autowired
-    verificationTokenServiceImpl verificationTokenServiceImpl;
+    verificationTokenService verificationTokenServiceImpl;
 
     @Autowired
     properties properties;
@@ -48,16 +50,16 @@ public class loginController {
         return modelAndView;
 
     }
-    @GetMapping("/forgotPassword")
-    public ModelAndView forgotPasswordGet() {
+    @GetMapping("/forgot-password")
+    public ModelAndView showForgotPasswordPage() {
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.setViewName("forgotPassword");
         return modelAndView;
     }
 
 
-    @RequestMapping(value = "/forgotPassword",method = RequestMethod.POST)
-    public ModelAndView forgotPasswordPost(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request) {
+    @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
+    public ModelAndView processForgotPassword(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request) {
 
 
         if(userServiceImpl.forgotPassword(userEmail,request)) {
@@ -74,7 +76,7 @@ public class loginController {
     }
 
 
-    @RequestMapping(value = "/resetPassword",method = RequestMethod.GET)
+    @RequestMapping(value = "/reset-password",method = RequestMethod.GET)
     public ModelAndView showResetPassword(ModelAndView modelAndView, @RequestParam("token") String token) {
 
         if (verificationTokenServiceImpl.checkTokenExpired(token)) {
@@ -89,16 +91,16 @@ public class loginController {
 
     }
 
-    @RequestMapping(value = "/resetPassword",method = RequestMethod.POST)
+    @RequestMapping(value = "/reset-password",method = RequestMethod.POST)
     public ModelAndView processResetPassword(ModelAndView modelAndView, @RequestParam("token") String token,@RequestParam("password") String password,@RequestParam("ConfirmPassword") String confirmPassword) {
 
         if(passwordChecker.isInvalidPassword(password)) {
             modelAndView.addObject("errorMessage",properties.getPasswordMessage());
-            modelAndView.setViewName("redirect:resetPassword?token=" + token);
+            modelAndView.setViewName("redirect:reset-password?token=" + token);
             return modelAndView;
         }   else if (!passwordChecker.doPasswordMatches(password,confirmPassword)) {
             modelAndView.addObject("errorConfirmMessage","Passwords does not match");
-            modelAndView.setViewName("redirect:resetPassword?token=" + token);
+            modelAndView.setViewName("redirect:reset-password?token=" + token);
             return modelAndView;
 
         }

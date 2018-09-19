@@ -45,7 +45,7 @@
         function sort(sortParam,direction) {
         var page=document.getElementById("row_no").value;
         page=Number(page)-1;
-        $.get("/sort", {
+        $.get("/recordLabel/sort", {
             sortParam:sortParam,
 			page:page,
 			direction:direction

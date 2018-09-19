@@ -1,4 +1,4 @@
-package com.app.MBox.aditional;
+package com.app.MBox.common.customHandler;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

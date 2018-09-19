@@ -10,7 +10,7 @@ jQuery(document).ready(
 		    pixelsScrolled+=860;
             var page=document.getElementById("row_no").value;
 
-			$.get("/lazyLoad", {
+			$.get("/recordLabel/lazyLoad", {
 			page:page
 		}, function(data) {
 			console.log(data);

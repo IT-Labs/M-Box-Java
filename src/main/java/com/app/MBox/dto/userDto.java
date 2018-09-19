@@ -1,6 +1,6 @@
 package com.app.MBox.dto;
 
-import com.app.MBox.aditional.passwordMatches;
+import com.app.MBox.common.validation.passwordMatches;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

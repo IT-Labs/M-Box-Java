@@ -32,7 +32,7 @@
             <ul class="nav navbar-nav">
                 <li><a th:href="@{/home/homepage}">Home</a></li>
                 <li><a th:href="@{/home/artists}">Artists</a></li>
-                <li><a th:href="@{/home/recordLabels}">Record Labels</a></li>
+                <li><a th:href="@{/home/record-labels}">Record Labels</a></li>
                 <li><a th:href="@{/home/about}">About</a></li>
 
             </ul>
@@ -65,7 +65,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a th:href="@{/listenerAccount}">My Account</a></li>
-                                <li><a th:href="@{/changePassword}">Change Password</a></li>
+                                <li><a th:href="@{/change-password}">Change Password</a></li>
                                 <li><a href="javascript:{}" onclick="document.getElementById('form').submit();">Sign out</a></li>
                                 <form id="form" th:action="@{/app-logout}" method="POST">
                                 </form>
@@ -86,7 +86,7 @@
                             <ul class="dropdown-menu">
                                 <li><a th:href="@{/listenerAccount}">My Account</a></li>
                                 <li><a th:href="@{/artistMySongs}">My Songs</a></li>
-                                <li><a th:href="@{/changePassword}">Change Password</a></li>
+                                <li><a th:href="@{/change-password}">Change Password</a></li>
                                 <li><a href="javascript:{}" onclick="document.getElementById('form').submit();">Sign out</a></li>
 
                             </ul>

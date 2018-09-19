@@ -3,7 +3,7 @@ $(document).ready(function () {
 	$("#nameError").show().html("");
 	 $("#emailError").show().html("");
 	 counter=0;
-		       if ($("#name").val()<2 || $("#name").val()>50) {
+		       if ($("#name").val().length<2 || $("#name").val().length>50) {
         $("#nameError").show().html("Name must be between 2 and 50 characters");
     	counter++;
     }
