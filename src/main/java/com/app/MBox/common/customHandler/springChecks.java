@@ -55,6 +55,16 @@ public class springChecks {
         return userRolesService.getRole(userRoles);
     }
 
+    public int getLoggedInUserId() {
+        authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return authenticatedUser.getUserId();
+    }
+
+    public String getLoggedInUserEmail() {
+        authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return authenticatedUser.getUsername();
+    }
+
 
 
 }

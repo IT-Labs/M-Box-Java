@@ -23,5 +23,5 @@ public class csvParseResultDto {
 
     private int artistAdded;
 
-    private boolean isErrorFlag;
+    private boolean hasErrors;
 }

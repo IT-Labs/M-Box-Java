@@ -1,7 +1,9 @@
 package com.app.MBox.services;
 
+import com.app.MBox.common.enumeration.emailTemplateEnum;
 import com.app.MBox.common.properties;
 import com.app.MBox.common.customHandler.springChecks;
+import com.app.MBox.core.model.emailTemplate;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.sendEmailDto;
@@ -36,6 +38,9 @@ public class emailService {
     @Autowired
     private springChecks springChecks;
 
+    @Autowired
+    private emailTemplateService emailTemplateService;
+
     @Async
     void sendMail(sendEmailDto sendEmail) {
         try {
@@ -67,7 +72,7 @@ public class emailService {
     }
 
     @Async
-    public void setEmail(emailBodyDto emailBodyDto, users user) {
+    public void setAndSendEmail(emailBodyDto emailBodyDto, users user) {
 
         sendEmailDto sendEmail=new sendEmailDto();
         sendEmail.setBody(emailBodyDto.getBody());
@@ -76,5 +81,23 @@ public class emailService {
         sendEmail.setToEmail(user.getEmail());
         sendMail(sendEmail);
 
+    }
+
+    public void sendDeleteArtistEmail(users user) {
+        emailTemplate emailTemplate= emailTemplateService.findByName(emailTemplateEnum.deleteArtistMail.toString());
+        String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
+        emailBodyDto emailBodyDto=new emailBodyDto();
+        emailBodyDto.setBody(body);
+        emailBodyDto.setSubject(emailTemplate.getSubject());
+        setAndSendEmail(emailBodyDto,user);
+    }
+
+    public void sendDeleteRecordLabelEmail(users user) {
+        emailTemplate emailTemplate= emailTemplateService.findByName(emailTemplateEnum.deleteRecordLabelMail.toString());
+        String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
+        emailBodyDto emailBodyDto=new emailBodyDto();
+        emailBodyDto.setBody(body);
+        emailBodyDto.setSubject(emailTemplate.getSubject());
+        setAndSendEmail(emailBodyDto,user);
     }
 }

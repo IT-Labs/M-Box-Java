@@ -47,8 +47,7 @@ public class userController {
 
     @RequestMapping(value = "/change-password",method = RequestMethod.POST)
     public ModelAndView processChangePassword(@ModelAttribute("changePasswordDto") changePasswordDto changePasswordDto) {
-        String name=SecurityContextHolder.getContext().getAuthentication().getName();
-        users user=userServiceImpl.findByEmail(name);
+        users user=userServiceImpl.findByEmail(springChecks.getLoggedInUserEmail());
         ModelAndView modelAndView=new ModelAndView();
         if(!bCryptPasswordEncoder.matches(changePasswordDto.getPassword(),user.getPassword())) {
             modelAndView.addObject("oldPasswordErrorMessage",properties.getIncorectPasswordMessage());
@@ -63,8 +62,7 @@ public class userController {
             modelAndView.setViewName("changePassword");
             return modelAndView;
         }
-        user.setPassword(bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword()));
-        userServiceImpl.saveUser(user);
+        userServiceImpl.setUserPassword(user,changePasswordDto.getNewPassword());
         String role=springChecks.getLoggedInUserRole();
         if(role.equals(rolesEnum.ARTIST)) {
             modelAndView.addObject("role",rolesEnum.ARTIST.toString());

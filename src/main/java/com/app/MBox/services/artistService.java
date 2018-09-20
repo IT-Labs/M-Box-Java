@@ -26,7 +26,7 @@ public interface artistService {
 
     users createUser(String name,String email) ;
 
-    csvParseResultDto parseCsv(MultipartFile file, HttpServletRequest request) throws Exception;
+    csvParseResultDto addArtistsByCsvFile(MultipartFile file, HttpServletRequest request) throws Exception;
 
     void deleteArtist(String email);
 

@@ -68,7 +68,7 @@ public class artistServiceImpl implements artistService {
     public users inviteArtist(String name, String email, HttpServletRequest request) throws emailAlreadyExistsException {
         users user=userServiceImpl.findByEmail(email);
         if(user!=null) {
-            throw new emailAlreadyExistsException("email already exists");
+            throw new emailAlreadyExistsException(properties.getEmailAlreadyExistsMessage());
         }
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
@@ -85,10 +85,9 @@ public class artistServiceImpl implements artistService {
         recordLabelArtists.setRecordLabel(recordLabel);
         recordLabelArtistsServiceImpl.save(recordLabelArtists);
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
-
         String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl, emailTemplateEnum.artistSignUpMail.toString());
-        emailService.setEmail(emailBodyDto,user);
+        emailService.setAndSendEmail(emailBodyDto,user);
         return user;
     }
 
@@ -106,7 +105,7 @@ public class artistServiceImpl implements artistService {
         return user;
     }
 
-    public csvParseResultDto parseCsv(MultipartFile file, HttpServletRequest request) throws Exception {
+    public csvParseResultDto addArtistsByCsvFile(MultipartFile file, HttpServletRequest request) throws Exception {
         BufferedReader reader=new BufferedReader(new InputStreamReader(file.getInputStream()));
         String line;
         String invalidFormatDetectedRows="Invalid format detected (has to be: Artist Email, Artist Name), row(s):";
@@ -154,7 +153,7 @@ public class artistServiceImpl implements artistService {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
         if(lines.size() + number>properties.getArtistLimit()) {
-            errors.setArtistLimitExceded("Artist limit (50) exceeded");
+            errors.setArtistLimitExceded(properties.getArtistNumberMessage());
             hasErrors=true;
         }
 
@@ -174,7 +173,7 @@ public class artistServiceImpl implements artistService {
                 errors.setMaxLengthOfEmailRows(maxLengthOfEmailRows);
             }
 
-            errors.setErrorFlag(true);
+            errors.setHasErrors(true);
             return errors;
         }
 
@@ -196,7 +195,7 @@ public class artistServiceImpl implements artistService {
 
         errors.setArtistAdded(artistAdded);
         errors.setNumber(number);
-        errors.setErrorFlag(false);
+        errors.setHasErrors(false);
         return errors;
     }
 
@@ -206,16 +205,12 @@ public class artistServiceImpl implements artistService {
             return;
         }
         artist artist=artistRepository.findByUserId(user.getId());
-        if(artist==null) {
+        if(artist==null || artist.isDeleted()) {
             return;
         }
+
         artist.setDeleted(true);
-        emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteArtistMail.toString());
-        String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-        emailBodyDto emailBodyDto=new emailBodyDto();
-        emailBodyDto.setBody(body);
-        emailBodyDto.setSubject(emailTemplate.getSubject());
-        emailService.setEmail(emailBodyDto,user);
+        emailService.sendDeleteArtistEmail(user);
         save(artist);
         recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
         if(recordLabelArtists!=null) {
@@ -232,7 +227,7 @@ public class artistServiceImpl implements artistService {
             artistDto.setDeleted(a.isDeleted());
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(a.getId());
             if(!a.isDeleted()) {
-                //artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName()); this will have to be uncomnented
+                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
             }
             if(a.getUser().getPicture()!=null) {
                 //logic from s3 for the picture

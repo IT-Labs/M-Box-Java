@@ -1,7 +1,9 @@
 package com.app.MBox.controller;
 
 import com.app.MBox.dto.songDto;
+import com.app.MBox.services.artistService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 @RequestMapping(value = "/artist")
 public class artistController {
+
+    @Autowired
+    artistService artistService;
 
     @RequestMapping(value = "/song",method = RequestMethod.GET)
     public ModelAndView showSongPage (ModelAndView modelAndView,Model model) {
@@ -36,4 +41,6 @@ public class artistController {
         modelAndView.setViewName("artistAccount");
         return modelAndView;
     }
+
+
 }

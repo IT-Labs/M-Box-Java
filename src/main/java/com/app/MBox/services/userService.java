@@ -55,5 +55,7 @@ public interface userService {
 
      void setUserPassword(String token, String password) ;
 
+     void setUserPassword(users user,String password);
+
 
 }

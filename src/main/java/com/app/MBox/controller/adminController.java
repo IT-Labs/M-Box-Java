@@ -104,7 +104,7 @@ public class adminController  {
                recordLabels = userServiceImpl.search(searchParam);
                return recordLabels;
            }    else {
-               return null;
+               return recordLabels;
            }
 
 

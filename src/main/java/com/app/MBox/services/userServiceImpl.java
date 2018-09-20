@@ -85,7 +85,7 @@ public class userServiceImpl implements userService {
             verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
             String appUrl=String.format("%s%s",properties.getConfirmUrl(),verificationToken.getToken());
             emailBodyDto emailBodyDto=parsingEmailBody(user,appUrl,emailTemplateEnum.verificationMail.toString());
-            emailService.setEmail(emailBodyDto,user);
+            emailService.setAndSendEmail(emailBodyDto,user);
         return user;
     }
 
@@ -120,7 +120,7 @@ public class userServiceImpl implements userService {
             verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
             String appUrl=String.format("%s%s",properties.getResetPasswordUrl(),verificationToken.getToken());
             emailBodyDto emailBodyDto=parsingEmailBody(user,appUrl,emailTemplateEnum.forgotPassword.toString());
-            emailService.setEmail(emailBodyDto,user);
+            emailService.setAndSendEmail(emailBodyDto,user);
              return true;
 
         }
@@ -289,6 +289,11 @@ public class userServiceImpl implements userService {
         verificationTokenServiceImpl.delete(token);
     }
 
+
+    public void setUserPassword(users user,String password) {
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        saveUser(user);
+    }
 
 }
 

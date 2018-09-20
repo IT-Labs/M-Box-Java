@@ -69,7 +69,7 @@ public class registerController {
     }
 
 
-    @RequestMapping(value = "/success-register")
+    @RequestMapping(value = "/registration/success")
     public String success () {
 
         return "successRegister";

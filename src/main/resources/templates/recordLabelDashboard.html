@@ -47,7 +47,7 @@
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
-                <form role="form" th:action="@{/record-label/delete}" method="post" id="form">
+                <form role="form" th:action="@{delete-artist}" method="get" id="form">
                     <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
                     <td th:text="${artist.name}" style="width: 15%;"></td>
                     <td th:text="${artist.email}" style="width: 15%;"></td>
@@ -80,7 +80,7 @@
                 }
 
                 function redirectToInviteMultiple() {
-                window.location.href = serverContext + "record-label/add-artists";
+                window.location.href = serverContext + "record-label/artists";
                 }
 
                   $('form').submit(function(event) {

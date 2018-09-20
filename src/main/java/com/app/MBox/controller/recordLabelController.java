@@ -2,6 +2,7 @@ package com.app.MBox.controller;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.authenticatedUser;
+import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
@@ -38,6 +39,9 @@ public class recordLabelController {
     @Autowired
     properties properties;
 
+    @Autowired
+    springChecks springChecks;
+
     public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public static int ARTIST_LAZY_LOAD_INITIAL_SIZE=20;
 
@@ -45,8 +49,7 @@ public class recordLabelController {
     @RequestMapping(value = "/dashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
         ModelAndView modelAndView=new ModelAndView();
-        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId(),PageRequest.of(ARTIST_LAZY_LOAD_INITIAL_PAGE,ARTIST_LAZY_LOAD_INITIAL_SIZE));
+        List<artistDto> artists=userServiceImpl.findArtists(springChecks.getLoggedInUserId(),PageRequest.of(ARTIST_LAZY_LOAD_INITIAL_PAGE,ARTIST_LAZY_LOAD_INITIAL_SIZE));
         model.addAttribute("artists",artists);
         modelAndView.setViewName("recordLabelDashboard");
         return modelAndView;
@@ -68,7 +71,7 @@ public class recordLabelController {
             artists = userServiceImpl.searchArtists(searchParam);
             return artists;
         }    else {
-            return null;
+            return artists;
         }
 
     }
@@ -78,8 +81,7 @@ public class recordLabelController {
     @ResponseBody
     public List<artistDto> processLazyLoading(Pageable pageable) {
         List<artistDto> artistDtos=new LinkedList<>();
-        authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        artistDtos=userServiceImpl.findArtists(authenticatedUser.getUserId(),pageable);
+        artistDtos=userServiceImpl.findArtists(springChecks.getLoggedInUserId(),pageable);
         return artistDtos;
     }
 
@@ -110,13 +112,13 @@ public class recordLabelController {
 
     }
 
-    @RequestMapping(value = "/add-artists",method = RequestMethod.GET)
+    @RequestMapping(value = "/artists",method = RequestMethod.GET)
     public ModelAndView showAddMultipleArtistPage(ModelAndView modelAndView) {
         modelAndView.setViewName("addMultipleArtists");
         return modelAndView;
     }
-    @PostMapping(value = "/add-artists" , consumes = "multipart/form-data")
-    public ModelAndView processCsv(ModelAndView modelAndView, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    @PostMapping(value = "/artists" , consumes = "multipart/form-data")
+    public ModelAndView addArtists(ModelAndView modelAndView, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if(file.isEmpty()) {
             modelAndView.addObject("emptyFile",properties.getCsvExtensionError());
             modelAndView.setViewName("addMultipleArtists");
@@ -130,17 +132,17 @@ public class recordLabelController {
         }
 
         try {
-            csvParseResultDto errors=artistServiceImpl.parseCsv(file,request);
-            if(errors.isErrorFlag()) {
-                modelAndView.addObject("artistLimitExceded",errors.getArtistLimitExceded());
-                modelAndView.addObject("invalidEmailFormat",errors.getInvalidEmailFormatDetectedRows());
-                modelAndView.addObject("invalidFormatDetected",errors.getInvalidFormatDetectedRows());
-                modelAndView.addObject("maxLengthOfArtistName",errors.getMaxLengthOfArtistNameRows());
-                modelAndView.addObject("maxLengthOfArtistEmail",errors.getMaxLengthOfEmailRows());
+            csvParseResultDto result=artistServiceImpl.addArtistsByCsvFile(file,request);
+            if(result.isHasErrors()) {
+                modelAndView.addObject("artistLimitExceded",result.getArtistLimitExceded());
+                modelAndView.addObject("invalidEmailFormat",result.getInvalidEmailFormatDetectedRows());
+                modelAndView.addObject("invalidFormatDetected",result.getInvalidFormatDetectedRows());
+                modelAndView.addObject("maxLengthOfArtistName",result.getMaxLengthOfArtistNameRows());
+                modelAndView.addObject("maxLengthOfArtistEmail",result.getMaxLengthOfEmailRows());
                 modelAndView.setViewName("addMultipleArtists");
                 return modelAndView;
             }
-            modelAndView.addObject("artistAdded" ,String.format("%d new artists successfully added. Current artist status %d/50",errors.getArtistAdded(),errors.getArtistAdded()+errors.getNumber()));
+            modelAndView.addObject("artistAdded" ,String.format("%d new artists successfully added. Current artist status %d/50",result.getArtistAdded(),result.getArtistAdded()+result.getNumber()));
             modelAndView.setViewName("confirmationAddMultipleArtists");
             return modelAndView;
 
@@ -153,20 +155,13 @@ public class recordLabelController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/confirmation-artists",method = RequestMethod.GET)
+    @RequestMapping(value = "/artists/confirmation",method = RequestMethod.GET)
     public ModelAndView showConfirmationAddMultipleArtists(ModelAndView modelAndView) {
         modelAndView.setViewName("confirmationAddMultipleArtists");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
-    public ModelAndView processDeleteArtist(ModelAndView modelAndView,@RequestParam("email") String email) {
-        artistServiceImpl.deleteArtist(email);
-        modelAndView.setViewName("redirect:dashboard");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete-artist",method = RequestMethod.GET)
     public ModelAndView processDeleteArtistGet(ModelAndView modelAndView,@RequestParam("email") String email) {
         artistServiceImpl.deleteArtist(email);
         modelAndView.setViewName("redirect:dashboard");

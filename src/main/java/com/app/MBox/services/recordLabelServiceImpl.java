@@ -68,7 +68,7 @@ public class recordLabelServiceImpl implements recordLabelService {
 
         String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
-        emailService.setEmail(emailBodyDto,user);
+        emailService.setAndSendEmail(emailBodyDto,user);
 
         return recordLabel;
     }
@@ -98,20 +98,10 @@ public class recordLabelServiceImpl implements recordLabelService {
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId());
         for (artist artist:artists) {
             artist.setDeleted(true);
-            emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteArtistMail.toString());
-            String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-            emailBodyDto emailBodyDto=new emailBodyDto();
-            emailBodyDto.setBody(body);
-            emailBodyDto.setSubject(emailTemplate.getSubject());
-            emailService.setEmail(emailBodyDto,user);
+            emailService.sendDeleteArtistEmail(artist.getUser());
             artistServiceImpl.save(artist);
         }
-        emailTemplate emailTemplate= emailTemplateServiceImpl.findByName(emailTemplateEnum.deleteRecordLabelMail.toString());
-        String body=emailTemplate.getBody().replace(properties.getNAME(),user.getName());
-        emailBodyDto emailBodyDto=new emailBodyDto();
-        emailBodyDto.setBody(body);
-        emailBodyDto.setSubject(emailTemplate.getSubject());
-        emailService.setEmail(emailBodyDto,user);
+        emailService.sendDeleteRecordLabelEmail(user);
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
