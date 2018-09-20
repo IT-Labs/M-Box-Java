@@ -1,6 +1,7 @@
 package com.app.MBox.controller;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
+import com.app.MBox.common.properties;
 import com.app.MBox.dto.userDto;
 import com.app.MBox.core.model.*;
 import com.app.MBox.services.userService;
@@ -30,6 +31,9 @@ public class registerController {
     @Autowired
     private verificationTokenService verificationTokenServiceImpl;
 
+    @Autowired
+    private properties properties;
+
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView showRegistrationForm(ModelAndView modelAndView,WebRequest request, Model model) {
@@ -52,7 +56,7 @@ public class registerController {
                 catch (emailAlreadyExistsException e) {
                     log.error(e.getMessage());
                     ModelAndView modelAndView=new ModelAndView();
-                    modelAndView.addObject("userAlreadyExists","user already exists");
+                    modelAndView.addObject("userAlreadyExists",properties.getEmailAlreadyExistsMessage());
                     modelAndView.addObject("user",accountDto);
                     modelAndView.setViewName("registration");
                     return modelAndView;

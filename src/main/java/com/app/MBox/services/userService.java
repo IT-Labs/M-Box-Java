@@ -7,6 +7,7 @@ import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.userDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,18 +38,18 @@ public interface userService {
 
      emailBodyDto parsingEmailBody(users user, String appUrl, String templateName) ;
 
-     List<recordLabelDto> findRecordLabels(int page, int size) ;
+     List<recordLabelDto> findRecordLabels(Pageable pageable) ;
 
 
      List<recordLabelDto> search(String searchParam) ;
 
-     List<artistDto> findArtists(int userId, int page) ;
+     List<artistDto> findArtists(int userId, Pageable pageable) ;
 
 
-     List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int direction) ;
+     List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int size,int direction) ;
 
 
-     List<artistDto> findAndSortArtists(String sortParam, int page, int direction) ;
+     List<artistDto> findAndSortArtists(Pageable pageable) ;
 
      List<artistDto> searchArtists(String searchParam) ;
 

@@ -45,10 +45,17 @@
         function sort(sortParam,direction) {
         var page=document.getElementById("row_no").value;
         page=Number(page)-1;
-        $.get("/recordLabel/sort", {
-            sortParam:sortParam,
-			page:page,
-			direction:direction
+        var size=document.getElementById("size").value;
+        var calculatedSize=page*size+size;
+        if(direction==0) {
+            sortParam=sortParam+",desc";
+        }   else {
+            sortParam=sortParam+",asc";
+        }
+        $.get("/record-label/sort", {
+			page:0,
+			size:calculatedSize,
+			sort:sortParam
 		}, function(data) {
 			console.log(data);
 			var html="";

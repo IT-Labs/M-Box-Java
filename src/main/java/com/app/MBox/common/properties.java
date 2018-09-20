@@ -30,4 +30,13 @@ public class properties {
     private String confirmUrl;
     private String resetPasswordUrl;
     private String joinUrl;
+    private String songDefaultImage;
+    private String passwordNotMatchMessage;
+    private String incorrectEmailMessage;
+    private String notAuthorizeMessage;
+    private String invalidDataMessage;
+    private String emailAlreadyExistsMessage;
+    private String artistNumberMessage;
+    private String csvExtensionError;
+    private String incorectPasswordMessage;
 }

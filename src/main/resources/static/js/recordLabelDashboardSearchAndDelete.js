@@ -1,7 +1,7 @@
  function deleteFunction(name,email) {
      if(confirm("Are you sure you want do delete " + name)) {
 
-           $.get("/recordLabel/delete", {
+           $.get("/record-label/delete", {
  			email:email
  		}, function(data) {
              redirectToDashboard();
@@ -18,7 +18,7 @@
 
  function mySearch() {
             var searchParam=document.getElementById("search").value
-            $.get("/recordLabel/search", {
+            $.get("/record-label/search", {
 			searchParam:searchParam
 		}, function(data) {
 		      if(data.length>0) {

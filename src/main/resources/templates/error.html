@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Boot MVC Security</title>
-    <link rel="stylesheet" href="/css/styles.css"/>
+    <title>MBox</title>
 </head>
 <body>
 <h3>Access Denied Exception</h3>
@@ -14,6 +13,9 @@
 </div>
 <p class="error" th:text="${errorMsg}">Error</p>
 <h1>  YOU ARE IN THE ERROR PAGE </h1>
+<h1>You are here because an error happened. We are sorry.</h1>
+
+<h1 > Please proceed to <a th:href="@{/home/homepage}">home page</a></h1>
 
 </body>
 </html>

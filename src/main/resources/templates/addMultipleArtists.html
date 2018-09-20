@@ -31,7 +31,7 @@
 
          </div>
          <div class="col-md-4">
-    <form th:action="@{/recordLabel/add-artists}" method="post" id="form" enctype="multipart/form-data">
+    <form th:action="@{/record-label/add-artists}" method="post" id="form" enctype="multipart/form-data">
         <input type="button" onclick="document.getElementById('file').click()" class="file btn btn-lg btn-primary text-center" value="Upload CSV file">
         <input type="file" name="file" id="file" accept=".csv" style="display:none"/>
         <p th:text="${artistLimitExceded}" class="error"></p>

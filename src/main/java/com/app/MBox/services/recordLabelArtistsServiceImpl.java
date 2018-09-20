@@ -30,4 +30,5 @@ public class recordLabelArtistsServiceImpl implements recordLabelArtistsService 
     public recordLabelArtists findByArtistId(int id) {
         return recordLabelArtistsRepository.findByArtistId(id);
     }
+
 }

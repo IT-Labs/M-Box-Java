@@ -7,12 +7,15 @@ import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.recordLabelRepository;
 import com.app.MBox.dto.emailBodyDto;
+import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.sendEmailDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service("recordLabelServiceImpl")
@@ -120,5 +123,21 @@ public class recordLabelServiceImpl implements recordLabelService {
         recordLabelRepository.delete(recordLabel);
         userServiceImpl.delete(user);
 
+    }
+
+    public List<recordLabelDto> getRecordLabels(int page, int size) {
+        List<recordLabelDto> recordLabelsDto=new LinkedList<>();
+        List<recordLabel> recordLabels=recordLabelRepository.findAllRecordLabels(PageRequest.of(page,size));
+        for (recordLabel record:recordLabels) {
+                recordLabelDto recordLabelDto=new recordLabelDto();
+                recordLabelDto.setName(record.getUser().getName());
+                if(record.getUser().getPicture()!=null){
+                    //logic for picture
+                }   else {
+                    recordLabelDto.setPictureUrl(properties.getSongDefaultImage());
+                }
+                recordLabelsDto.add(recordLabelDto);
+        }
+        return recordLabelsDto;
     }
 }

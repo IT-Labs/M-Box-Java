@@ -7,6 +7,7 @@ import com.app.MBox.common.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.changePasswordDto;
 import com.app.MBox.services.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,8 @@ public class userController {
     verificationTokenService verificationTokenServiceImpl;
     @Autowired
     springChecks springChecks;
+    @Autowired
+    userRolesService userRolesService;
 
 
     @RequestMapping(value = "/change-password",method = RequestMethod.GET)
@@ -48,7 +51,7 @@ public class userController {
         users user=userServiceImpl.findByEmail(name);
         ModelAndView modelAndView=new ModelAndView();
         if(!bCryptPasswordEncoder.matches(changePasswordDto.getPassword(),user.getPassword())) {
-            modelAndView.addObject("oldPasswordErrorMessage","Incorrect password");
+            modelAndView.addObject("oldPasswordErrorMessage",properties.getIncorectPasswordMessage());
             modelAndView.setViewName("changePassword");
             return modelAndView;
         }   else if (passwordChecker.isInvalidPassword(changePasswordDto.getNewPassword())) {
@@ -56,12 +59,20 @@ public class userController {
             modelAndView.setViewName("changePassword");
             return modelAndView;
         }   else if (!passwordChecker.doPasswordMatches(changePasswordDto.getNewPassword(),changePasswordDto.getConfirmPassword())) {
-            modelAndView.addObject("errorConfirmMessage","Password does not match");
+            modelAndView.addObject("errorConfirmMessage",properties.getPasswordNotMatchMessage());
             modelAndView.setViewName("changePassword");
             return modelAndView;
         }
         user.setPassword(bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword()));
         userServiceImpl.saveUser(user);
+        String role=springChecks.getLoggedInUserRole();
+        if(role.equals(rolesEnum.ARTIST)) {
+            modelAndView.addObject("role",rolesEnum.ARTIST.toString());
+        } else if (role.equals(rolesEnum.RECORDLABEL)) {
+            modelAndView.addObject("role",rolesEnum.RECORDLABEL.toString());
+        }   else {
+            modelAndView.addObject("role",rolesEnum.LISTENER.toString());
+        }
         modelAndView.setViewName("confirmationChangePassword");
         return modelAndView;
 
@@ -88,12 +99,12 @@ public class userController {
             modelAndView.setViewName("redirect:join?token=" + token);
             return modelAndView;
         }   else if (!passwordChecker.doPasswordMatches(password,confirmPassword)) {
-            modelAndView.addObject("errorConfirmMessage","Passwords does not match");
+            modelAndView.addObject("errorConfirmMessage",properties.getPasswordNotMatchMessage());
             modelAndView.setViewName("redirect:join?token=" + token);
             return modelAndView;
 
         }
-        if(springChecks.getUserByToken(token).equals(rolesEnum.ARTIST.toString())) {
+        if(userRolesService.getUserRoleByToken(token).equals(rolesEnum.ARTIST.toString())) {
             modelAndView.setViewName("artistAccount");
         }   else {
             modelAndView.setViewName("recordLabelDashboard");

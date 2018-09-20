@@ -43,8 +43,7 @@ public class loginController {
     @GetMapping("/error")
     public ModelAndView error() {
         ModelAndView modelAndView=new ModelAndView();
-        String errorMessage="You are not authorize for the requested data";
-        modelAndView.addObject("errorMsg",errorMessage);
+        modelAndView.addObject("errorMsg",properties.getNotAuthorizeMessage());
         modelAndView.setViewName("error");
 
         return modelAndView;
@@ -67,7 +66,7 @@ public class loginController {
                 return modelAndView;
 
         }   else {
-            modelAndView.addObject("errorMsg","Incorrect email");
+            modelAndView.addObject("errorMsg",properties.getIncorrectEmailMessage());
             modelAndView.setViewName("forgotPassword");
             return modelAndView;
         }
@@ -99,7 +98,7 @@ public class loginController {
             modelAndView.setViewName("redirect:reset-password?token=" + token);
             return modelAndView;
         }   else if (!passwordChecker.doPasswordMatches(password,confirmPassword)) {
-            modelAndView.addObject("errorConfirmMessage","Passwords does not match");
+            modelAndView.addObject("errorConfirmMessage",properties.getPasswordNotMatchMessage());
             modelAndView.setViewName("redirect:reset-password?token=" + token);
             return modelAndView;
 

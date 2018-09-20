@@ -34,12 +34,12 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests().antMatchers("jquery/**/","bootstrap/**/","css/**","images/**","js/**").permitAll()
                 .antMatchers("/home/**").hasAnyAuthority("ROLE_ANONYMOUS",rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString()).antMatchers("/successRegister","/forgot-password","/confirm").permitAll()
-                .antMatchers("/successfullConfirm","/unSuccessfullConfirm","/reset-password","/join").permitAll()
-                .antMatchers("/registration").anonymous()
+                .antMatchers("/successfullConfirm","/unSuccessfullConfirm","/reset-password","/join","/artist/**").permitAll()
+                .antMatchers("/registration","/login").anonymous()
                 .antMatchers("/admin/**").hasAnyAuthority(rolesEnum.ADMIN.toString()).anyRequest().authenticated()
                 .antMatchers("/recordLabel/**").hasAnyAuthority(rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
                 .antMatchers("/change-password").hasAnyAuthority(rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString(),rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
-                .and().formLogin().loginPage("/login").loginProcessingUrl("/app-login").usernameParameter("app_username").passwordParameter("app_password").permitAll().successHandler(myAuthenticationSuccessHandler())
+                .and().formLogin().loginPage("/login").loginProcessingUrl("/app-login").usernameParameter("app_username").passwordParameter("app_password").successHandler(myAuthenticationSuccessHandler())
                 .and().logout().logoutUrl("/app-logout").logoutSuccessUrl("/login")
                 .and().exceptionHandling().accessDeniedPage("/error");
 

@@ -7,6 +7,7 @@ import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.common.properties;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.artistRepository;
+import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.sendEmailDto;
@@ -69,7 +70,7 @@ public class artistServiceImpl implements artistService {
         if(user!=null) {
             throw new emailAlreadyExistsException("email already exists");
         }
-        recordLabel recordLabel= springChecks.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
         if(number>=properties.getArtistLimit()) {
             return null;
@@ -150,7 +151,7 @@ public class artistServiceImpl implements artistService {
             counterRows++;
         }
         csvParseResultDto errors=new csvParseResultDto();
-        recordLabel recordLabel= springChecks.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
         if(lines.size() + number>properties.getArtistLimit()) {
             errors.setArtistLimitExceded("Artist limit (50) exceeded");
@@ -220,5 +221,27 @@ public class artistServiceImpl implements artistService {
         if(recordLabelArtists!=null) {
             recordLabelArtistsServiceImpl.delete(recordLabelArtists);
         }
+    }
+
+    public List<artistDto> findRecentlyAddedArtist(){
+        List<artist>artists=artistRepository.findRecentlyAddedArtist();
+        List<artistDto> artistDtos=new LinkedList<>();
+        for (artist a:artists) {
+            artistDto artistDto=new artistDto();
+            artistDto.setName(a.getUser().getName());
+            artistDto.setDeleted(a.isDeleted());
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(a.getId());
+            if(!a.isDeleted()) {
+                //artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName()); this will have to be uncomnented
+            }
+            if(a.getUser().getPicture()!=null) {
+                //logic from s3 for the picture
+            }   else {
+                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
+            }
+            artistDtos.add(artistDto);
+        }
+
+        return artistDtos;
     }
 }

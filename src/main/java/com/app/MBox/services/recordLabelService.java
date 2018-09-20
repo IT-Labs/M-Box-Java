@@ -3,9 +3,12 @@ package com.app.MBox.services;
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.users;
+import com.app.MBox.dto.recordLabelDto;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 @Component
 public interface recordLabelService {
 
@@ -21,4 +24,6 @@ public interface recordLabelService {
 
 
      void deleteRecordLabel(String email);
+
+     List<recordLabelDto> getRecordLabels(int page, int size);
 }

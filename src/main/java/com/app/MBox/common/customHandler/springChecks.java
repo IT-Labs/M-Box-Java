@@ -21,13 +21,15 @@ public class springChecks {
     @Autowired
     recordLabelService recordLabelServiceImpl;
     @Autowired
-    userServiceImpl userServiceImpl;
+    userService userServiceImpl;
     @Autowired
     verificationTokenService verificationTokenServiceImpl;
     @Autowired
     artistService artistServiceImpl;
     @Autowired
     userRolesService userRolesServiceImpl;
+    @Autowired
+    userRolesService userRolesService;
 
     public boolean isProductionProfile() {
         String[] profiles = environment.getActiveProfiles();
@@ -38,32 +40,21 @@ public class springChecks {
         return false;
     }
 
-    public recordLabel getAuthenticatedUser() {
+    public recordLabel getLoggedInRecordLabel() {
         authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(authenticatedUser.getUserId());
         return recordLabel;
     }
 
-    public String getUserByToken(String token) {
-        users user=verificationTokenServiceImpl.findByToken(token);
+
+
+    public String getLoggedInUserRole() {
+        authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        users user=userServiceImpl.findByEmail(authenticatedUser.getUsername());
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
-        if(userRoles.getRole().getName().equals(rolesEnum.ARTIST.name())) {
-            return rolesEnum.ARTIST.name();
-        }
-
-        if(userRoles.getRole().getName().equals(rolesEnum.RECORDLABEL.name())) {
-            return rolesEnum.RECORDLABEL.name();
-        }
-
-        if(userRoles.getRole().getName().equals(rolesEnum.ADMIN.name())) {
-            return rolesEnum.ADMIN.name();
-        }
-
-        if(userRoles.getRole().getName().equals(rolesEnum.LISTENER.name())) {
-            return rolesEnum.LISTENER.name();
-        }
-
-        return null;
+        return userRolesService.getRole(userRoles);
     }
+
+
 
 }

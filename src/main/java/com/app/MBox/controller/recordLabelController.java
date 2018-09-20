@@ -2,6 +2,7 @@ package com.app.MBox.controller;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.authenticatedUser;
+import com.app.MBox.common.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
@@ -9,6 +10,9 @@ import com.app.MBox.services.artistService;
 import com.app.MBox.services.userService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +26,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping(value = "/recordLabel")
+@RequestMapping(value = "/record-label")
 public class recordLabelController {
 
     @Autowired
@@ -31,14 +35,18 @@ public class recordLabelController {
     @Autowired
     artistService artistServiceImpl;
 
-    public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
+    @Autowired
+    properties properties;
+
+    public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
+    public static int ARTIST_LAZY_LOAD_INITIAL_SIZE=20;
 
 
     @RequestMapping(value = "/dashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
         ModelAndView modelAndView=new ModelAndView();
         authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId(),RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE);
+        List<artistDto> artists=userServiceImpl.findArtists(authenticatedUser.getUserId(),PageRequest.of(ARTIST_LAZY_LOAD_INITIAL_PAGE,ARTIST_LAZY_LOAD_INITIAL_SIZE));
         model.addAttribute("artists",artists);
         modelAndView.setViewName("recordLabelDashboard");
         return modelAndView;
@@ -46,9 +54,9 @@ public class recordLabelController {
 
     @RequestMapping(value = "/sort",method = RequestMethod.GET)
     @ResponseBody
-    public List<artistDto> processSort(@RequestParam String sortParam, @RequestParam int page, @RequestParam int direction) {
+    public List<artistDto> processSort(Pageable pageable) {
         List<artistDto> artists=new LinkedList<>();
-        artists=userServiceImpl.findAndSortArtists(sortParam,page,direction);
+        artists=userServiceImpl.findAndSortArtists(pageable);
         return artists;
     }
 
@@ -68,10 +76,10 @@ public class recordLabelController {
 
     @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
     @ResponseBody
-    public List<artistDto> processLazyLoading(@RequestParam int page) {
+    public List<artistDto> processLazyLoading(Pageable pageable) {
         List<artistDto> artistDtos=new LinkedList<>();
         authenticatedUser authenticatedUser=(authenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        artistDtos=userServiceImpl.findArtists(authenticatedUser.getUserId(),page);
+        artistDtos=userServiceImpl.findArtists(authenticatedUser.getUserId(),pageable);
         return artistDtos;
     }
 
@@ -86,7 +94,7 @@ public class recordLabelController {
         try {
             users user=artistServiceImpl.inviteArtist(name,email,request);
             if(user==null) {
-                modelAndView.addObject("artistNumberError","Artist limit (50) exceeded");
+                modelAndView.addObject("artistNumberError",properties.getArtistNumberMessage());
                 modelAndView.setViewName("inviteArtist");
                 return modelAndView;
             }
@@ -95,7 +103,7 @@ public class recordLabelController {
             return modelAndView;
         } catch (emailAlreadyExistsException e) {
             log.error(e.getMessage());
-            modelAndView.addObject("emailAlreadyExistsError","email already exists");
+            modelAndView.addObject("emailAlreadyExistsError",properties.getEmailAlreadyExistsMessage());
             modelAndView.setViewName("inviteArtist");
             return modelAndView;
         }
@@ -110,13 +118,13 @@ public class recordLabelController {
     @PostMapping(value = "/add-artists" , consumes = "multipart/form-data")
     public ModelAndView processCsv(ModelAndView modelAndView, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if(file.isEmpty()) {
-            modelAndView.addObject("emptyFile","Please select a .csv file");
+            modelAndView.addObject("emptyFile",properties.getCsvExtensionError());
             modelAndView.setViewName("addMultipleArtists");
             return modelAndView;
         }
         String [] extension=file.getOriginalFilename().split("\\.");
         if(!extension[extension.length-1].equals("csv")) {
-            modelAndView.addObject("invalidExtension","Uploaded file must be .csv");
+            modelAndView.addObject("invalidExtension",properties.getCsvExtensionError());
             modelAndView.setViewName("addMultipleArtists");
             return modelAndView;
         }

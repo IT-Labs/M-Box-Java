@@ -2,6 +2,7 @@ package com.app.MBox.services;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.*;
+import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -29,4 +30,5 @@ public interface artistService {
 
     void deleteArtist(String email);
 
+    List<artistDto> findRecentlyAddedArtist();
 }

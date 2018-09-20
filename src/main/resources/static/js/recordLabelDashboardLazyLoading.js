@@ -9,9 +9,10 @@ jQuery(document).ready(
 		    if(scrolltop==pixelsScrolled) {
 		    pixelsScrolled+=860;
             var page=document.getElementById("row_no").value;
-
-			$.get("/recordLabel/lazyLoad", {
-			page:page
+            var size=document.getElementById("size").value;
+			$.get("/record-label/lazyLoad", {
+			page:page,
+			size:size
 		}, function(data) {
 			console.log(data);
 			var html="";

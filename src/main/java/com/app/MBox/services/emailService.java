@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -35,11 +36,13 @@ public class emailService {
     @Autowired
     private springChecks springChecks;
 
+    @Async
     void sendMail(sendEmailDto sendEmail) {
         try {
             Properties props = System.getProperties();
             props.put("mail.transport.protocol", "smtp");
             props.put("mail.smtp.port", configurationServiceImpl.findByKey(properties.getSmtpServerPort()).getValue());
+            props.put("mail.smtp.ssl.trust", "*");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.auth", "true");
 
@@ -63,7 +66,7 @@ public class emailService {
         }
     }
 
-
+    @Async
     public void setEmail(emailBodyDto emailBodyDto, users user) {
 
         sendEmailDto sendEmail=new sendEmailDto();

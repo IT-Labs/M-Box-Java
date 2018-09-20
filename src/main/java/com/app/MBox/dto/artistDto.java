@@ -12,5 +12,7 @@ public class artistDto {
     private String pictureUrl;
     private String name;
     private String email;
+    private String recordLabelName;
+    private boolean deleted;
 
 }

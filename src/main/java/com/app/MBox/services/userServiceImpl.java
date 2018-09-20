@@ -11,6 +11,7 @@ import com.app.MBox.dto.*;
 import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,9 +56,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private springChecks springChecks;
 
-    public static int RECORD_LABEL_LAZY_LOAD_SIZE=20;
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
-    public static int ARTIST_LAZY_LOAD_SIZE=20;
     public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public users findByEmail(String email) {
 
@@ -146,9 +145,9 @@ public class userServiceImpl implements userService {
         return emailBodyDto;
     }
 
-    public List<recordLabelDto> findRecordLabels(int page,int size) {
+    public List<recordLabelDto> findRecordLabels(Pageable pageable) {
         List<recordLabelDto> recordLabelDtos=new LinkedList<>();
-        List<users> users=userRepository.findRecordLabels(PageRequest.of(page,size));
+        List<users> users=userRepository.findRecordLabels(pageable);
         for(int i=0 ; i<users.size() ; i++) {
             recordLabelDto recordLabelDto=new recordLabelDto();
             recordLabelDto.setEmail(users.get(i).getEmail());
@@ -178,10 +177,10 @@ public class userServiceImpl implements userService {
         return recordLabelDtos;
     }
 
-    public List<artistDto> findArtists(int userId,int page) {
+    public List<artistDto> findArtists(int userId,Pageable pageable) {
         List<artistDto> artistsDto=new LinkedList<>();
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(userId);
-        List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),PageRequest.of(page,ARTIST_LAZY_LOAD_SIZE));
+        List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
         for(int i=0 ; i<artists.size();i++) {
             artistDto artistDto=new artistDto();
             artistDto.setEmail(artists.get(i).getUser().getEmail());
@@ -197,14 +196,14 @@ public class userServiceImpl implements userService {
     }
 
 
-    public List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int direction) {
+    public List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int size,int direction) {
         List<recordLabelDto> recordLabelDtos=new LinkedList<>();
         List<users> users;
         if(!sortParam.equals("number")) {
             if (direction == 0) {
-                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*RECORD_LABEL_LAZY_LOAD_SIZE+RECORD_LABEL_LAZY_LOAD_SIZE, Sort.Direction.DESC, sortParam));
+                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.DESC, sortParam));
             } else {
-                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*RECORD_LABEL_LAZY_LOAD_SIZE+RECORD_LABEL_LAZY_LOAD_SIZE, Sort.Direction.ASC, sortParam));
+                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.ASC, sortParam));
             }
             for (int i = 0; i < users.size(); i++) {
                 recordLabelDto recordLabelDto = new recordLabelDto();
@@ -216,7 +215,7 @@ public class userServiceImpl implements userService {
                 recordLabelDtos.add(recordLabelDto);
             }
         }   else {
-                users = userRepository.findRecordLabels(PageRequest.of(0, page*RECORD_LABEL_LAZY_LOAD_SIZE+RECORD_LABEL_LAZY_LOAD_SIZE));
+                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
                 for (int i = 0; i < users.size(); i++) {
                     recordLabelDto recordLabelDto = new recordLabelDto();
                     recordLabelDto.setEmail(users.get(i).getEmail());
@@ -239,16 +238,13 @@ public class userServiceImpl implements userService {
     }
 
 
-    public List<artistDto> findAndSortArtists(String sortParam, int page, int direction) {
+    public List<artistDto> findAndSortArtists(Pageable pageable) {
 
         List<artistDto> artistDtos=new LinkedList<>();
-        recordLabel recordLabel= springChecks.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists;
-        if(direction==0) {
-           artists = userRepository.findArtists(recordLabel.getId(), PageRequest.of(ARTIST_LAZY_LOAD_INITIAL_PAGE, page * ARTIST_LAZY_LOAD_SIZE + ARTIST_LAZY_LOAD_SIZE, Sort.Direction.DESC, sortParam));
-        }  else {
-            artists = userRepository.findArtists(recordLabel.getId(), PageRequest.of(ARTIST_LAZY_LOAD_INITIAL_PAGE, page * ARTIST_LAZY_LOAD_SIZE + ARTIST_LAZY_LOAD_SIZE, Sort.Direction.ASC, sortParam));
-        }
+            artists = userRepository.findArtists(recordLabel.getId(), pageable);
+
 
         for(int i=0 ; i<artists.size();i++) {
             artistDto artistDto=new artistDto();
@@ -266,7 +262,7 @@ public class userServiceImpl implements userService {
     }
 
     public List<artistDto> searchArtists(String searchParam) {
-        recordLabel recordLabel= springChecks.getAuthenticatedUser();
+        recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
         List<artistDto> artistDtos=new LinkedList<>();
         for(int i=0 ; i<artists.size();i++) {

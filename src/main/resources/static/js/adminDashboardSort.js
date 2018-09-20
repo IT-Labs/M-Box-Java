@@ -65,9 +65,11 @@ $(document).ready(function () {
         function sort(sortParam,direction) {
         var page=document.getElementById("row_no").value;
         page=Number(page)-1;
+        var size=document.getElementById("size").value;
         $.get("/admin/sort", {
             sortParam:sortParam,
 			page:page,
+			size:size,
 			direction:direction
 		}, function(data) {
 			console.log(data);

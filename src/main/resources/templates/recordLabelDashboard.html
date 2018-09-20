@@ -47,7 +47,7 @@
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
-                <form role="form" th:action="@{/recordLabel/delete}" method="post" id="form">
+                <form role="form" th:action="@{/record-label/delete}" method="post" id="form">
                     <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
                     <td th:text="${artist.name}" style="width: 15%;"></td>
                     <td th:text="${artist.email}" style="width: 15%;"></td>
@@ -61,6 +61,7 @@
 
         </table>
         <input type="hidden" id="row_no" name="pageNumber" value="1">
+        <input type="hidden" id="size" name="sizeNumber" value="20">
     </div>
     </div>
 
@@ -71,15 +72,15 @@
                /*<![CDATA[*/
                 var serverContext = [[@{/}]];
                  function redirectToDashboard() {
-                window.location.href = serverContext + "recordLabel/dashboard";
+                window.location.href = serverContext + "record-label/dashboard";
                 }
 
                 function redirectToInvite() {
-                window.location.href = serverContext + "recordLabel/invite";
+                window.location.href = serverContext + "record-label/invite";
                 }
 
                 function redirectToInviteMultiple() {
-                window.location.href = serverContext + "recordLabel/add-artists";
+                window.location.href = serverContext + "record-label/add-artists";
                 }
 
                   $('form').submit(function(event) {

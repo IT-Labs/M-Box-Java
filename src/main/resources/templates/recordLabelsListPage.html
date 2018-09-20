@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<header th:insert="shared/header.html :: header"> </header>
+<div class="body-content">
+<div class="container-fluid" style="margin-top:4%">
+    <ul id="recordLabelsListId" class="list-group recordLabelList" style="list-style:none;">
 
+        <li th:each="record : ${recordLabels}" class="col-sm-2 table-bordered" style="margin-right:3.2% ; margin-bottom:4%;">
+            <div class="row">
+                <div>
+                    <div class="text-center text">
+                        <h5 th:text="${record.name}"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <img class="img-responsive center-block text-center" th:src="${record.pictureUrl}" />
+                </div>
+            </div>
+        </li>
+
+    </ul>
+    <button name="LoadMore" class="btn btn-primary center-block" id="loadmorebutton" style="display:none"> Load More</button>
+</div>
+</div>
+
+<script>
+    jQuery(document).ready(
+
+	function($) {
+
+        $(window).on("scroll", function () {
+            var scrollHeight = $(document).height();
+            var scrollPosition = $(window).height() + $(window).scrollTop();
+            if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+
+
+                  }
+        });
+	});
+
+</script>
 </body>
 </html>
