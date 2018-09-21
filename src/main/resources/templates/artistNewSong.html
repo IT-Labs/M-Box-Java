@@ -14,7 +14,7 @@
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
 </head>
 <body>
 
@@ -22,20 +22,30 @@
     <hr />
     <div class="row">
         <div class="row" style="padding: 15px">
+
             <form th:action="@{artistAccount}" method="get">
                 <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
             </form>
+
         </div>
     </div>
     <div class="row">
-        <form th:action="@{song}" method="post">
+        <form th:action="@{song}" method="post" enctype="multipart/form-data" id="form">
+
             <button type="submit" class="btn btn-block btn-primary" style="margin: 5px">Publish</button>
+
             <div class="col-md-6 col-sm-6">
+                <div class="col-md-2 col-sm-2">
+                    <label>Song Name:</label>
+                </div>
                 <div class="row form-group" style="margin: 15px">
-                    <input name="songName" class="form-control" placeholder="Song Name">
+                    <input name="songName" class="form-control" placeholder="Song Name" id="name">
+                    <p id="nameError" class="error"></p>
                 </div>
                 <div class="row" style="margin: 15px">
                     <input type="file" name="file" id="file" accept=".jpg,.png">
+                    <p th:text="${wrongFormat}" class="error"></p>
+                    <p th:text="${sizeExceeded}" class="error"></p>
                 </div>
                 <div class="row" style="margin: 15px">
                     <label th:text="${artistName}"></label>
@@ -46,6 +56,7 @@
                     </div>
                     <div class="col-md-6 col-sm-6">
                         <input class="form-control" name="albumName" placeholder="Album Name" id="albumName">
+                        <p id="albumNameError" class="error"></p>
                     </div>
                 </div>
                 <div class="row" style="margin: 15px">
@@ -56,8 +67,16 @@
                         <select name="genre">
                             <option>Rock</option>
                             <option>Pop</option>
-                            <option>Classical</option>
+                            <option>Electro</option>
+                            <option>Hip-Hop</option>
+                            <option>RnB</option>
                             <option>Rap</option>
+                            <option>Metal</option>
+                            <option>Jazz</option>
+                            <option>Soul</option>
+                            <option>Classical</option>
+                            <option>Funk</option>
+                            <option>Drum ‘n Bass</option>
                         </select>
                     </div>
                 </div>
@@ -66,7 +85,7 @@
                         <label>Release Date:</label>
                     </div>
                     <div class="col-md-7 col-sm-7">
-                        <input name="dateReleased" class="form-control" type="date" />
+                        <input name="dateReleased" class="form-control" type="date" required />
                     </div>
                 </div>
                 <div class="row" style="margin: 15px">
@@ -76,6 +95,7 @@
                         </div>
                         <div class="row" style="padding: 8px">
                             <input name="youtubeLink" class="form-control" placeholder="Youtube Link" id="youtubeLinkUrl">
+                            <p id="youtubeLinkError" class="error"></p>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
@@ -84,6 +104,7 @@
                         </div>
                         <div class="row" style="padding: 8px">
                             <input name="vimeoLink" class="form-control" placeholder="Vimeo Link" id="vimeoLinkUrl">
+                            <p id="vimeoLinkError" class="error"></p>
                         </div>
                     </div>
                 </div>
@@ -94,12 +115,78 @@
                 </div>
                 <div class="row" style="padding: 12px;">
                     <textarea name="songLyrics" class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" id="songLyrics"></textarea>
+                    <p id="songLyricsError"></p>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
+<script>
 
+ function matchYoutubeUrl(url) {
+    var regex = RegExp('^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+');
+    if(regex.test(url)){
+        return true;
+    }
+    return false;
+}
+
+        $(document).ready(function () {
+
+	$("#form").submit(function(event) {
+	   $("#nameError").show().html("");
+	   $("#albumNameError").show().html("");
+	   $("#youtubeLinkError").show().html("");
+	   $("#vimeoLinkError").show().html("");
+	   $("#songLyricsError").show().html("");
+	    var name=$("#name").val();
+	    var albumName=$("#albumName").val();
+	    var youtubeLink=$("#youtubeLinkUrl").val();
+	    var vimeoLink=$("#vimeoLinkUrl").val();
+	    var lyrics=$("#songLyrics").val();
+	    var counter=0;
+        if ($("#name").val().length<2 || $("#name").val().length>50) {
+        $("#nameError").show().html("Name must be between 1 and 50 characters");
+    	counter++;
+        }
+
+        if(albumName.length<2 || albumName.length>50) {
+        $("#albumNameError").show().html("Album name must be between 1 and 50 characters");
+    	counter++;
+        }
+
+        if(lyrics.length>10000) {
+         $("#songLyricsError").show().html("Lyrics can not contain more than 10000 characters");
+    	counter++;
+        }
+
+        if(!matchYoutubeUrl($("#youtubeLinkUrl").val())) {
+        counter++;
+        $("#youtubeLinkError").show().html("It must be a youtube link");
+        }
+
+        var vre=new RegExp('^(http:\/\/|https:\/\/)(vimeo\.com\.be)\/([\w\/]+)([\?].*)?$');
+        if(!vre.test(vimeoLink)) {
+        console.log("invalid Vimeo");
+        counter++;
+        $("#vimeoLinkError").show().html("It must be a vimeo link");
+        }
+
+        if(counter>0) {
+        event.preventDefault();
+        return;
+    }
+
+	})
+
+
+
+
+	})
+
+
+
+</script>
 </body>
 </html>

@@ -5,9 +5,9 @@ import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.artistService;
+import com.app.MBox.services.songService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,22 +26,34 @@ public class artistController {
     artistService artistService;
     @Autowired
     springChecks springChecks;
+    @Autowired
+    songService songService;
 
     @RequestMapping(value = "/song",method = RequestMethod.GET)
     public ModelAndView showSongPage (ModelAndView modelAndView,Model model) {
         songDto songDto=new songDto();
-        //artist artist=springChecks.getLoggedInArtist();
-        //modelAndView.addObject("artistName","by: " + artist.getUser().getName());
-        modelAndView.addObject("artistName","by: Tyga");
+        artist artist=springChecks.getLoggedInArtist();
+        modelAndView.addObject("artistName","by: " + artist.getUser().getName());
         model.addAttribute("songDto",songDto);
         modelAndView.setViewName("artistNewSong");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/song",method = RequestMethod.POST,consumes = "multipart/form-data")
-    public ModelAndView processSongPage(ModelAndView modelAndView,@ModelAttribute("songDto") songDto songDto) {
-        System.out.println(songDto.getSongName() + songDto.getAlbumName() + songDto.getArtistName() + songDto.getDateReleased() + songDto.getGenre() + songDto.getFile().getOriginalFilename() + "fileNamee");
-        modelAndView.setViewName("artistNewSong");
+    @RequestMapping(value = "/song",method = RequestMethod.POST)
+    public ModelAndView processSongPage(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@ModelAttribute("songDto") songDto songDto) {
+        String result=songService.isValidPicture(file);
+        if(result.equals("wrongFormat")) {
+            modelAndView.addObject(result,"You can only upload .jpg, .jpeg or .png!");
+            modelAndView.setViewName("artistNewSong");
+            return modelAndView;
+        } else if (result.equals("sizeExceeded")) {
+            modelAndView.addObject(result,"Upload file exceeded the maximum file size limit of 3MB!");
+            modelAndView.setViewName("artistNewSong");
+            return modelAndView;
+        }
+
+        songService.addSong(file,songDto);
+        modelAndView.setViewName("artistAccount");
         return modelAndView;
     }
 

@@ -31,6 +31,5 @@ public class songDto {
 
     private String songLyrics;
 
-    private MultipartFile file;
 
 }
