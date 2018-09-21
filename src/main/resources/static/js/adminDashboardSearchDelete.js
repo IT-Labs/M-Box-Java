@@ -1,7 +1,7 @@
 function deleteFunction(name,email) {
     if(confirm("Are you sure you want do delete " + name)) {
 
-          $.get("/admin/delete", {
+          $.get("/admin/delete-record-label", {
 			email:email
 		}, function(data) {
             redirectToDashboard();

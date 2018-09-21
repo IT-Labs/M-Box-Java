@@ -54,7 +54,7 @@
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="recordLabel : ${recordLabels}">
-                <form role="form" th:action="@{delete}" method="post" id="form">
+                <form role="form" th:action="@{delete-record-label}" method="get" id="form">
                 <td th:text="${recordLabel.name}" style="width: 15%;"></td>
                 <td th:text="${recordLabel.email}" style="width: 15%;"></td>
                 <td th:text="${recordLabel.number}" style="width: 15%;"></td>

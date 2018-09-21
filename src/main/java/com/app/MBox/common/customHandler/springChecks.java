@@ -19,15 +19,9 @@ public class springChecks {
     @Autowired
     private Environment environment;
     @Autowired
-    recordLabelService recordLabelServiceImpl;
+    recordLabelService recordLabelService;
     @Autowired
-    userService userServiceImpl;
-    @Autowired
-    verificationTokenService verificationTokenServiceImpl;
-    @Autowired
-    artistService artistServiceImpl;
-    @Autowired
-    userRolesService userRolesServiceImpl;
+    userService userService;
     @Autowired
     userRolesService userRolesService;
 
@@ -42,7 +36,7 @@ public class springChecks {
 
     public recordLabel getLoggedInRecordLabel() {
         authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recordLabel recordLabel=recordLabelServiceImpl.findByUserId(authenticatedUser.getUserId());
+        recordLabel recordLabel=recordLabelService.findByUserId(authenticatedUser.getUserId());
         return recordLabel;
     }
 
@@ -50,8 +44,8 @@ public class springChecks {
 
     public String getLoggedInUserRole() {
         authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        users user=userServiceImpl.findByEmail(authenticatedUser.getUsername());
-        userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
+        users user=userService.findByEmail(authenticatedUser.getUsername());
+        userRoles userRoles=userRolesService.findByUserId(user.getId());
         return userRolesService.getRole(userRoles);
     }
 

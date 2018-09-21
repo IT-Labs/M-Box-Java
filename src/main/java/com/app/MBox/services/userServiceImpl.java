@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("userServiceImpl")
 public class userServiceImpl implements userService {
@@ -50,14 +51,11 @@ public class userServiceImpl implements userService {
     @Autowired
     private emailService emailService;
     @Autowired
-    private artistRepository artistRepository;
-    @Autowired
     private artistService artistServiceImpl;
     @Autowired
     private springChecks springChecks;
 
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
-    public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public users findByEmail(String email) {
 
         return userRepository.findByEmail(email);
@@ -146,34 +144,29 @@ public class userServiceImpl implements userService {
     }
 
     public List<recordLabelDto> findRecordLabels(Pageable pageable) {
-        List<recordLabelDto> recordLabelDtos=new LinkedList<>();
         List<users> users=userRepository.findRecordLabels(pageable);
-        for(int i=0 ; i<users.size() ; i++) {
+        List<recordLabelDto> recordLabelDtos=users.stream().map(temp->{
             recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabelDto.setEmail(users.get(i).getEmail());
-            recordLabelDto.setName(users.get(i).getName());
-            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(users.get(i).getId());
-            int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-            recordLabelDto.setNumber(number);
-            recordLabelDtos.add(recordLabelDto);
-        }
+            recordLabelDto.setEmail(temp.getEmail());
+            recordLabelDto.setName(temp.getName());
+            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
+            recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
+            return recordLabelDto;
+        }).collect(Collectors.toList());
         return recordLabelDtos;
     }
 
 
     public List<recordLabelDto> search(String searchParam) {
-        List<recordLabelDto> recordLabelDtos=new LinkedList<>();
         List<users> users=userRepository.searchRecordLabels(searchParam);
-        for(int i=0 ; i<users.size() ; i++) {
+        List<recordLabelDto> recordLabelDtos=users.stream().map(temp->{
             recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabelDto.setEmail(users.get(i).getEmail());
-            recordLabelDto.setName(users.get(i).getName());
-            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(users.get(i).getId());
-            int number=recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-            recordLabelDto.setNumber(number);
-            recordLabelDtos.add(recordLabelDto);
-        }
-
+            recordLabelDto.setEmail(temp.getEmail());
+            recordLabelDto.setName(temp.getName());
+            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
+            recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
+            return recordLabelDto;
+        }).collect(Collectors.toList());
         return recordLabelDtos;
     }
 
@@ -181,17 +174,17 @@ public class userServiceImpl implements userService {
         List<artistDto> artistsDto=new LinkedList<>();
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(userId);
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
-        for(int i=0 ; i<artists.size();i++) {
+        artistsDto=artists.stream().map(temp->{
             artistDto artistDto=new artistDto();
-            artistDto.setEmail(artists.get(i).getUser().getEmail());
-            artistDto.setName(artists.get(i).getUser().getName());
-            if(artists.get(i).getUser().getPicture()!=null) {
-                //logic for the picture from s3
+            artistDto.setEmail(temp.getUser().getEmail());
+            artistDto.setName(temp.getUser().getName());
+            if(temp.getUser().getPicture()!=null) {
+                //logic for picture from s3
             }   else {
-                    artistDto.setPictureUrl(properties.getArtistDefaultPicture());
+                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
-            artistsDto.add(artistDto);
-        }
+            return artistDto;
+        }).collect(Collectors.toList());
         return artistsDto;
     }
 
@@ -205,26 +198,28 @@ public class userServiceImpl implements userService {
             } else {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.ASC, sortParam));
             }
-            for (int i = 0; i < users.size(); i++) {
-                recordLabelDto recordLabelDto = new recordLabelDto();
-                recordLabelDto.setEmail(users.get(i).getEmail());
-                recordLabelDto.setName(users.get(i).getName());
-                recordLabel recordLabel = recordLabelServiceImpl.findByUserId(users.get(i).getId());
-                int number = recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-                recordLabelDto.setNumber(number);
-                recordLabelDtos.add(recordLabelDto);
-            }
-        }   else {
+
+            recordLabelDtos=users.stream().map(temp->{
+                recordLabelDto recordLabelDto=new recordLabelDto();
+                recordLabelDto.setEmail(temp.getEmail());
+                recordLabelDto.setName(temp.getName());
+                recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
+                recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
+                return recordLabelDto;
+            }).collect(Collectors.toList());
+
+        }
+        else {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
-                for (int i = 0; i < users.size(); i++) {
-                    recordLabelDto recordLabelDto = new recordLabelDto();
-                    recordLabelDto.setEmail(users.get(i).getEmail());
-                    recordLabelDto.setName(users.get(i).getName());
-                    recordLabel recordLabel = recordLabelServiceImpl.findByUserId(users.get(i).getId());
-                    int number = recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId());
-                    recordLabelDto.setNumber(number);
-                    recordLabelDtos.add(recordLabelDto);
-                }
+                recordLabelDtos=users.stream().map(temp->{
+                recordLabelDto recordLabelDto=new recordLabelDto();
+                recordLabelDto.setEmail(temp.getEmail());
+                recordLabelDto.setName(temp.getName());
+                recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
+                recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
+                return recordLabelDto;
+                }).collect(Collectors.toList());
+
 
                 if(direction==0) {
                     Collections.sort(recordLabelDtos,Collections.reverseOrder());
@@ -245,38 +240,35 @@ public class userServiceImpl implements userService {
         List<users> artists;
             artists = userRepository.findArtists(recordLabel.getId(), pageable);
 
-
-        for(int i=0 ; i<artists.size();i++) {
+            artistDtos=artists.stream().map(temp->{
             artistDto artistDto=new artistDto();
-            artistDto.setEmail(artists.get(i).getEmail());
-            artistDto.setName(artists.get(i).getName());
-            if(artists.get(i).getPicture()!=null) {
-                //logic for the picture from s3
+            artistDto.setEmail(temp.getEmail());
+            artistDto.setName(temp.getName());
+            if(temp.getPicture()!=null) {
+                //logic for picture from s3
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
-            artistDtos.add(artistDto);
+            return artistDto;
+        }).collect(Collectors.toList());
 
-        }
         return artistDtos;
     }
 
     public List<artistDto> searchArtists(String searchParam) {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
-        List<artistDto> artistDtos=new LinkedList<>();
-        for(int i=0 ; i<artists.size();i++) {
+        List<artistDto> artistDtos=artists.stream().map(temp->{
             artistDto artistDto=new artistDto();
-            artistDto.setEmail(artists.get(i).getEmail());
-            artistDto.setName(artists.get(i).getName());
-
-            if(artists.get(i).getPicture()!=null) {
-                //logic for the picture from s3
+            artistDto.setEmail(temp.getEmail());
+            artistDto.setName(temp.getName());
+            if(temp.getPicture()!=null) {
+                //logic for picture from s3
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
-            artistDtos.add(artistDto);
-        }
+            return artistDto;
+        }).collect(Collectors.toList());
 
         return artistDtos;
     }

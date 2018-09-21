@@ -82,19 +82,13 @@ public class adminController  {
         }
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete-record-label",method = RequestMethod.GET)
     public ModelAndView processDeleteRecordLabel(ModelAndView modelAndView,@RequestParam("email") String email) {
         recordLabelServiceImpl.deleteRecordLabel(email);
         modelAndView.setViewName("redirect:dashboard");
         return modelAndView;
         }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.GET)
-    @ResponseBody
-    public String processDeleteRecordLabelGet(@RequestParam("email") String email) {
-        recordLabelServiceImpl.deleteRecordLabel(email);
-        return "OK";
-    }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     @ResponseBody
