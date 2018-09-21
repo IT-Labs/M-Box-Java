@@ -24,6 +24,8 @@ public class springChecks {
     userService userService;
     @Autowired
     userRolesService userRolesService;
+    @Autowired
+    artistService artistService;
 
     public boolean isProductionProfile() {
         String[] profiles = environment.getActiveProfiles();
@@ -40,6 +42,11 @@ public class springChecks {
         return recordLabel;
     }
 
+    public artist getLoggedInArtist() {
+        authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        artist artist=artistService.findByUserId(authenticatedUser.getUserId());
+        return artist;
+    }
 
 
     public String getLoggedInUserRole() {

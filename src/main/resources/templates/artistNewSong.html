@@ -21,146 +21,84 @@
 <div class="container-fluid">
     <hr />
     <div class="row">
-        <div class="col-md-4 col-sm-4">
-
-        </div>
-        <div class="col-md-8 col-sm-8">
-            <div class="row">
-                <div class="col-md-6 col-sm-6">
-
-                        <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
-
-                </div>
-                <div class="col-md-6 col-sm-6">
-
-                        <button class="btn btn-block btn-primary" style="margin: 5px" onclick="formSubmit()">Publish</button>
-
-                </div>
-            </div>
+        <div class="row" style="padding: 15px">
+            <form th:action="@{artistAccount}" method="get">
+                <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
+            </form>
         </div>
     </div>
-    <hr />
     <div class="row">
-        <form id="songForm" method="post" th:action="@{song}" enctype="multipart/form-data">
-        <div class="col-md-6 col-sm-6">
-            <div class="row" style="text-align: center">
-                <div class="col-md-6 col-sm-6">
-                    <input class="form-control" placeholder="Song Name" name="songName" id="songName" disabled>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-default edit" name="songName,editSongName,saveSongName,cancelSongName" id="editSongName" onclick="editDetails(this.name)">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-success save" id="saveSongName" name="songName,editSongName,saveSongName,cancelSongName" style="display:none" onclick="saveDetails(this.name)">
-                        <i class="fa fa-check"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-danger cancel" id="cancelSongName" name="songName,editSongName,saveSongName,cancelSongName" style="display:none" onclick="cancelEditing(this.name)">
-                        <i class="fa fa-remove"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <input type="file" name="file" id="file" accept=".jpg,.png"/>
-            </div>
-            <div class="row">
-                By: artist
-            </div>
-            <div class="row" style="text-align: center">
-                <div class="col-md-6 col-sm-6">
-                    <input class="form-control" placeholder="Album Name" name="albumName" id="albumName" disabled>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button  type="button" class="btn btn-default edit" name="albumName,editAlbumName,saveAlbumName,cancelAlbumName" id="editAlbumName" onclick="editDetails(this.name)">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-success save" name="albumName,editAlbumName,saveAlbumName,cancelAlbumName" id="saveAlbumName" style="display:none" onclick="saveDetails(this.name)">
-                        <i class="fa fa-check"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-danger cancel" id="cancelAlbumName" name="albumName,editAlbumName,saveAlbumName,cancelAlbumName" style="display:none" onclick="cancelEditing(this.name)">
-                        <i class="fa fa-remove"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="row" style="text-align: center">
-                genre
-            </div>
-
+        <form th:action="@{song}" method="post">
+            <button type="submit" class="btn btn-block btn-primary" style="margin: 5px">Publish</button>
             <div class="col-md-6 col-sm-6">
-                <input type="date" class="form-control" placeholder="Release date" id="dateReleased" name="dateReleased" disabled>
-            </div>
-            <div class="col-md-1 col-sm-1">
-                <button  type="button" class="btn btn-default edit" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" id="editDateRelease" onclick="editDetails(this.name)">
-                    <i class="fa fa-edit"></i>
-                </button>
-            </div>
-            <div class="col-md-1 col-sm-1">
-                <button type="button" class="btn btn-success save" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" id="saveDateRelease" style="display:none" onclick="saveDetails(this.name)">
-                    <i class="fa fa-check"></i>
-                </button>
-            </div>
-            <div class="col-md-1 col-sm-1">
-                <button type="button" class="btn btn-danger cancel" id="cancelDateRelease" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" style="display:none" onclick="cancelEditing(this.name)">
-                    <i class="fa fa-remove"></i>
-                </button>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 col-sm-6">
-                    <label>Youtube Link</label>
+                <div class="row form-group" style="margin: 15px">
+                    <input name="songName" class="form-control" placeholder="Song Name">
                 </div>
-                <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
-                    <label>Vimeo Link</label>
+                <div class="row" style="margin: 15px">
+                    <input type="file" name="file" id="file" accept=".jpg,.png">
+                </div>
+                <div class="row" style="margin: 15px">
+                    <label th:text="${artistName}"></label>
+                </div>
+                <div class="row" style="margin: 15px">
+                    <div class="col-md-2 col-sm-2">
+                        <label>Album Name:</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <input class="form-control" name="albumName" placeholder="Album Name" id="albumName">
+                    </div>
+                </div>
+                <div class="row" style="margin: 15px">
+                    <div class="col-md-4 col-sm-3" style="margin-top: 5px">
+                        <label>Genre:</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <select name="genre">
+                            <option>Rock</option>
+                            <option>Pop</option>
+                            <option>Classical</option>
+                            <option>Rap</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin: 15px">
+                    <div class="col-md-3 col-sm-3" style="margin-top: 5px">
+                        <label>Release Date:</label>
+                    </div>
+                    <div class="col-md-7 col-sm-7">
+                        <input name="dateReleased" class="form-control" type="date" />
+                    </div>
+                </div>
+                <div class="row" style="margin: 15px">
+                    <div class="col-md-6 col-sm-6">
+                        <div class="row" style="text-align: center">
+                            <label>Youtube</label>
+                        </div>
+                        <div class="row" style="padding: 8px">
+                            <input name="youtubeLink" class="form-control" placeholder="Youtube Link" id="youtubeLinkUrl">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+                        <div class="row" style="text-align: center">
+                            <label>Vimeo</label>
+                        </div>
+                        <div class="row" style="padding: 8px">
+                            <input name="vimeoLink" class="form-control" placeholder="Vimeo Link" id="vimeoLinkUrl">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-
-        <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
-            <div class="row">
-                <div class="col-md-1 col-sm-1">
-                    <button class="btn btn-default edit editDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="editLyrics" onclick="editDetails(this.name)">
-                        <i class="fa fa-edit"></i>
-                    </button>
+            <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+                <div class="row" style="text-align: center">
+                    <label>Song Lyrics</label>
                 </div>
-                <div class="col-md-1 col-sm-1" >
-                    <button class="btn btn-success saveDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="saveLyrics" onclick="saveDetails(this.name)" style="display:none">
-                        <i class="fa fa-check"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button class="btn btn-danger cancelDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="cancelLyrics" onclick="cancelEditing(this.name)" style="display:none">
-                        <i class="fa fa-remove"></i>
-                    </button>
+                <div class="row" style="padding: 12px;">
+                    <textarea name="songLyrics" class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" id="songLyrics"></textarea>
                 </div>
             </div>
-            <div class="row" style="padding: 12px;">
-                <textarea  class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" name="songLyrics"  id="songLyrics" disabled></textarea>
-            </div>
-        </div>
-
         </form>
     </div>
-
 </div>
-
-<script>
-
-    function formSubmit(event) {
-    console.log("POSTING FORM NOW");
-       document.getElementById("songForm").submit();
-
-
-    }
-
-</script>
 
 
 </body>

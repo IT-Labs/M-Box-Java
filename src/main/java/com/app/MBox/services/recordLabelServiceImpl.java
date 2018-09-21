@@ -100,16 +100,18 @@ public class recordLabelServiceImpl implements recordLabelService {
             artist.setDeleted(true);
             emailService.sendDeleteArtistEmail(artist.getUser());
             artistServiceImpl.save(artist);
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+            if(recordLabelArtists!=null) {
+                recordLabelArtistsServiceImpl.delete(recordLabelArtists);
+            }
         }
         emailService.sendDeleteRecordLabelEmail(user);
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
             }
-        recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByRecordLabelId(recordLabel.getId());
-            if(recordLabelArtists!=null) {
-                recordLabelArtistsServiceImpl.delete(recordLabelArtists);
-            }
+
+
         recordLabelRepository.delete(recordLabel);
         userServiceImpl.delete(user);
 

@@ -109,7 +109,7 @@ public class adminController  {
     @ResponseBody
     public List<recordLabelDto> processSort(@RequestParam String sortParam,@RequestParam int page,@RequestParam int size,@RequestParam int direction) {
         List<recordLabelDto> recordLabels=new LinkedList<>();
-        recordLabels=userServiceImpl.findAndSortRecordLabels(sortParam,page,size,direction);  //Ask for this because it is a litle bit tricky
+        recordLabels=userServiceImpl.findAndSortRecordLabels(sortParam,page,size,direction);
         return recordLabels;
     }
 
