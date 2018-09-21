@@ -16,7 +16,7 @@ public interface artistRepository extends CrudRepository<artist,Integer> {
     @Query(value = "select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id" ,nativeQuery = true)
     List<artist> findAllArtists(int recordLabelId);
 
-    @Query(value = "select a.* from users u join (select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id)a on u.id=a.user_id where u.is_activated=true" ,nativeQuery = true)
+    @Query(value = "select a.* from users u join (select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id)a on u.id=a.user_id" ,nativeQuery = true)
     List<artist> findAllArtists(int recordLabelId, Pageable pageable);
 
     artist findByUserId(int userId);

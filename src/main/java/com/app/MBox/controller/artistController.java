@@ -38,8 +38,9 @@ public class artistController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/song",method = RequestMethod.POST ,consumes = "multipart/form-data")
-    public ModelAndView processSongPage(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@ModelAttribute("songDto") songDto songDto) {
+    @RequestMapping(value = "/song",method = RequestMethod.POST,consumes = "multipart/form-data")
+    public ModelAndView processSongPage(ModelAndView modelAndView,@ModelAttribute("songDto") songDto songDto) {
+        System.out.println(songDto.getSongName() + songDto.getAlbumName() + songDto.getArtistName() + songDto.getDateReleased() + songDto.getGenre() + songDto.getFile().getOriginalFilename() + "fileNamee");
         modelAndView.setViewName("artistNewSong");
         return modelAndView;
     }
