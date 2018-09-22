@@ -1,10 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/artistDashboardLazyLoading.js}"></script>
+    <script th:src="@{/js/artistDashboardSearchAndDelete.js}"></script>
+    <script th:src="@{/js/artistDashboardSort.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
+    <header th:insert="shared/header.html :: header"> </header>
+
+    <div class="container" style="margin-top:8%">
+
+        <div class="row">
+            <div class="col-sm-4 col-md-4">
+                <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%" onclick="redirect()">Add New Song</button>
+            </div>
+            <div class="col-sm-8 col-md-8">
+                <form class="form" role="search">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
+                    <input type="button" value="search" onclick="mySearch()">
+                </form>
+            </div>
+        </div>
+
+        <div class="row" id="content-box" style="margin-top: 25px">
+
+            <div id="tableContainer" class="table-responsive">
+                <table st-table="rowCollection" class="table table-striped" style="border: 1px solid gray;">
+                    <thead class="fixedHeader">
+                    <tr style="display: block">
+                        <th style="width: 19%;" id="songName">Song Name <img th:src="@{/images/downArrow.png}"\ style="width:7%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;" id="upName"\></th>
+                        <th style="width: 19%;" id="albumName">Album name <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
+                        <th style="width: 19%;" id="genre">Genre <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upNumber"\></th>
+                        <th style="width: 19%;">Delete Song <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"\></th>
+                    </tr>
+                    </thead>
+                    <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
+                    <tr th:each="song : ${songs}">
+                        <form role="form" th:action="@{delete-song}" method="get" id="form">
+                            <td th:text="${song.songName}" style="width: 15%;"></td>
+                            <td th:text="${song.albumName}" style="width: 15%;"></td>
+                            <td th:text="${song.genre}" style="width: 15%;"></td>
+                            <input type="hidden" name="id" th:value=${song.id}>
+                            <input type="hidden" name="name" th:value=${song.songName}>
+                            <td style="width: 15%;"><button type="submit">DELETE</button></td>
+                        </form>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+                <input type="hidden" id="row_no" name="pageNumber" value="1">
+                <input type="hidden" id="size" name="sizeNumber" value="20">
+            </div>
+        </div>
+    </div>
+
+
+    <script th:inline="javascript">
+               /*<![CDATA[*/
+                var serverContext = [[@{/}]];
+                function redirect() {
+
+                window.location.href = serverContext + "artist/song";
+                }
+
+                 function redirectToMySongs() {
+                window.location.href = serverContext + "artist/songs";
+                }
+
+
+                $(document).ready(function () {
+
+
+
+	        $('form').submit(function(event) {
+	         var values = $(this).serialize();
+	         rez=values.split("=")
+                    if(!confirm("Are you sure you want to delete " + rez[rez.length-1] )) {
+                            event.preventDefault();
+                             return;
+                    }
+
+	        })
+
+
+
+	        })
+                /*]]>*/
+   </script>
 
 </body>
 </html>

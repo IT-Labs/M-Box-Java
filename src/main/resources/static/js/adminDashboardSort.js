@@ -16,6 +16,12 @@ $(document).ready(function () {
 
 
         function handle(param) {
+                $("#downEmail").hide();
+                $("#upEmail").hide();
+                $("#downName").hide();
+                $("#upName").hide();
+                $("#downNumber").hide();
+                $("#upNumber").hide();
             if(param==1) {
                 var name="name";
                 if(counterName%2==0) {

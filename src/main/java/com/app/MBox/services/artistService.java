@@ -31,4 +31,6 @@ public interface artistService {
     void deleteArtist(String email);
 
     List<artistDto> findRecentlyAddedArtist();
+
+    List<artistDto> findAllArtists(Pageable pageable);
 }

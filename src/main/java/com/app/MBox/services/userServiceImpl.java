@@ -287,5 +287,9 @@ public class userServiceImpl implements userService {
         saveUser(user);
     }
 
+    public List<users> findAllRecentlyAddedArtists(Pageable pageable) {
+        return userRepository.findAllRecentlyAddedArtists(pageable);
+    }
+
 }
 

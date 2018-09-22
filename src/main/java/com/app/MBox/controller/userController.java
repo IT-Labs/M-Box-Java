@@ -102,13 +102,9 @@ public class userController {
             return modelAndView;
 
         }
-        if(userRolesService.getUserRoleByToken(token).equals(rolesEnum.ARTIST.toString())) {
-            modelAndView.setViewName("artistAccount");
-        }   else {
-            modelAndView.setViewName("recordLabelDashboard");
-        }
-        userServiceImpl.setUserPassword(token,password);
 
+        userServiceImpl.setUserPassword(token,password);
+        modelAndView.setViewName("login");
 
         return modelAndView;
     }

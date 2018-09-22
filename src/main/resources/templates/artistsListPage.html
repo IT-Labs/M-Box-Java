@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/artistListPageLazyLoading.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+
+<header th:insert="shared/header.html :: header"> </header>
+<div class="body-content">
+    <div class="container-fluid" style="margin-top:4%">
+        <ul id="recordLabelsListId" class="list-group recordLabelList" style="list-style:none; margin-top:5px">
+
+            <li th:each="artist : ${artists}" class="col-sm-2 table-bordered" style="margin-right:3.2%;margin-top:6px">
+                <div>
+                    <div class="row">
+                        <div>
+                            <div class="text-center text">
+                                <h5 th:text="${artist.name}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <img class="img-circle img-responsive artistAlign" th:src="${artist.pictureUrl}" style="width: 80%;height: 80%;margin-left: auto;margin-right: auto;" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="text-center text">
+
+                                <h5 th:text="${artist.recordLabelName}"></h5>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <button name="LoadMore" class="btn btn-primary center-block" id="loadmorebutton" style="display:none"> Load More</button>
+    </div>
+</div>
+<input type="hidden" id="row_no" name="pageNumber" value="1">
+<input type="hidden" id="size" name="sizeNumber" value="25">
+<script>
+
+
+</script>
 
 </body>
 </html>

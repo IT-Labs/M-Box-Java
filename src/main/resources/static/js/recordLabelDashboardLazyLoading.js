@@ -7,7 +7,7 @@ jQuery(document).ready(
             var scrolltop=$('#bodyScroll').scrollTop();
             console.log(scrolltop);
 		    if(scrolltop==pixelsScrolled) {
-		    pixelsScrolled+=860;
+		    pixelsScrolled+=920;
             var page=document.getElementById("row_no").value;
             var size=document.getElementById("size").value;
 			$.get("/record-label/lazyLoad", {

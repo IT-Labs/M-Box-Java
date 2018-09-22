@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class artistServiceImpl implements artistService {
@@ -220,23 +221,50 @@ public class artistServiceImpl implements artistService {
 
     public List<artistDto> findRecentlyAddedArtist(){
         List<artist>artists=artistRepository.findRecentlyAddedArtist();
-        List<artistDto> artistDtos=new LinkedList<>();
-        for (artist a:artists) {
+        List<artistDto> artistDtos=mapArtistToArtistDto(artists);
+        return artistDtos;
+    }
+
+    public List<artistDto> findAllArtists(Pageable pageable) {
+        List<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
+        List<artistDto> artistDtos=artists.stream().map(temp->{
             artistDto artistDto=new artistDto();
-            artistDto.setName(a.getUser().getName());
-            artistDto.setDeleted(a.isDeleted());
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(a.getId());
-            if(!a.isDeleted()) {
+            artistDto.setName(temp.getName());
+            artist artist=findByUserId(temp.getId());
+            artistDto.setDeleted(artist.isDeleted());
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+            if(!artist.isDeleted() && recordLabelArtists!=null) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
             }
-            if(a.getUser().getPicture()!=null) {
+            if(temp.getPicture()!=null) {
                 //logic from s3 for the picture
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
-            artistDtos.add(artistDto);
-        }
-
+            return artistDto;
+        }).collect(Collectors.toList());
         return artistDtos;
+
+    }
+
+    public List<artistDto> mapArtistToArtistDto(List<artist> artists) {
+
+        List<artistDto> artistDtos=artists.stream().map(temp ->{
+            artistDto artistDto=new artistDto();
+            artistDto.setName(temp.getUser().getName());
+            artistDto.setDeleted(temp.isDeleted());
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(temp.getId());
+            if(!temp.isDeleted()) {
+                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
+            }
+            if(temp.getUser().getPicture()!=null) {
+                //logic from s3 for the picture
+            }   else {
+                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
+            }
+            return artistDto;
+        }).collect(Collectors.toList());
+        return artistDtos;
+
     }
 }

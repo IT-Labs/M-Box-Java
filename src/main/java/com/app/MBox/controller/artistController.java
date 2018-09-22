@@ -8,14 +8,16 @@ import com.app.MBox.services.artistService;
 import com.app.MBox.services.songService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -64,5 +66,34 @@ public class artistController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/songs",method = RequestMethod.GET)
+    public ModelAndView showArtistMySongsPage(ModelAndView modelAndView,Model model) {
+        List<songDto> songs=songService.findSongs(PageRequest.of(0,20));
+        model.addAttribute("songs",songs);
+        modelAndView.setViewName("artistMySongs");
+        return modelAndView;
+    }
 
+    @RequestMapping(value = "/delete-song",method = RequestMethod.GET)
+    public ModelAndView deleteSong(ModelAndView modelAndView,@RequestParam ("id") int id) {
+        songService.deleteSong(id);
+        modelAndView.setViewName("redirect:songs");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
+    @ResponseBody
+    public List<songDto> processLazyLoading(Pageable pageable) {
+        List<songDto> songDtos=new LinkedList<>();
+        songDtos=songService.findSongs(pageable);
+        return songDtos;
+    }
+
+    @RequestMapping(value = "/sort",method = RequestMethod.GET)
+    @ResponseBody
+    public List<songDto> processSongsSort(Pageable pageable) {
+        List<songDto> songs=new LinkedList<>();
+        songs=songService.findSongs(pageable);
+        return songs;
+    }
 }

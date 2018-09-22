@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
+
 </head>
 <body>
 
@@ -23,7 +24,7 @@
     <div class="row">
         <div class="row" style="padding: 15px">
 
-            <form th:action="@{artistAccount}" method="get">
+            <form th:action="@{account}" method="get">
                 <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
             </form>
 
@@ -124,13 +125,22 @@
 
 <script>
 
- function matchYoutubeUrl(url) {
-    var regex = RegExp('^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+');
-    if(regex.test(url)){
+
+function isInvalid (url,type) {
+   if(url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/)){
+    if (RegExp.$3.indexOf('youtu') > -1 && type=="1") {
         return true;
+    } else if (RegExp.$3.indexOf('vimeo') > -1 && type=="0") {
+        return true;
+    }   else {
+        return false;
     }
-    return false;
+
+    }
+    return true;
+
 }
+
 
         $(document).ready(function () {
 
@@ -161,14 +171,11 @@
     	counter++;
         }
 
-        if(!matchYoutubeUrl($("#youtubeLinkUrl").val())) {
+        if(isInvalid(youtubeLink,0)) {
         counter++;
         $("#youtubeLinkError").show().html("It must be a youtube link");
         }
-
-        var vre=new RegExp('^(http:\/\/|https:\/\/)(vimeo\.com\.be)\/([\w\/]+)([\?].*)?$');
-        if(!vre.test(vimeoLink)) {
-        console.log("invalid Vimeo");
+        if(isInvalid(vimeoLink,1)) {
         counter++;
         $("#vimeoLinkError").show().html("It must be a vimeo link");
         }

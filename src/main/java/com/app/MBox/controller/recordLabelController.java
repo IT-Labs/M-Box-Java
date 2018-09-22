@@ -162,7 +162,7 @@ public class recordLabelController {
     }
 
     @RequestMapping(value = "/delete-artist",method = RequestMethod.GET)
-    public ModelAndView processDeleteArtistGet(ModelAndView modelAndView,@RequestParam("email") String email) {
+    public ModelAndView processDeleteArtist(ModelAndView modelAndView,@RequestParam("email") String email) {
         artistServiceImpl.deleteArtist(email);
         modelAndView.setViewName("redirect:dashboard");
         return modelAndView;

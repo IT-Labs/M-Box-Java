@@ -57,5 +57,6 @@ public interface userService {
 
      void setUserPassword(users user,String password);
 
+     List<users> findAllRecentlyAddedArtists(Pageable pageable);
 
 }

@@ -31,5 +31,6 @@ public class songDto {
 
     private String songLyrics;
 
+    private int id;
 
 }

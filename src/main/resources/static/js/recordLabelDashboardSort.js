@@ -11,6 +11,10 @@
 
 
         function handle(param) {
+                $("#downEmail").hide();
+                $("#upEmail").hide();
+                $("#downName").hide();
+                $("#upName").hide();
             if(param==1) {
                 var name="name";
                 if(counterName%2==0) {

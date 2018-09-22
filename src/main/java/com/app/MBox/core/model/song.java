@@ -42,7 +42,7 @@ public class song extends audit {
 
     private String genre;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "artistId",foreignKey = @ForeignKey(name = "FK_song_artist"))
     private artist artist;
 

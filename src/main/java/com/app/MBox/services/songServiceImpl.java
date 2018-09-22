@@ -8,6 +8,7 @@ import com.app.MBox.core.repository.songRepository;
 import com.app.MBox.dto.songDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,7 +33,7 @@ public class songServiceImpl implements songService {
 
     public static long FILE_SIZE=3*1024*1024;
 
-    public song findByArtistId (int artistId) {
+    public List<song> findByArtistId (int artistId) {
         return songRepository.findByArtistId(artistId);
     }
 
@@ -105,4 +107,24 @@ public class songServiceImpl implements songService {
         return "OK";
     }
 
+    public List<songDto> findSongs(Pageable pageable) {
+        artist artist=springChecks.getLoggedInArtist();
+        List<song> songs=songRepository.findSongs(artist.getId(),pageable);
+        List<songDto> songDtos=songs.stream().map(temp-> {
+            songDto songDto=new songDto();
+            songDto.setAlbumName(temp.getAlbumName());
+            songDto.setSongName(temp.getName());
+            songDto.setGenre(temp.getGenre());
+            songDto.setId(temp.getId());
+            return songDto;
+        }).collect(Collectors.toList());
+        return songDtos;
+    }
+
+    @Override
+    public void deleteSong(int songId) {
+        song song=songRepository.findById(songId);
+        //I will have to delete the picture from s3
+        songRepository.delete(song);
+    }
 }
