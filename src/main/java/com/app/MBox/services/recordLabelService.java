@@ -4,6 +4,7 @@ import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.recordLabelDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,5 +26,5 @@ public interface recordLabelService {
 
      void deleteRecordLabel(String email);
 
-     List<recordLabelDto> getRecordLabels(int page, int size);
+     List<recordLabelDto> getRecordLabels(Pageable pageable);
 }

@@ -59,4 +59,6 @@ public interface userService {
 
      List<users> findAllRecentlyAddedArtists(Pageable pageable);
 
+     List<users> findAllActiveRecordLabels(Pageable pageable);
+
 }

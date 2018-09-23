@@ -9,6 +9,7 @@
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/recordLabelListPageLazyLoading.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -38,22 +39,8 @@
     <button name="LoadMore" class="btn btn-primary center-block" id="loadmorebutton" style="display:none"> Load More</button>
 </div>
 </div>
+<input type="hidden" id="row_no" name="pageNumber" value="1">
+<input type="hidden" id="size" name="sizeNumber" value="25">
 
-<script>
-    jQuery(document).ready(
-
-	function($) {
-
-        $(window).on("scroll", function () {
-            var scrollHeight = $(document).height();
-            var scrollPosition = $(window).height() + $(window).scrollTop();
-            if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-
-
-                  }
-        });
-	});
-
-</script>
 </body>
 </html>

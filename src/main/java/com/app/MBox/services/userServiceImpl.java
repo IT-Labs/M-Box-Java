@@ -291,5 +291,8 @@ public class userServiceImpl implements userService {
         return userRepository.findAllRecentlyAddedArtists(pageable);
     }
 
+    public List<users> findAllActiveRecordLabels(Pageable pageable) {
+        return userRepository.findAllActivatedRecordLabels(pageable);
+    }
 }
 

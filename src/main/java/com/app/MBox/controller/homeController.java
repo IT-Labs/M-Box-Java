@@ -55,7 +55,7 @@ public class homeController {
 
     @RequestMapping(value = "/record-labels",method = RequestMethod.GET)
     public ModelAndView showRecordLabels(ModelAndView modelAndView,Model model) {
-        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(0,25);
+        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(PageRequest.of(0,25, Sort.Direction.DESC,"date_created"));
         model.addAttribute("recordLabels",recordLabels);
         modelAndView.setViewName("recordLabelsListPage");
         return modelAndView;
@@ -68,7 +68,12 @@ public class homeController {
         return artists;
     }
 
-
+    @RequestMapping(value = "/record-label-lazyLoad",method = RequestMethod.GET)
+    @ResponseBody
+    public List<recordLabelDto> processRecordLabelLazyLoad(Pageable pageable) {
+        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(pageable);
+        return recordLabels;
+    }
 
     @RequestMapping(value = "/about")
     public String showAbout() {

@@ -11,6 +11,7 @@ import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.sendEmailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -117,13 +118,13 @@ public class recordLabelServiceImpl implements recordLabelService {
 
     }
 
-    public List<recordLabelDto> getRecordLabels(int page, int size) {
+    public List<recordLabelDto> getRecordLabels(Pageable pageable) {
         List<recordLabelDto> recordLabelsDto=new LinkedList<>();
-        List<recordLabel> recordLabels=recordLabelRepository.findAllRecordLabels(PageRequest.of(page,size));
-        for (recordLabel record:recordLabels) {
+        List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels(pageable);
+        for (users record:recordLabels) {
                 recordLabelDto recordLabelDto=new recordLabelDto();
-                recordLabelDto.setName(record.getUser().getName());
-                if(record.getUser().getPicture()!=null){
+                recordLabelDto.setName(record.getName());
+                if(record.getPicture()!=null){
                     //logic for picture
                 }   else {
                     recordLabelDto.setPictureUrl(properties.getSongDefaultImage());
