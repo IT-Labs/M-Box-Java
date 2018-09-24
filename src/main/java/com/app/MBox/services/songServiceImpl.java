@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +58,7 @@ public class songServiceImpl implements songService {
             songDto.setArtistName(s.getArtist().getUser().getName());
             if(s.getImage()!=null) {
                 //logic from S3
+                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(s.getImage()));
             }   else {
                 songDto.setSongImgUrl(properties.getSongDefaultImage());
             }
@@ -86,7 +88,10 @@ public class songServiceImpl implements songService {
         song.setVimeoLink(songDto.getVimeoLink());
         if(!file.isEmpty()) {
             //logic for saving the picture on s3
-            amazonS3ClientService.uploadFileToS3Bucket(file,true);
+            String [] extension=file.getContentType().split("/");
+            String imageName=UUID.randomUUID().toString() + "."+ extension[1];
+            amazonS3ClientService.uploadFileToS3Bucket(file,false,imageName);
+            song.setImage(imageName);
         }
 
         song=songRepository.save(song);
@@ -114,6 +119,25 @@ public class songServiceImpl implements songService {
     public List<songDto> findSongs(Pageable pageable) {
         artist artist=springChecks.getLoggedInArtist();
         List<song> songs=songRepository.findSongs(artist.getId(),pageable);
+        List<songDto> songDtos=transferSongToSongDto(songs);
+        return songDtos;
+    }
+
+    @Override
+    public void deleteSong(int songId) {
+        song song=songRepository.findById(songId);
+        amazonS3ClientService.deleteFileFromS3Bucket(song.getImage());
+        songRepository.delete(song);
+    }
+
+    public List<songDto> searchSongs(String searchParam) {
+        artist artist=springChecks.getLoggedInArtist();
+        List<song> songs=songRepository.findSongs(artist.getId(),searchParam);
+        List<songDto> songDtos=transferSongToSongDto(songs);
+        return songDtos;
+    }
+
+    public List<songDto> transferSongToSongDto(List<song> songs) {
         List<songDto> songDtos=songs.stream().map(temp-> {
             songDto songDto=new songDto();
             songDto.setAlbumName(temp.getAlbumName());
@@ -123,12 +147,5 @@ public class songServiceImpl implements songService {
             return songDto;
         }).collect(Collectors.toList());
         return songDtos;
-    }
-
-    @Override
-    public void deleteSong(int songId) {
-        song song=songRepository.findById(songId);
-        //I will have to delete the picture from s3
-        songRepository.delete(song);
     }
 }

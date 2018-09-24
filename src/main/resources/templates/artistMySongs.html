@@ -23,14 +23,21 @@
     <div class="container" style="margin-top:8%">
 
         <div class="row">
-            <div class="col-sm-4 col-md-4">
-                <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%" onclick="redirect()">Add New Song</button>
+            <div class="col-sm-3 col-md-3" >
+                <button th:if="${artist.deleted}" type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%;margin-top:4px;" onclick="redirect()" disabled>Add New Song</button>
+                <button th:unless="${artist.deleted}" type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%;margin-top:4px;" onclick="redirect()">Add New Song</button>
             </div>
-            <div class="col-sm-8 col-md-8">
+            <div class="col-sm-9 col-md-9" style="margin-top: 5px">
+                <div class="row">
                 <form class="form" role="search">
+                    <div class="col-md-9 col-sm-9">
                     <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
-                    <input type="button" value="search" onclick="mySearch()">
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                    <input type="button" value="search" onclick="mySearch()" class="btn btn-default btn-block">
+                    </div>
                 </form>
+                </div>
             </div>
         </div>
 
@@ -40,21 +47,21 @@
                 <table st-table="rowCollection" class="table table-striped" style="border: 1px solid gray;">
                     <thead class="fixedHeader">
                     <tr style="display: block">
-                        <th style="width: 19%;" id="songName">Song Name <img th:src="@{/images/downArrow.png}"\ style="width:7%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;" id="upName"\></th>
-                        <th style="width: 19%;" id="albumName">Album name <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
-                        <th style="width: 19%;" id="genre">Genre <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upNumber"\></th>
-                        <th style="width: 19%;">Delete Song <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"\></th>
+                        <th style="width: 19%;" id="songName">Song Name <img th:src="@{/images/downArrow.png}" style="width:5%;display:none;" id="downName"\><img th:src="@{/images/upArrow.png}"style="width:5%;display:none;" id="upName"\></th>
+                        <th style="width: 16%;" id="albumName">Album name <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
+                        <th style="width: 23%;" id="genre">Genre <img th:src="@{/images/downArrow.png}" style="width:4%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:3%;display:none;"id="upNumber"\></th>
+                        <th style="width: 6%;">Delete Song </th>
                     </tr>
                     </thead>
                     <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
                     <tr th:each="song : ${songs}">
                         <form role="form" th:action="@{delete-song}" method="get" id="form">
-                            <td th:text="${song.songName}" style="width: 15%;"></td>
-                            <td th:text="${song.albumName}" style="width: 15%;"></td>
-                            <td th:text="${song.genre}" style="width: 15%;"></td>
+                            <td th:text="${song.songName}" style="width: 30%;"></td>
+                            <td th:text="${song.albumName}" style="width: 27%;"></td>
+                            <td th:text="${song.genre}" style="width: 36%;"></td>
                             <input type="hidden" name="id" th:value=${song.id}>
                             <input type="hidden" name="name" th:value=${song.songName}>
-                            <td style="width: 15%;"><button type="submit">DELETE</button></td>
+                            <td style="width: 15%;"><button class="btn btn-danger" type="submit">DELETE<i class="fa fa-trash"></i></button></td>
                         </form>
                     </tr>
 

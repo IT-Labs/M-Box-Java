@@ -54,6 +54,8 @@ public class userServiceImpl implements userService {
     private artistService artistServiceImpl;
     @Autowired
     private springChecks springChecks;
+    @Autowired
+    private amazonS3ClientService amazonS3ClientService;
 
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
     public users findByEmail(String email) {
@@ -180,6 +182,7 @@ public class userServiceImpl implements userService {
             artistDto.setName(temp.getUser().getName());
             if(temp.getUser().getPicture()!=null) {
                 //logic for picture from s3
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getUser().getPicture()));
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }

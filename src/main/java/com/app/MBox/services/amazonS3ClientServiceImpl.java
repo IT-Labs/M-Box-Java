@@ -1,13 +1,16 @@
 package com.app.MBox.services;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.app.MBox.core.model.users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -17,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -35,7 +41,7 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
     }
 
     @Async
-    public void uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess)
+    public void uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess,String imageName)
     {
         String fileName = multipartFile.getOriginalFilename();
 
@@ -46,17 +52,22 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
             fos.write(multipartFile.getBytes());
             fos.close();
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(this.awsS3AudioBucket, fileName, file);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(this.awsS3AudioBucket, imageName, file);
 
             if (enablePublicReadAccess) {
                 putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
             }
             this.amazonS3.putObject(putObjectRequest);
+
             //removing the file created in the server
+
             file.delete();
+
         } catch (IOException | AmazonServiceException ex) {
             log.error("error [" + ex.getMessage() + "] occured while uploading [" + fileName + "] ");
         }
+
+
     }
 
     @Async
@@ -67,5 +78,16 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
         } catch (AmazonServiceException ex) {
             log.error("error [" + ex.getMessage() + "] occurred while removing [" + fileName + "] ");
         }
+    }
+
+
+    public String getPictureUrl(String fileName) {
+        java.util.Date expiration = new java.util.Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * 60;
+        expiration.setTime(expTimeMillis);
+        GeneratePresignedUrlRequest request=new GeneratePresignedUrlRequest(this.awsS3AudioBucket,fileName).withMethod(HttpMethod.GET).withExpiration(expiration);
+        URL url=amazonS3.generatePresignedUrl(request);
+        return url.toString();
     }
 }

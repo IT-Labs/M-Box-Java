@@ -23,29 +23,38 @@
 <div class="container-fluid">
     <hr />
     <div class="row">
-        <div class="row" style="padding: 15px">
-
+        <div class="row" style="margin: 15px">
+            <div class="col-md-8 col-sm-8">
+            </div>
+            <div class="col-md-4 col-sm-4">
             <form th:action="@{account}" method="get">
                 <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
             </form>
-
+            </div>
         </div>
     </div>
     <div class="row">
         <form th:action="@{song}" method="post" enctype="multipart/form-data" id="form">
-
+            <div class="row" style="margin: 15px">
+                <div class="col-md-8 col-sm-8">
+                </div>
+                <div class="col-md-4 col-sm-4">
             <button type="submit" class="btn btn-block btn-primary" style="margin: 5px">Publish</button>
-
+                </div>
+            </div>
+            <div class="row" style="margin: 15px">
             <div class="col-md-6 col-sm-6">
+                <div class="row form-group" style="margin: 15px">
                 <div class="col-md-2 col-sm-2">
                     <label>Song Name:</label>
                 </div>
-                <div class="row form-group" style="margin: 15px">
+                <div class="col-md-6 col-sm-6">
                     <input name="songName" class="form-control" placeholder="Song Name" id="name">
                     <p id="nameError" class="error"></p>
                 </div>
+                </div>
                 <div class="row" style="margin: 15px">
-                    <input type="file" name="file" id="file" accept=".jpg,.png">
+                    <input type="file" name="file" id="file" accept=".jpg,.png,.jpeg">
                     <p th:text="${wrongFormat}" class="error"></p>
                     <p th:text="${sizeExceeded}" class="error"></p>
                 </div>

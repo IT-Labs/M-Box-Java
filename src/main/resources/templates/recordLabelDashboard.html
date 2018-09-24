@@ -21,16 +21,26 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-sm-4 col-md-4">
-            <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; margin-bottom:5px; width:100%" onclick="redirectToInvite()">Add New Artist</button>
-            <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%" onclick="redirectToInviteMultiple()">Add Multiple Artists</button>
+    <div class="row" style="margin-top: 25px">
+        <div class="col-sm-3 col-md-3">
+            <button type="button" class="btn btn-block btn-primary" style="margin:5px;" onclick="redirectToInvite()">Add New Artist</button>
+
         </div>
-        <div class="col-sm-8 col-md-8">
+        <div class="col-sm-3 col-md-3">
+
+            <button type="button" class="btn btn-block btn-primary" style="margin:5px;" onclick="redirectToInviteMultiple()">Add Multiple Artists</button>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="row">
             <form class="form" role="search">
-                <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
-                <input type="button" value="search" onclick="mySearch()">
+                <div class="col-md-9 col-sm-9">
+                <input type="text" class="form-control" placeholder="Search" style="margin-top:6px" aria-label="Search" id="search">
+                </div>
+                <div class="col-md-3 col-sm-3">
+                <input type="button" value="search" class="btn btn-default btn-block"  style="margin-top:6px" onclick="mySearch()">
+                </div>
             </form>
+            </div>
         </div>
     </div>
     <div class="row" id="content-box" style="margin-top: 25px">
@@ -41,19 +51,19 @@
             <tr style="display: block">
                 <th style="width: 19%;">Profile Picture</th>
                 <th style="width: 19%;" id="artistName">Artist Name<img th:src="@{/images/downArrow.png}"\ style="width:4%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:4%;display:none;" id="upName"\></th>
-                <th style="width: 19%;" id="artistEmail">Artist E-mail<img th:src="@{/images/downArrow.png}"style="width:4%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:4%;display:none;"id="upEmail"\></th>
-                <th style="width: 10%;">Delete Artist</th>
+                <th style="width: 22%;" id="artistEmail">Artist E-mail<img th:src="@{/images/downArrow.png}"style="width:4%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:4%;display:none;"id="upEmail"\></th>
+                <th style="width: 8%;">Delete Artist</th>
             </tr>
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
                 <form role="form" th:action="@{delete-artist}" method="get" id="form">
-                    <td style="width: 15%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
-                    <td th:text="${artist.name}" style="width: 15%;"></td>
-                    <td th:text="${artist.email}" style="width: 15%;"></td>
+                    <td style="width: 30%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
+                    <td th:text="${artist.name}" style="width: 27%;"></td>
+                    <td th:text="${artist.email}" style="width: 36%;"></td>
                     <input type="hidden" name="email" th:value=${artist.email}>
                     <input type="hidden" name="name" th:value=${artist.name}>
-                    <td style="width: 15%;"><button type="submit">DELETE</button></td>
+                    <td style="width: 15%;"><button type="submit" class="btn btn-danger">DELETE<i class="fa fa-trash"></i></button></td>
                 </form>
             </tr>
 

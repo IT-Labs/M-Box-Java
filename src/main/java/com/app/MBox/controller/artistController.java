@@ -3,6 +3,7 @@ package com.app.MBox.controller;
 import com.app.MBox.common.customHandler.authenticatedUser;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.core.model.artist;
+import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.artistService;
 import com.app.MBox.services.songService;
@@ -70,6 +71,10 @@ public class artistController {
     public ModelAndView showArtistMySongsPage(ModelAndView modelAndView,Model model) {
         List<songDto> songs=songService.findSongs(PageRequest.of(0,20));
         model.addAttribute("songs",songs);
+        artist artist=springChecks.getLoggedInArtist();
+        artistDto artistDto=new artistDto();
+        artistDto.setDeleted(artist.isDeleted());
+        model.addAttribute("artist",artistDto);
         modelAndView.setViewName("artistMySongs");
         return modelAndView;
     }
@@ -95,5 +100,18 @@ public class artistController {
         List<songDto> songs=new LinkedList<>();
         songs=songService.findSongs(pageable);
         return songs;
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    @ResponseBody
+    public List<songDto> processSearch(@RequestParam String searchParam) {
+        List<songDto> songs=new LinkedList<>();
+        if(!searchParam.equals("")) {
+            songs = songService.searchSongs(searchParam);
+            return songs;
+        }    else {
+            return songs;
+        }
+
     }
 }

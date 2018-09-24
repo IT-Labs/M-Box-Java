@@ -70,7 +70,7 @@
                 html=html+'<td style="width: 36%;">' + data[i].email + '</td>';
                 html=html+'<input type="hidden" name="email" value=' + data[i].email + '>';
                 html=html+'<input type="hidden" name="name" value=' + data[i].name +'>';
-                html=html+'<td style="width: 15%;"><input type="submit" value="DELETE" id="' + data[i].name + '" name="' + data[i].email + '" onclick="deleteFunction(this.id,this.name)"></td>';
+                html=html+'<td style="width: 15%;"><button type="submit" class="btn btn-danger" id="' + data[i].name + '" name="' + data[i].email + '" onclick="deleteFunction(this.id,this.name)">DELETE<i class="fa fa-trash"></i></button></td>';
                 html=html+'</form></tr>';
                 }
                 $("#bodyScroll").empty().append(html);

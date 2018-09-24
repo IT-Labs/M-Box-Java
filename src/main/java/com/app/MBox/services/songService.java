@@ -24,4 +24,6 @@ public interface songService {
     List<songDto> findSongs(Pageable pageable);
 
     void deleteSong(int songId);
+
+    List<songDto> searchSongs(String searchParam);
 }

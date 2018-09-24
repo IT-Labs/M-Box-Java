@@ -1,13 +1,13 @@
 jQuery(document).ready(
 
 	function($) {
-        var pixelsScrolled=240;
+        var pixelsScrolled=400;
 		$("#bodyScroll").scroll(function () {
 
             var scrolltop=$('#bodyScroll').scrollTop();
             console.log(scrolltop);
 		    if(scrolltop==pixelsScrolled) {
-		    pixelsScrolled+=920;
+		    pixelsScrolled+=1000;
             var page=document.getElementById("row_no").value;
             var size=document.getElementById("size").value;
 			$.get("/record-label/lazyLoad", {
@@ -23,7 +23,7 @@ jQuery(document).ready(
                 html=html+'<td style="width: 36%;">' + data[i].email + '</td>';
                 html=html+'<input type="hidden" name="email" value=' + data[i].email + '>';
                 html=html+'<input type="hidden" name="name" value=' + data[i].name +'>';
-                html=html+'<td style="width: 15%;"><input type="submit" value="DELETE" id="' + data[i].name + '" name="' + data[i].email + '" onclick="deleteFunction(this.id,this.name)"></td>';
+                html=html+'<td style="width: 15%;"><button type="submit" class="btn btn-danger" id="' + data[i].name + '" name="' + data[i].email + '" onclick="deleteFunction(this.id,this.name)">DELETE<i class="fa fa-trash"></i></button></td>';
                 html=html+'</form></tr>';
                 }
                 $("#bodyScroll").append(html);

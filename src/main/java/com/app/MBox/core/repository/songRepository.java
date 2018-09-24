@@ -20,4 +20,7 @@ public interface songRepository extends CrudRepository<song,Integer> {
 
     @Query(value = "select * from song where artist_id=?1",nativeQuery = true)
     List<song> findSongs(int artistId, Pageable pageable);
+
+    @Query(value = "select * from song where artist_id=?1 and (album_name LIKE %?2% or genre LIKE %?2% or name LIKE %?2%)",nativeQuery = true)
+    List<song> findSongs(int artistId, String searchParam);
 }

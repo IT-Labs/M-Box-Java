@@ -236,7 +236,7 @@ public class artistServiceImpl implements artistService {
             if(!artist.isDeleted() && recordLabelArtists!=null) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
             }   else {
-                artistDto.setRecordLabelName(" ");
+                artistDto.setRecordLabelName("_____");
             }
             if(temp.getPicture()!=null) {
                 //logic from s3 for the picture
@@ -258,6 +258,8 @@ public class artistServiceImpl implements artistService {
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(temp.getId());
             if(!temp.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
+            }   else {
+                artistDto.setRecordLabelName("_____");
             }
             if(temp.getUser().getPicture()!=null) {
                 //logic from s3 for the picture
