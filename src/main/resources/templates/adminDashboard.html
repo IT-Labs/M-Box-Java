@@ -20,59 +20,58 @@
 
 <div th:insert="shared/dashboardHeader :: dashboardHeader"></div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-
 <div class="container">
 
-    <div class="row">
-        <div class="col-sm-4 col-md-4">
-            <button type="button" class="btn btn-primary" style="margin-left:auto; margin-right:auto; width:100%" onclick="redirect()">Add New Record Label</button>
+    <div class="row" style="margin-top: 25px">
+        <div class="col-md-3 col-sm-3">
+            <button type="button" class="btn btn-block btn-primary" style="margin: 5px" onclick="redirect()">Add New Record Label</button>
         </div>
-        <div class="col-sm-8 col-md-8">
-        <form class="form" role="search">
-            <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
-            <input type="button" value="search" onclick="mySearch()">
-        </form>
+        <div class="col-md-9 col-sm-9" style="margin-top: 5px">
+            <div class="row">
+            <form class="form" role="search">
+                <div class="col-md-9 col-sm-9">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
+                </div>
+                <div class="col-md-3 col-sm-3">
+                <input type="button" value="search" onclick="mySearch()" class="btn btn-default btn-block" \>
+                </div>
+            </form>
+            </div>
         </div>
-</div>
+    </div>
 
     <div class="row" id="content-box" style="margin-top: 25px">
 
-     <div id="tableContainer" class="table-responsive">
-        <table st-table="rowCollection" class="table table-striped" style="border: 1px solid gray;">
-            <thead class="fixedHeader">
-            <tr style="display: block">
-                <th style="width: 19%;" id="recordLabelName">Record Label Name <img th:src="@{/images/downArrow.png}"\ style="width:7%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;" id="upName"\></th>
-                <th style="width: 19%;" id="recordLabelEmail">Record Label Email address <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
-                <th style="width: 19%;" id="recordLabelNumber">Number of artists <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upNumber"\></th>
-                <th style="width: 19%;">Delete Record Label <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"\></th>
-            </tr>
-            </thead>
-            <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
-            <tr th:each="recordLabel : ${recordLabels}">
-                <form role="form" th:action="@{delete-record-label}" method="get" id="form">
-                <td th:text="${recordLabel.name}" style="width: 15%;"></td>
-                <td th:text="${recordLabel.email}" style="width: 15%;"></td>
-                <td th:text="${recordLabel.number}" style="width: 15%;"></td>
-                <input type="hidden" name="email" th:value=${recordLabel.email}>
-                    <input type="hidden" name="name" th:value=${recordLabel.name}>
-                    <td style="width: 15%;"><button type="submit">DELETE</button></td>
-                </form>
-            </tr>
+        <div id="tableContainer" class="table-responsive">
+            <table st-table="rowCollection" class="table table-striped" style="border: 1px solid gray;">
+                <thead class="fixedHeader">
+                <tr style="display: block">
+                    <th style="width: 19%;" id="recordLabelName">Record Label Name <img th:src="@{/images/downArrow.png}"\ style="width:7%;display:none;" id="downName"><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;" id="upName"\></th>
+                    <th style="width: 19%;" id="recordLabelEmail">Record Label Email address <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downEmail"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upEmail"\></th>
+                    <th style="width: 19%;" id="recordLabelNumber">Number of artists <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"id="downNumber"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"id="upNumber"\></th>
+                    <th style="width: 12%;">Delete Record Label <img th:src="@{/images/downArrow.png}"style="width:7%;display:none;"\><img th:src="@{/images/upArrow.png}"style="width:6%;display:none;"\></th>
+                </tr>
+                </thead>
+                <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
+                <tr th:each="recordLabel : ${recordLabels}">
+                    <form role="form" th:action="@{delete-record-label}" method="get" id="form">
+                        <td th:text="${recordLabel.name}" style="width: 30%;"></td>
+                        <td th:text="${recordLabel.email}" style="width: 27%;"></td>
+                        <td th:text="${recordLabel.number}" style="width: 36%;"></td>
+                        <input type="hidden" name="email" th:value=${recordLabel.email}>
+                        <input type="hidden" name="name" th:value=${recordLabel.name}>
+                        <td style="width: 15%;"><button type="submit" class="btn btn-danger">DELETE<i class="fa fa-trash"></i></button></td>
+                    </form>
+                </tr>
 
-            </tbody>
+                </tbody>
 
-        </table>
-         <input type="hidden" id="row_no" name="pageNumber" value="1">
-         <input type="hidden" id="size" name="sizeNumber" value="20">
-    </div>
+            </table>
+            <input type="hidden" id="row_no" name="pageNumber" value="1">
+            <input type="hidden" id="size" name="sizeNumber" value="20">
         </div>
+    </div>
 </div>
-
 <script th:inline="javascript">
                /*<![CDATA[*/
                 var serverContext = [[@{/}]];

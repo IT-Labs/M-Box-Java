@@ -31,6 +31,9 @@ public class songServiceImpl implements songService {
     @Autowired
     private springChecks springChecks;
 
+    @Autowired
+    private amazonS3ClientService amazonS3ClientService;
+
     public static long FILE_SIZE=3*1024*1024;
 
     public List<song> findByArtistId (int artistId) {
@@ -83,6 +86,7 @@ public class songServiceImpl implements songService {
         song.setVimeoLink(songDto.getVimeoLink());
         if(!file.isEmpty()) {
             //logic for saving the picture on s3
+            amazonS3ClientService.uploadFileToS3Bucket(file,true);
         }
 
         song=songRepository.save(song);
