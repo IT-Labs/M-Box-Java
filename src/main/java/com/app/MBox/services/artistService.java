@@ -33,4 +33,6 @@ public interface artistService {
     List<artistDto> findRecentlyAddedArtist();
 
     List<artistDto> findAllArtists(Pageable pageable);
+
+    List<artistDto> mapArtistToArtistDto(List<artist> artists);
 }

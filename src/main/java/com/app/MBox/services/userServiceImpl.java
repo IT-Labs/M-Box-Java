@@ -147,20 +147,18 @@ public class userServiceImpl implements userService {
 
     public List<recordLabelDto> findRecordLabels(Pageable pageable) {
         List<users> users=userRepository.findRecordLabels(pageable);
-        List<recordLabelDto> recordLabelDtos=users.stream().map(temp->{
-            recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabelDto.setEmail(temp.getEmail());
-            recordLabelDto.setName(temp.getName());
-            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
-            recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
-            return recordLabelDto;
-        }).collect(Collectors.toList());
+        List<recordLabelDto> recordLabelDtos=transferUserToRecordLabelDto(users);
         return recordLabelDtos;
     }
 
 
     public List<recordLabelDto> search(String searchParam) {
         List<users> users=userRepository.searchRecordLabels(searchParam);
+        List<recordLabelDto> recordLabelDtos=transferUserToRecordLabelDto(users);
+        return recordLabelDtos;
+    }
+
+    public List<recordLabelDto> transferUserToRecordLabelDto(List<users> users) {
         List<recordLabelDto> recordLabelDtos=users.stream().map(temp->{
             recordLabelDto recordLabelDto=new recordLabelDto();
             recordLabelDto.setEmail(temp.getEmail());
@@ -176,24 +174,13 @@ public class userServiceImpl implements userService {
         List<artistDto> artistsDto=new LinkedList<>();
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(userId);
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
-        artistsDto=artists.stream().map(temp->{
-            artistDto artistDto=new artistDto();
-            artistDto.setEmail(temp.getUser().getEmail());
-            artistDto.setName(temp.getUser().getName());
-            if(temp.getUser().getPicture()!=null) {
-                //logic for picture from s3
-                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getUser().getPicture()));
-            }   else {
-                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
-            }
-            return artistDto;
-        }).collect(Collectors.toList());
+        artistsDto=artistServiceImpl.mapArtistToArtistDto(artists);
         return artistsDto;
     }
 
 
     public List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int size,int direction) {
-        List<recordLabelDto> recordLabelDtos=new LinkedList<>();
+        List<recordLabelDto> recordLabelDtos;
         List<users> users;
         if(!sortParam.equals("number")) {
             if (direction == 0) {
@@ -202,27 +189,12 @@ public class userServiceImpl implements userService {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.ASC, sortParam));
             }
 
-            recordLabelDtos=users.stream().map(temp->{
-                recordLabelDto recordLabelDto=new recordLabelDto();
-                recordLabelDto.setEmail(temp.getEmail());
-                recordLabelDto.setName(temp.getName());
-                recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
-                recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
-                return recordLabelDto;
-            }).collect(Collectors.toList());
+            recordLabelDtos=transferUserToRecordLabelDto(users);
 
         }
         else {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
-                recordLabelDtos=users.stream().map(temp->{
-                recordLabelDto recordLabelDto=new recordLabelDto();
-                recordLabelDto.setEmail(temp.getEmail());
-                recordLabelDto.setName(temp.getName());
-                recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
-                recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
-                return recordLabelDto;
-                }).collect(Collectors.toList());
-
+                recordLabelDtos=transferUserToRecordLabelDto(users);
 
                 if(direction==0) {
                     Collections.sort(recordLabelDtos,Collections.reverseOrder());
@@ -241,32 +213,26 @@ public class userServiceImpl implements userService {
         List<artistDto> artistDtos=new LinkedList<>();
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists;
-            artists = userRepository.findArtists(recordLabel.getId(), pageable);
-
-            artistDtos=artists.stream().map(temp->{
-            artistDto artistDto=new artistDto();
-            artistDto.setEmail(temp.getEmail());
-            artistDto.setName(temp.getName());
-            if(temp.getPicture()!=null) {
-                //logic for picture from s3
-            }   else {
-                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
-            }
-            return artistDto;
-        }).collect(Collectors.toList());
-
+        artists = userRepository.findArtists(recordLabel.getId(), pageable);
+        artistDtos=transferUserToArtistDto(artists);
         return artistDtos;
     }
 
     public List<artistDto> searchArtists(String searchParam) {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
+        List<artistDto> artistDtos=transferUserToArtistDto(artists);
+
+        return artistDtos;
+    }
+
+    public List<artistDto> transferUserToArtistDto(List<users> artists) {
         List<artistDto> artistDtos=artists.stream().map(temp->{
             artistDto artistDto=new artistDto();
             artistDto.setEmail(temp.getEmail());
             artistDto.setName(temp.getName());
             if(temp.getPicture()!=null) {
-                //logic for picture from s3
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getPicture()));
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
@@ -275,6 +241,8 @@ public class userServiceImpl implements userService {
 
         return artistDtos;
     }
+
+
 
     public void setUserPassword(String token, String password) {
         users user=verificationTokenServiceImpl.findByToken(token);

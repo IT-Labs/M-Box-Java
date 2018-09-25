@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("recordLabelServiceImpl")
 public class recordLabelServiceImpl implements recordLabelService {
@@ -35,11 +36,11 @@ public class recordLabelServiceImpl implements recordLabelService {
     @Autowired
     artistService artistServiceImpl;
     @Autowired
-    emailTemplateService emailTemplateServiceImpl;
-    @Autowired
     properties properties;
     @Autowired
     emailService emailService;
+    @Autowired
+    amazonS3ClientService amazonS3ClientService;
 
     @Autowired
     recordLabelArtistsService recordLabelArtistsServiceImpl;
@@ -111,26 +112,26 @@ public class recordLabelServiceImpl implements recordLabelService {
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
             }
-
-
+        if(user.getPicture()!=null) {
+                amazonS3ClientService.deleteFileFromS3Bucket(user.getPicture());
+        }
         recordLabelRepository.delete(recordLabel);
         userServiceImpl.delete(user);
 
     }
 
     public List<recordLabelDto> getRecordLabels(Pageable pageable) {
-        List<recordLabelDto> recordLabelsDto=new LinkedList<>();
         List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels(pageable);
-        for (users record:recordLabels) {
-                recordLabelDto recordLabelDto=new recordLabelDto();
-                recordLabelDto.setName(record.getName());
-                if(record.getPicture()!=null){
-                    //logic for picture
-                }   else {
-                    recordLabelDto.setPictureUrl(properties.getSongDefaultImage());
-                }
-                recordLabelsDto.add(recordLabelDto);
-        }
+        List<recordLabelDto> recordLabelsDto=recordLabels.stream().map(record->{
+            recordLabelDto recordLabelDto=new recordLabelDto();
+            recordLabelDto.setName(record.getName());
+            if(record.getPicture()!=null){
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(record.getPicture()));
+            }   else {
+                recordLabelDto.setPictureUrl(properties.getSongDefaultImage());
+            }
+            return recordLabelDto;
+        }).collect(Collectors.toList());
         return recordLabelsDto;
     }
 }

@@ -49,22 +49,7 @@ public class songServiceImpl implements songService {
     public List<songDto> getMostRecentSongs() {
         List<songDto> songDtos=new LinkedList<>();
         List<song> songs=songRepository.getMostRecentSongs();
-        for (song s:songs) {
-            songDto songDto=new songDto();
-            songDto.setSongName(s.getName());
-            songDto.setAlbumName(s.getAlbumName());
-            songDto.setYoutubeLink(s.getYoutubeLink());
-            songDto.setVimeoLink(s.getVimeoLink());
-            songDto.setArtistName(s.getArtist().getUser().getName());
-            if(s.getImage()!=null) {
-                //logic from S3
-                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(s.getImage()));
-            }   else {
-                songDto.setSongImgUrl(properties.getSongDefaultImage());
-            }
-            songDtos.add(songDto);
-        }
-
+        songDtos=transferSongToSongDto(songs);
         return songDtos;
     }
 
@@ -144,6 +129,13 @@ public class songServiceImpl implements songService {
             songDto.setSongName(temp.getName());
             songDto.setGenre(temp.getGenre());
             songDto.setId(temp.getId());
+            songDto.setVimeoLink(temp.getVimeoLink());
+            songDto.setYoutubeLink(temp.getYoutubeLink());
+            if(temp.getImage()!=null) {
+                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(temp.getImage()));
+            }   else {
+                songDto.setSongImgUrl(properties.getSongDefaultImage());
+            }
             return songDto;
         }).collect(Collectors.toList());
         return songDtos;

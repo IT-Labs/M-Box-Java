@@ -46,7 +46,7 @@ public class artistServiceImpl implements artistService {
     @Autowired
     userRolesService userRolesServiceImpl;
     @Autowired
-    emailTemplateService emailTemplateServiceImpl;
+    amazonS3ClientService amazonS3ClientService;
 
 
     @Override
@@ -239,7 +239,8 @@ public class artistServiceImpl implements artistService {
                 artistDto.setRecordLabelName("_____");
             }
             if(temp.getPicture()!=null) {
-                //logic from s3 for the picture
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getPicture()));
+
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
@@ -262,7 +263,7 @@ public class artistServiceImpl implements artistService {
                 artistDto.setRecordLabelName("_____");
             }
             if(temp.getUser().getPicture()!=null) {
-                //logic from s3 for the picture
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getUser().getPicture()));
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }
