@@ -12,6 +12,7 @@
     <script th:src="@{/js/recordLabelDashboardSort.js}"></script>
     <script th:src="@{/js/recordLabelDashboardSearchAndDelete.js}"></script>
     <script th:src="@{/js/recordLabelDashboardLazyLoading.js}"></script>
+    <script th:src="@{/js/searchOnEnter.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -37,7 +38,7 @@
                 <input type="text" class="form-control" placeholder="Search" style="margin-top:6px" aria-label="Search" id="search">
                 </div>
                 <div class="col-md-3 col-sm-3">
-                <input type="button" value="search" class="btn btn-default btn-block"  style="margin-top:6px" onclick="mySearch()">
+                    <button type="button" class="btn btn-default btn-block"  id="buttonSearch" style="margin-top:6px" onclick="mySearch()">search</button>
                 </div>
             </form>
             </div>
@@ -93,15 +94,7 @@
                 window.location.href = serverContext + "record-label/artists";
                 }
 
-                  $('form').submit(function(event) {
-	         var values = $(this).serialize();
-	         rez=values.split("=")
-                    if(!confirm("Are you sure you want to delete " + rez[rez.length-1] )) {
-                            event.preventDefault();
-                             return;
-                    }
 
-	        })
 
                 /*]]>*/
    </script>

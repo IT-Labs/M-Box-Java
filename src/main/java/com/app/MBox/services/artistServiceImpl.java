@@ -140,13 +140,14 @@ public class artistServiceImpl implements artistService {
             if(artistsDetails[0].length()>320) {
                 maxLengthOfEmailRows=String.format("%srow%d",maxLengthOfEmailRows,counterRows);
                 hasErrors=true;
-                maxLengthOfArtistName=true;
+                maxLengthOfEmail=true;
+
             }
 
             if(artistsDetails[1].length()>50) {
                 maxLengthOfArtistNameRows=String.format("%srow%d, ",maxLengthOfArtistNameRows,counterRows);
                 hasErrors=true;
-                maxLengthOfEmail=true;
+                maxLengthOfArtistName=true;
             }
             counterRows++;
         }
@@ -256,6 +257,7 @@ public class artistServiceImpl implements artistService {
             artistDto artistDto=new artistDto();
             artistDto.setName(temp.getUser().getName());
             artistDto.setDeleted(temp.isDeleted());
+            artistDto.setEmail(temp.getUser().getEmail());
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(temp.getId());
             if(!temp.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());

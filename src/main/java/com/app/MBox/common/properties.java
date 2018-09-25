@@ -39,4 +39,5 @@ public class properties {
     private String artistNumberMessage;
     private String csvExtensionError;
     private String incorectPasswordMessage;
+    private String recordLabelDefaultPicture;
 }

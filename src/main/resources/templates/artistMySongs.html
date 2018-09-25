@@ -12,6 +12,7 @@
     <script th:src="@{/js/artistDashboardLazyLoading.js}"></script>
     <script th:src="@{/js/artistDashboardSearchAndDelete.js}"></script>
     <script th:src="@{/js/artistDashboardSort.js}"></script>
+    <script th:src="@{/js/searchOnEnter.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,7 +35,7 @@
                     <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
                     </div>
                     <div class="col-md-3 col-sm-3">
-                    <input type="button" value="search" onclick="mySearch()" class="btn btn-default btn-block">
+                    <input type="button" value="search" id="buttonSearch" onclick="mySearch()" class="btn btn-default btn-block">
                     </div>
                 </form>
                 </div>
@@ -88,23 +89,6 @@
                 }
 
 
-                $(document).ready(function () {
-
-
-
-	        $('form').submit(function(event) {
-	         var values = $(this).serialize();
-	         rez=values.split("=")
-                    if(!confirm("Are you sure you want to delete " + rez[rez.length-1] )) {
-                            event.preventDefault();
-                             return;
-                    }
-
-	        })
-
-
-
-	        })
                 /*]]>*/
    </script>
 

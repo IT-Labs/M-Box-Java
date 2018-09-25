@@ -128,7 +128,7 @@ public class recordLabelServiceImpl implements recordLabelService {
             if(record.getPicture()!=null){
                 recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(record.getPicture()));
             }   else {
-                recordLabelDto.setPictureUrl(properties.getSongDefaultImage());
+                recordLabelDto.setPictureUrl(properties.getRecordLabelDefaultPicture());
             }
             return recordLabelDto;
         }).collect(Collectors.toList());

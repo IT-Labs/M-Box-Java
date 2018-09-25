@@ -15,6 +15,8 @@
     <script th:src="@{/js/adminDashboardSearchDelete.js}"></script>
     <script th:src="@{/js/adminDashboardLazyLoading.js}"></script>
     <script th:src="@{/js/adminDashboardSort.js}"></script>
+    <script th:src="@{/js/searchOnEnter.js}"></script>
+
 </head>
 <body>
 
@@ -30,10 +32,10 @@
             <div class="row">
             <form class="form" role="search">
                 <div class="col-md-9 col-sm-9">
-                <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search">
                 </div>
                 <div class="col-md-3 col-sm-3">
-                <input type="button" value="search" onclick="mySearch()" class="btn btn-default btn-block" \>
+                    <button type="button" onclick="mySearch()" class="btn btn-default btn-block" id="buttonSearch" >search </button>
                 </div>
             </form>
             </div>
@@ -84,24 +86,6 @@
                 window.location.href = serverContext + "admin/dashboard";
                 }
 
-
-                $(document).ready(function () {
-
-
-
-	        $('form').submit(function(event) {
-	         var values = $(this).serialize();
-	         rez=values.split("=")
-                    if(!confirm("Are you sure you want to delete " + rez[rez.length-1] )) {
-                            event.preventDefault();
-                             return;
-                    }
-
-	        })
-
-
-
-	        })
                 /*]]>*/
    </script>
 
