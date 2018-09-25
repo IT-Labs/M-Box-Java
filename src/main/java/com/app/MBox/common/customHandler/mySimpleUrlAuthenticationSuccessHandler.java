@@ -66,7 +66,7 @@ public class mySimpleUrlAuthenticationSuccessHandler
         }   else if (isRecordLabel) {
             return "/record-label/dashboard";
         }   else if (isArtist) {
-            return "/artist/account";
+            return "/home/homepage";
         }
         else {
             throw new IllegalStateException();

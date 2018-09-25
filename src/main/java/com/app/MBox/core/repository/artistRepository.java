@@ -21,7 +21,7 @@ public interface artistRepository extends CrudRepository<artist,Integer> {
     List<artist> findAllArtists(int recordLabelId, Pageable pageable);
 
     artist findByUserId(int userId);
-    @Query(value = "select a.* from users u join artist a on u.id=a.user_id where u.is_activated=true order by u.date_created limit 5",nativeQuery = true)
+    @Query(value = "select a.* from users u join artist a on u.id=a.user_id where u.is_activated=true order by u.date_created desc limit 5",nativeQuery = true)
     List<artist> findRecentlyAddedArtist();
 
 

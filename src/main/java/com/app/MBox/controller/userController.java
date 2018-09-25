@@ -68,7 +68,7 @@ public class userController {
             modelAndView.addObject("role",rolesEnum.ARTIST.toString());
         } else if (role.equals(rolesEnum.RECORDLABEL)) {
             modelAndView.addObject("role",rolesEnum.RECORDLABEL.toString());
-        }   else {
+        }   else if (role.equals(rolesEnum.LISTENER)) {
             modelAndView.addObject("role",rolesEnum.LISTENER.toString());
         }
         modelAndView.setViewName("confirmationChangePassword");

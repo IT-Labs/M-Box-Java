@@ -41,11 +41,8 @@ public class loginController {
     }
 
     @GetMapping("/error")
-    public ModelAndView error() {
-        ModelAndView modelAndView=new ModelAndView();
-        modelAndView.addObject("errorMsg",properties.getNotAuthorizeMessage());
+    public ModelAndView error(ModelAndView modelAndView) {
         modelAndView.setViewName("error");
-
         return modelAndView;
 
     }

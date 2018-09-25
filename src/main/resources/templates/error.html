@@ -2,20 +2,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<h3>Access Denied Exception</h3>
-<div>
-    Logged in authenticatedUser: <b th:inline="text"  class="authenticatedUser"> [[${#httpServletRequest.remoteUser}]] </b>
+<h3 th:text="${errorMsg}" class="error"></h3>
+<div class="col-md-2 col-sm-2">
+
+</div>
+<div class="row col-md-8 col-sm-8">
+
+<h1 class="text-info">You are in the error page</h1>
+
+<h1 class="text-info">You are here because an error happened. We are sorry.</h1>
+
+<h1 class="text-info"> Please click the Return button and start again</h1>
+</div>
+<div class="col-md-2 col-sm-2">
+
+</div>
+
+<div class="row">
     <form th:action="@{/app-logout}" method="POST">
-        <input type="submit" value="Logout"/>
+        <input type="submit" value="Return" class="btn btn-danger" style="margin-top:24%;"/>
     </form>
 </div>
-<p class="error" th:text="${errorMsg}">Error</p>
-<h1>  YOU ARE IN THE ERROR PAGE </h1>
-<h1>You are here because an error happened. We are sorry.</h1>
-
-<h1 > Please proceed to <a th:href="@{/home/homepage}">home page</a></h1>
 
 </body>
 </html>

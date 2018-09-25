@@ -45,20 +45,20 @@ public class userRolesServiceImpl implements userRolesService {
 
 
     public String getRole(userRoles userRoles) {
-        if(userRoles.getRole().getName().equals(rolesEnum.ARTIST.name())) {
-            return rolesEnum.ARTIST.name();
+        if(userRoles.getRole().getName().equals(rolesEnum.ARTIST.toString())) {
+            return rolesEnum.ARTIST.toString();
         }
 
-        if(userRoles.getRole().getName().equals(rolesEnum.RECORDLABEL.name())) {
-            return rolesEnum.RECORDLABEL.name();
+        if(userRoles.getRole().getName().equals(rolesEnum.RECORDLABEL.toString())) {
+            return rolesEnum.RECORDLABEL.toString();
         }
 
-        if(userRoles.getRole().getName().equals(rolesEnum.ADMIN.name())) {
-            return rolesEnum.ADMIN.name();
+        if(userRoles.getRole().getName().equals(rolesEnum.ADMIN.toString())) {
+            return rolesEnum.ADMIN.toString();
         }
 
-        if(userRoles.getRole().getName().equals(rolesEnum.LISTENER.name())) {
-            return rolesEnum.LISTENER.name();
+        if(userRoles.getRole().getName().equals(rolesEnum.LISTENER.toString())) {
+            return rolesEnum.LISTENER.toString();
         }
 
         return null;
