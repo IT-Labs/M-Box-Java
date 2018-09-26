@@ -29,8 +29,6 @@ public class homeController {
     artistService artistService;
     @Autowired
     recordLabelService recordLabelService;
-    @Autowired
-    userService userService;
 
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
@@ -76,8 +74,9 @@ public class homeController {
     }
 
     @RequestMapping(value = "/about")
-    public String showAbout() {
-        return "about";
+    public ModelAndView showAbout(ModelAndView modelAndView) {
+        modelAndView.setViewName("about");
+        return modelAndView;
     }
 
 

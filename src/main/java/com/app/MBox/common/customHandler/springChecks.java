@@ -7,6 +7,7 @@ import com.app.MBox.core.model.userRoles;
 import com.app.MBox.core.model.users;
 import com.app.MBox.services.*;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
+@Slf4j
 public class springChecks {
 
     @Autowired
@@ -50,10 +52,15 @@ public class springChecks {
 
 
     public String getLoggedInUserRole() {
-        authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        users user=userService.findByEmail(authenticatedUser.getUsername());
-        userRoles userRoles=userRolesService.findByUserId(user.getId());
-        return userRolesService.getRole(userRoles);
+        try {
+            authenticatedUser authenticatedUser = (authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            users user = userService.findByEmail(authenticatedUser.getUsername());
+            userRoles userRoles = userRolesService.findByUserId(user.getId());
+            return userRolesService.getRole(userRoles);
+        } catch (Exception e) {
+            log.error(e.toString());
+            return null;
+        }
     }
 
     public int getLoggedInUserId() {

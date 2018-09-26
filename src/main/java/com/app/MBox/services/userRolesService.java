@@ -15,9 +15,9 @@ public interface userRolesService {
 
      void deleteUserRoles(userRoles userRoles);
 
-     public String getUserRoleByToken(String token) ;
+      String getUserRoleByToken(String token) ;
 
 
-     public String getRole(userRoles userRoles) ;
+      String getRole(userRoles userRoles) ;
 
 }

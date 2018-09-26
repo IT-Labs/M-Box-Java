@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<h3 th:text="${errorMsg}" class="error"></h3>
+
+<p th:text="${role}" id="role" style="display:none"></p>
 <div class="col-md-2 col-sm-2">
 
 </div>
@@ -23,17 +24,44 @@
 
 <h1 class="text-info">You are here because an error happened. We are sorry.</h1>
 
-<h1 class="text-info"> Please click the Return button and start again</h1>
+<h1 class="text-info"> Please click the Return button to go back or click the Start Again button to start again</h1>
+
+    <h3 th:text="${errorMsg}" class="error text-info"></h3>
 </div>
 <div class="col-md-2 col-sm-2">
 
 </div>
 
+
 <div class="row">
     <form th:action="@{/app-logout}" method="POST">
-        <input type="submit" value="Return" class="btn btn-danger" style="margin-top:24%;"/>
+        <input type="submit" value="Start Again" class="btn btn-danger" style="margin-top:24%;"/>
     </form>
 </div>
+
+<input type="button" value="Return" class="btn btn-danger" style="margin-top: -3%;margin-left: 56%;" onclick="redirect()">
+
+<script th:inline="javascript">
+
+               /*<![CDATA[*/
+                var serverContext = [[@{/}]];
+                function redirect() {
+                var role=$('p').text();
+                console.log(role + " this is the rolee");
+                if(role=="LISTENER") {
+                window.location.href = serverContext + "home/homepage";
+                }   else if (role=="ARTIST") {
+                window.location.href = serverContext + "home/homepage";
+                }   else if (role=="RECORDLABEL") {
+                window.location.href = serverContext + "record-label/dashboard";
+                }   else if (role=="ADMIN") {
+                window.location.href = serverContext + "admin/dashboard";
+                }   else {
+                    window.location.href = serverContext + "home/homepage";
+                }
+
+                }
+        </script>
 
 </body>
 </html>
