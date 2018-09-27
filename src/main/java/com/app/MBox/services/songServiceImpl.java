@@ -1,7 +1,7 @@
 package com.app.MBox.services;
 
 import com.app.MBox.common.customHandler.springChecks;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.core.model.song;
 import com.app.MBox.core.repository.songRepository;
@@ -53,34 +53,39 @@ public class songServiceImpl implements songService {
         return songDtos;
     }
 
-    public song addSong(MultipartFile file, songDto songDto) {
-        song song=new song();
-        song.setName(songDto.getSongName());
-        song.setAlbumName(songDto.getAlbumName());
-        song.setGenre(songDto.getGenre());
-        song.setLyrics(songDto.getSongLyrics());
-        String [] dateParts=songDto.getDateReleased().split("-");
-        String parseDate=String.format("%s/%s/%s",dateParts[2],dateParts[1],dateParts[0]);
+    public String addSong(MultipartFile file, songDto songDto) {
+        String result=isValidPicture(file);
+        if(result.equals("OK")) {
+            song song = new song();
+            song.setName(songDto.getSongName());
+            song.setAlbumName(songDto.getAlbumName());
+            song.setGenre(songDto.getGenre());
+            song.setLyrics(songDto.getSongLyrics());
+            String[] dateParts = songDto.getDateReleased().split("-");
+            String parseDate = String.format("%s/%s/%s", dateParts[2], dateParts[1], dateParts[0]);
             try {
                 Date date = new SimpleDateFormat("dd/MM/yyyy").parse(parseDate);
                 song.setDateOfRelease(date);
-            }   catch (Exception e) {
+            } catch (Exception e) {
                 log.error(e.getMessage());
             }
-        artist artist=springChecks.getLoggedInArtist();
-        song.setArtist(artist);
-        song.setYoutubeLink(songDto.getYoutubeLink());
-        song.setVimeoLink(songDto.getVimeoLink());
-        if(!file.isEmpty()) {
-            //logic for saving the picture on s3
-            String [] extension=file.getContentType().split("/");
-            String imageName=UUID.randomUUID().toString() + "."+ extension[1];
-            amazonS3ClientService.uploadFileToS3Bucket(file,false,imageName);
-            song.setImage(imageName);
+            artist artist = springChecks.getLoggedInArtist();
+            song.setArtist(artist);
+            song.setYoutubeLink(songDto.getYoutubeLink());
+            song.setVimeoLink(songDto.getVimeoLink());
+            if (!file.isEmpty()) {
+                //logic for saving the picture on s3
+                String[] extension = file.getContentType().split("/");
+                String imageName = UUID.randomUUID().toString() + "." + extension[1];
+                amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
+                song.setImage(imageName);
+            }
+
+            songRepository.save(song);
+
         }
 
-        song=songRepository.save(song);
-        return song;
+        return result;
     }
 
     public String isValidPicture(MultipartFile file) {
@@ -111,8 +116,10 @@ public class songServiceImpl implements songService {
     @Override
     public void deleteSong(int songId) {
         song song=songRepository.findById(songId);
-        amazonS3ClientService.deleteFileFromS3Bucket(song.getImage());
-        songRepository.delete(song);
+        if(song!=null) {
+            amazonS3ClientService.deleteFileFromS3Bucket(song.getImage());
+            songRepository.delete(song);
+        }
     }
 
     public List<songDto> searchSongs(String searchParam) {

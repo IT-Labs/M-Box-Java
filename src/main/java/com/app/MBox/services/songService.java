@@ -17,7 +17,7 @@ public interface songService {
 
     List<songDto> getMostRecentSongs();
 
-    song addSong(MultipartFile file,songDto songDto);
+    String addSong(MultipartFile file,songDto songDto);
 
     String isValidPicture(MultipartFile file);
 

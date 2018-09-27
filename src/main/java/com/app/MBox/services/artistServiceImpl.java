@@ -4,13 +4,12 @@ import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.enumeration.emailTemplateEnum;
 import com.app.MBox.common.enumeration.rolesEnum;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.artistRepository;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.dto.emailBodyDto;
-import com.app.MBox.dto.sendEmailDto;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -229,28 +228,11 @@ public class artistServiceImpl implements artistService {
     public List<artistDto> findAllArtists(Pageable pageable) {
         List<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
 
-        List<artistDto> artistDtos=artists.stream().map(temp->{
-            artistDto artistDto=new artistDto();
-            artistDto.setName(temp.getName());
-            artist artist=findByUserId(temp.getId());
-            artistDto.setDeleted(artist.isDeleted());
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
-            if(!artist.isDeleted() && recordLabelArtists!=null) {
-                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
-            }   else {
-                artistDto.setRecordLabelName("_____");
-            }
-            if(temp.getPicture()!=null) {
-                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getPicture()));
-
-            }   else {
-                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
-            }
-            return artistDto;
-        }).collect(Collectors.toList());
+        List<artistDto> artistDtos=userServiceImpl.transferUserToArtistDto(artists);
         return artistDtos;
 
     }
+
 
     public List<artistDto> mapArtistToArtistDto(List<artist> artists) {
 

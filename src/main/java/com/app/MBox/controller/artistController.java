@@ -1,11 +1,10 @@
 package com.app.MBox.controller;
 
-import com.app.MBox.common.customHandler.authenticatedUser;
 import com.app.MBox.common.customHandler.springChecks;
+import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.songDto;
-import com.app.MBox.services.artistService;
 import com.app.MBox.services.songService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +25,17 @@ import java.util.List;
 public class artistController {
 
     @Autowired
-    artistService artistService;
-    @Autowired
     springChecks springChecks;
     @Autowired
     songService songService;
+    @Autowired
+    properties properties;
 
     @RequestMapping(value = "/song",method = RequestMethod.GET)
     public ModelAndView showSongPage (ModelAndView modelAndView,Model model) {
         songDto songDto=new songDto();
         artist artist=springChecks.getLoggedInArtist();
-        modelAndView.addObject("artistName","by: " + artist.getUser().getName());
+        modelAndView.addObject("artistName",String.format("by: %s",artist.getUser().getName()));
         model.addAttribute("songDto",songDto);
         modelAndView.setViewName("artistNewSong");
         return modelAndView;
@@ -44,18 +43,17 @@ public class artistController {
 
     @RequestMapping(value = "/song",method = RequestMethod.POST)
     public ModelAndView processSongPage(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@ModelAttribute("songDto") songDto songDto) {
-        String result=songService.isValidPicture(file);
+        String result=songService.addSong(file,songDto);
         if(result.equals("wrongFormat")) {
-            modelAndView.addObject(result,"You can only upload .jpg, .jpeg or .png!");
+            modelAndView.addObject(result,properties.getImageExtensionError());
             modelAndView.setViewName("artistNewSong");
             return modelAndView;
         } else if (result.equals("sizeExceeded")) {
-            modelAndView.addObject(result,"Upload file exceeded the maximum file size limit of 3MB!");
+            modelAndView.addObject(result,properties.getMaxUploadImageSize());
             modelAndView.setViewName("artistNewSong");
             return modelAndView;
         }
 
-        songService.addSong(file,songDto);
         modelAndView.setViewName("artistAccount");
         return modelAndView;
     }

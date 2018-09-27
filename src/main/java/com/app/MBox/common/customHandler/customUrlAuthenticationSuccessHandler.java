@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-public class mySimpleUrlAuthenticationSuccessHandler
+public class customUrlAuthenticationSuccessHandler
         implements AuthenticationSuccessHandler {
 
 

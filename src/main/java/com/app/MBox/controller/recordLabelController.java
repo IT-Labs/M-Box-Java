@@ -1,9 +1,8 @@
 package com.app.MBox.controller;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
-import com.app.MBox.common.customHandler.authenticatedUser;
 import com.app.MBox.common.customHandler.springChecks;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

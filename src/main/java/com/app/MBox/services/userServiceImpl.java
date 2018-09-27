@@ -5,8 +5,7 @@ import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.enumeration.emailTemplateEnum;
 import com.app.MBox.common.enumeration.rolesEnum;
-import com.app.MBox.common.properties;
-import com.app.MBox.core.repository.artistRepository;
+import com.app.MBox.config.properties;
 import com.app.MBox.dto.*;
 import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -227,12 +226,21 @@ public class userServiceImpl implements userService {
     }
 
     public List<artistDto> transferUserToArtistDto(List<users> artists) {
-        List<artistDto> artistDtos=artists.stream().map(temp->{
+        List<artistDto> artistDtos=artists.stream().map(artist->{
             artistDto artistDto=new artistDto();
-            artistDto.setEmail(temp.getEmail());
-            artistDto.setName(temp.getName());
-            if(temp.getPicture()!=null) {
-                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getPicture()));
+            artistDto.setName(artist.getName());
+            artistDto.setEmail(artist.getEmail());
+            artist thisArtist=artistServiceImpl.findByUserId(artist.getId());
+            artistDto.setDeleted(thisArtist.isDeleted());
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
+            if(!thisArtist.isDeleted() && recordLabelArtists!=null) {
+                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
+            }   else {
+                artistDto.setRecordLabelName("_____");
+            }
+            if(artist.getPicture()!=null) {
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artist.getPicture()));
+
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }

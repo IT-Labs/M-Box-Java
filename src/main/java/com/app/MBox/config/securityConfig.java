@@ -1,6 +1,6 @@
 package com.app.MBox.config;
 
-import com.app.MBox.common.customHandler.mySimpleUrlAuthenticationSuccessHandler;
+import com.app.MBox.common.customHandler.customUrlAuthenticationSuccessHandler;
 import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.services.userDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,8 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests().antMatchers("jquery/**/","bootstrap/**/","css/**","images/**","js/**").permitAll()
-                .antMatchers("/home/**").hasAnyAuthority("ROLE_ANONYMOUS",rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString()).antMatchers("/successRegister","/forgot-password","/confirm").permitAll()
+                .antMatchers("/home/**").hasAnyAuthority("ROLE_ANONYMOUS",rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString())
+                .antMatchers("/successRegister","/forgot-password","/confirm").permitAll()
                 .antMatchers("/successfullConfirm","/unSuccessfullConfirm","/reset-password","/join").permitAll()
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/admin/**").hasAnyAuthority(rolesEnum.ADMIN.toString()).anyRequest().authenticated()
@@ -56,7 +57,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new mySimpleUrlAuthenticationSuccessHandler();
+        return new customUrlAuthenticationSuccessHandler();
     }
 
 

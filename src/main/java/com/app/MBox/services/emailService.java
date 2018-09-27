@@ -1,15 +1,12 @@
 package com.app.MBox.services;
 
 import com.app.MBox.common.enumeration.emailTemplateEnum;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.core.model.emailTemplate;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.sendEmailDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -23,9 +20,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service("emailService")
-@Getter
-@Setter
-@NoArgsConstructor
 @Slf4j
 public class emailService {
 

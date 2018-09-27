@@ -2,7 +2,7 @@ package com.app.MBox.controller;
 
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.common.validation.recordLabelValidator;
 import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.services.*;

@@ -2,10 +2,9 @@ package com.app.MBox.controller;
 
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.validation.passwordChecker;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.services.userService;
 import com.app.MBox.services.verificationTokenService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

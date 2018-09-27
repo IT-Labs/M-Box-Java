@@ -2,21 +2,17 @@ package com.app.MBox.services;
 
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.enumeration.emailTemplateEnum;
-import com.app.MBox.common.properties;
+import com.app.MBox.config.properties;
 import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.core.model.*;
 import com.app.MBox.core.repository.recordLabelRepository;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.recordLabelDto;
-import com.app.MBox.dto.sendEmailDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 

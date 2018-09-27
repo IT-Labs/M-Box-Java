@@ -22,7 +22,7 @@ $(document).ready(function () {
         return 0;
     } else if (str.search(/[a-zA-Z]/) == -1) {
        return 0;
-    } else if (str.search(/\d/) == -1 && str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) == -1) {
+    } else if (str.search(/\d/) == -1 && str.search(/[^\w\s]/) == -1) {
         return 0;
     }
      return 1;

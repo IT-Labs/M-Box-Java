@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import com.app.MBox.config.amazonS3Config;
+
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,16 +31,17 @@ import java.util.UUID;
 @Component
 public class amazonS3ClientServiceImpl implements amazonS3ClientService {
 
-    private String awsS3AudioBucket;
+  //  private String awsS3AudioBucket;
     private AmazonS3 amazonS3;
+    @Autowired private amazonS3Config amazonS3Config;
 
-    @Autowired
-    public void AmazonS3ClientServiceImpl(Region awsRegion, AWSCredentialsProvider awsCredentialsProvider, String awsS3AudioBucket)
+    @PostConstruct
+    public void init()
     {
         this.amazonS3 = AmazonS3ClientBuilder.standard()
-                .withCredentials(awsCredentialsProvider)
-                .withRegion(awsRegion.getName()).build();
-        this.awsS3AudioBucket = awsS3AudioBucket;
+                .withCredentials(amazonS3Config.getAWSCredentials())
+                .withRegion(amazonS3Config.getAWSPollyRegion().getName()).build();
+       // this.awsS3AudioBucket = awsS3AudioBucket;
     }
 
     @Async
@@ -52,7 +56,7 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
             fos.write(multipartFile.getBytes());
             fos.close();
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(this.awsS3AudioBucket, imageName, file);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(amazonS3Config.getAWSS3AudioBucket(), imageName, file);
 
             if (enablePublicReadAccess) {
                 putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
@@ -74,7 +78,7 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
     public void deleteFileFromS3Bucket(String fileName)
     {
         try {
-            amazonS3.deleteObject(new DeleteObjectRequest(awsS3AudioBucket, fileName));
+            amazonS3.deleteObject(new DeleteObjectRequest(amazonS3Config.getAWSS3AudioBucket(), fileName));
         } catch (AmazonServiceException ex) {
             log.error("error [" + ex.getMessage() + "] occurred while removing [" + fileName + "] ");
         }
@@ -86,7 +90,7 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
         long expTimeMillis = expiration.getTime();
         expTimeMillis += 1000 * 60 * 60;
         expiration.setTime(expTimeMillis);
-        GeneratePresignedUrlRequest request=new GeneratePresignedUrlRequest(this.awsS3AudioBucket,fileName).withMethod(HttpMethod.GET).withExpiration(expiration);
+        GeneratePresignedUrlRequest request=new GeneratePresignedUrlRequest(amazonS3Config.getAWSS3AudioBucket(),fileName).withMethod(HttpMethod.GET).withExpiration(expiration);
         URL url=amazonS3.generatePresignedUrl(request);
         return url.toString();
     }
