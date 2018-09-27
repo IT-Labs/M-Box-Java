@@ -12,6 +12,7 @@ import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.dto.emailBodyDto;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,7 @@ public class artistServiceImpl implements artistService {
     @Autowired
     properties properties;
     @Autowired
+    @Lazy
     emailService emailService;
     @Autowired
     userRolesService userRolesServiceImpl;
