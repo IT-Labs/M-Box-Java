@@ -13,16 +13,17 @@ import java.util.List;
 
 @Repository
 public interface artistRepository extends CrudRepository<artist,Integer> {
-
-    @Query(value = "select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id" ,nativeQuery = true)
+    //select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id
+    @Query(value = "select a from recordLabelArtists rla,artist a where rla.recordLabel.id=?1 and rla.artist=a")
     List<artist> findAllArtists(int recordLabelId);
-
-    @Query(value = "select a.* from users u join (select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id)a on u.id=a.user_id" ,nativeQuery = true)
+    //select a.* from users u join (select ar.* from record_label_artists rla,artist ar where rla.record_label_id=?1 and rla.artist_id=ar.id)a on u.id=a.user_id
+    @Query(value = "select a from artist a,recordLabelArtists rla where rla.recordLabel.id=?1 and rla.artist=a")
     List<artist> findAllArtists(int recordLabelId, Pageable pageable);
 
     artist findByUserId(int userId);
-    @Query(value = "select a.* from users u join artist a on u.id=a.user_id where u.is_activated=true order by u.date_created desc limit 5",nativeQuery = true)
-    List<artist> findRecentlyAddedArtist();
+    //select a.* from users u join artist a on u.id=a.user_id where u.is_activated=true order by u.date_created desc limit 5
+    @Query(value = "select a from users u , artist a where u=a.user and u.isActivated=true")
+    List<artist> findRecentlyAddedArtist(Pageable pageable);
 
 
 }

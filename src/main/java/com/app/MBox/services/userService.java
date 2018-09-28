@@ -61,6 +61,6 @@ public interface userService {
 
      List<users> findAllActiveRecordLabels(Pageable pageable);
 
-     List<artistDto> transferUserToArtistDto(List<users> artists);
+     List<artistDto> mapUserToArtistDto(List<users> artists);
 
 }

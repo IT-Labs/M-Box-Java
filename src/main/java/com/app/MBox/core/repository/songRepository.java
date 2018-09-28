@@ -2,6 +2,7 @@ package com.app.MBox.core.repository;
 
 import com.app.MBox.core.model.song;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,12 +16,12 @@ public interface songRepository extends CrudRepository<song,Integer> {
 
     song findById (int id);
 
-    @Query(value = "select * from song order by date_created DESC limit 5",nativeQuery = true)
-    List<song> getMostRecentSongs();
+    @Query(value = "select s from song s")
+    List<song> getMostRecentSongs(Pageable pageable);
 
-    @Query(value = "select * from song where artist_id=?1",nativeQuery = true)
+    @Query(value = "select s from song s where s.artist.id=?1")
     List<song> findSongs(int artistId, Pageable pageable);
 
-    @Query(value = "select * from song where artist_id=?1 and (album_name LIKE %?2% or genre LIKE %?2% or name LIKE %?2%)",nativeQuery = true)
+    @Query(value = "select s from song s where s.artist.id=?1 and (s.albumName LIKE %?2% or s.genre LIKE %?2% or s.name LIKE %?2%)")
     List<song> findSongs(int artistId, String searchParam);
 }

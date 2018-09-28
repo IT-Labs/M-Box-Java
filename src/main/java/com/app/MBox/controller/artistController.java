@@ -1,5 +1,6 @@
 package com.app.MBox.controller;
 
+import com.amazonaws.util.StringUtils;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
@@ -92,24 +93,22 @@ public class artistController {
         return songDtos;
     }
 
-    @RequestMapping(value = "/sort",method = RequestMethod.GET)
-    @ResponseBody
-    public List<songDto> processSongsSort(Pageable pageable) {
-        List<songDto> songs=new LinkedList<>();
-        songs=songService.findSongs(pageable);
-        return songs;
-    }
+//    @RequestMapping(value = "/sort",method = RequestMethod.GET)
+//    @ResponseBody
+//    public List<songDto> processSongsSort(Pageable pageable) {
+//        List<songDto> songs=new LinkedList<>();
+//        songs=songService.findSongs(pageable);
+//        return songs;
+//    }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     @ResponseBody
     public List<songDto> processSearch(@RequestParam String searchParam) {
         List<songDto> songs=new LinkedList<>();
-        if(!searchParam.equals("")) {
+        if(!StringUtils.isNullOrEmpty(searchParam) ) {
             songs = songService.searchSongs(searchParam);
+            }
             return songs;
-        }    else {
-            return songs;
-        }
 
     }
 }

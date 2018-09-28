@@ -8,7 +8,7 @@ jQuery(document).ready(
             if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
                 var page=document.getElementById("row_no").value;
                     var size=document.getElementById("size").value;
-                    var param="date_created,desc"
+                    var param="dateCreated,desc"
                     $.get("/home/record-label-lazyLoad", {
                     page:page,
                     size:size,

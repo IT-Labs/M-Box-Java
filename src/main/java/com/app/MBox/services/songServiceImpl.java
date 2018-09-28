@@ -46,10 +46,10 @@ public class songServiceImpl implements songService {
     }
 
     @Override
-    public List<songDto> getMostRecentSongs() {
+    public List<songDto> getMostRecentSongs(Pageable pageable) {
         List<songDto> songDtos=new LinkedList<>();
-        List<song> songs=songRepository.getMostRecentSongs();
-        songDtos=transferSongToSongDto(songs);
+        List<song> songs=songRepository.getMostRecentSongs(pageable);
+        songDtos=mapSongToSongDto(songs);
         return songDtos;
     }
 
@@ -76,7 +76,7 @@ public class songServiceImpl implements songService {
             if (!file.isEmpty()) {
                 //logic for saving the picture on s3
                 String[] extension = file.getContentType().split("/");
-                String imageName = UUID.randomUUID().toString() + "." + extension[1];
+                String imageName = String.format("%s.%s",UUID.randomUUID().toString(),extension[1]);
                 amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
                 song.setImage(imageName);
             }
@@ -109,7 +109,7 @@ public class songServiceImpl implements songService {
     public List<songDto> findSongs(Pageable pageable) {
         artist artist=springChecks.getLoggedInArtist();
         List<song> songs=songRepository.findSongs(artist.getId(),pageable);
-        List<songDto> songDtos=transferSongToSongDto(songs);
+        List<songDto> songDtos=mapSongToSongDto(songs);
         return songDtos;
     }
 
@@ -125,11 +125,11 @@ public class songServiceImpl implements songService {
     public List<songDto> searchSongs(String searchParam) {
         artist artist=springChecks.getLoggedInArtist();
         List<song> songs=songRepository.findSongs(artist.getId(),searchParam);
-        List<songDto> songDtos=transferSongToSongDto(songs);
+        List<songDto> songDtos=mapSongToSongDto(songs);
         return songDtos;
     }
 
-    public List<songDto> transferSongToSongDto(List<song> songs) {
+    public List<songDto> mapSongToSongDto(List<song> songs) {
         List<songDto> songDtos=songs.stream().map(temp-> {
             songDto songDto=new songDto();
             songDto.setAlbumName(temp.getAlbumName());

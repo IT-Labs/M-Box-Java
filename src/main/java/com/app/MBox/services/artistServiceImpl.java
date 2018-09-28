@@ -221,8 +221,8 @@ public class artistServiceImpl implements artistService {
         }
     }
 
-    public List<artistDto> findRecentlyAddedArtist(){
-        List<artist>artists=artistRepository.findRecentlyAddedArtist();
+    public List<artistDto> findRecentlyAddedArtist(Pageable pageable){
+        List<artist>artists=artistRepository.findRecentlyAddedArtist(pageable);
         List<artistDto> artistDtos=mapArtistToArtistDto(artists);
         return artistDtos;
     }
@@ -230,7 +230,7 @@ public class artistServiceImpl implements artistService {
     public List<artistDto> findAllArtists(Pageable pageable) {
         List<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
 
-        List<artistDto> artistDtos=userServiceImpl.transferUserToArtistDto(artists);
+        List<artistDto> artistDtos=userServiceImpl.mapUserToArtistDto(artists);
         return artistDtos;
 
     }
@@ -238,19 +238,20 @@ public class artistServiceImpl implements artistService {
 
     public List<artistDto> mapArtistToArtistDto(List<artist> artists) {
 
-        List<artistDto> artistDtos=artists.stream().map(temp ->{
+        List<artistDto> artistDtos=artists.stream().map(artist ->{
             artistDto artistDto=new artistDto();
-            artistDto.setName(temp.getUser().getName());
-            artistDto.setDeleted(temp.isDeleted());
-            artistDto.setEmail(temp.getUser().getEmail());
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(temp.getId());
-            if(!temp.isDeleted()) {
+            users artistUser=artist.getUser();
+            artistDto.setName(artistUser.getName());
+            artistDto.setDeleted(artist.isDeleted());
+            artistDto.setEmail(artistUser.getEmail());
+            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+            if(!artist.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
             }   else {
                 artistDto.setRecordLabelName("_____");
             }
-            if(temp.getUser().getPicture()!=null) {
-                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(temp.getUser().getPicture()));
+            if(artist.getUser().getPicture()!=null) {
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artistUser.getPicture()));
             }   else {
                 artistDto.setPictureUrl(properties.getArtistDefaultPicture());
             }

@@ -36,7 +36,7 @@ $(document).ready(function () {
                 counterName--;
               }
             }   else if (param==2) {
-                var albumName="album_name";
+                var albumName="albumName";
                 if(counterAlbumName%2==0) {
                 $("#downEmail").show();
                 $("#upEmail").hide();
@@ -78,7 +78,7 @@ $(document).ready(function () {
                 }   else {
                     sortParam=sortParam+",asc";
                 }
-                $.get("/artist/sort", {
+                $.get("/artist/lazyLoad", {
         			page:0,
         			size:calculatedSize,
         			sort:sortParam

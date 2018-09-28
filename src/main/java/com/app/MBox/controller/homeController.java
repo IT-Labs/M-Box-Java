@@ -33,9 +33,9 @@ public class homeController {
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
         List<songDto> songs;
-        songs=songService.getMostRecentSongs();
+        songs=songService.getMostRecentSongs(PageRequest.of(0,5,Sort.Direction.DESC,"dateCreated"));
         List<artistDto>artists;
-        artists=artistService.findRecentlyAddedArtist();
+        artists=artistService.findRecentlyAddedArtist(PageRequest.of(0,5,Sort.Direction.DESC,"dateCreated"));
         model.addAttribute("artists",artists);
         model.addAttribute("songs",songs);
         modelAndView.setViewName("home");
@@ -53,7 +53,7 @@ public class homeController {
 
     @RequestMapping(value = "/record-labels",method = RequestMethod.GET)
     public ModelAndView showRecordLabels(ModelAndView modelAndView,Model model) {
-        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(PageRequest.of(0,25, Sort.Direction.DESC,"date_created"));
+        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(PageRequest.of(0,25, Sort.Direction.DESC,"dateCreated"));
         model.addAttribute("recordLabels",recordLabels);
         modelAndView.setViewName("recordLabelsListPage");
         return modelAndView;

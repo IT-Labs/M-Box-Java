@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface recordLabelArtistsRepository extends CrudRepository <recordLabelArtists,Integer> {
 
-
-    @Query(value="select count(*) from record_label_artists r where r.record_label_id=?1" , nativeQuery = true)
+    //select count(*) from record_label_artists r where r.record_label_id=?1
+    @Query(value="select count(r) from recordLabelArtists r where r.recordLabel.id=?1")
      int findNumberOfArtistsInRecordLabel(int recordLabelId);
 
      recordLabelArtists findByRecordLabelId(int recordLabelId);

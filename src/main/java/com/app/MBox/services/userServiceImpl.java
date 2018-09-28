@@ -146,23 +146,23 @@ public class userServiceImpl implements userService {
 
     public List<recordLabelDto> findRecordLabels(Pageable pageable) {
         List<users> users=userRepository.findRecordLabels(pageable);
-        List<recordLabelDto> recordLabelDtos=transferUserToRecordLabelDto(users);
+        List<recordLabelDto> recordLabelDtos=mapUserToRecordLabelDto(users);
         return recordLabelDtos;
     }
 
 
     public List<recordLabelDto> search(String searchParam) {
         List<users> users=userRepository.searchRecordLabels(searchParam);
-        List<recordLabelDto> recordLabelDtos=transferUserToRecordLabelDto(users);
+        List<recordLabelDto> recordLabelDtos=mapUserToRecordLabelDto(users);
         return recordLabelDtos;
     }
 
-    public List<recordLabelDto> transferUserToRecordLabelDto(List<users> users) {
-        List<recordLabelDto> recordLabelDtos=users.stream().map(temp->{
+    public List<recordLabelDto> mapUserToRecordLabelDto(List<users> users) {
+        List<recordLabelDto> recordLabelDtos=users.stream().map(recordLabelUser->{
             recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabelDto.setEmail(temp.getEmail());
-            recordLabelDto.setName(temp.getName());
-            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(temp.getId());
+            recordLabelDto.setEmail(recordLabelUser.getEmail());
+            recordLabelDto.setName(recordLabelUser.getName());
+            recordLabel recordLabel=recordLabelServiceImpl.findByUserId(recordLabelUser.getId());
             recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
             return recordLabelDto;
         }).collect(Collectors.toList());
@@ -188,12 +188,12 @@ public class userServiceImpl implements userService {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.ASC, sortParam));
             }
 
-            recordLabelDtos=transferUserToRecordLabelDto(users);
+            recordLabelDtos=mapUserToRecordLabelDto(users);
 
         }
         else {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
-                recordLabelDtos=transferUserToRecordLabelDto(users);
+                recordLabelDtos=mapUserToRecordLabelDto(users);
 
                 if(direction==0) {
                     Collections.sort(recordLabelDtos,Collections.reverseOrder());
@@ -213,19 +213,19 @@ public class userServiceImpl implements userService {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists;
         artists = userRepository.findArtists(recordLabel.getId(), pageable);
-        artistDtos=transferUserToArtistDto(artists);
+        artistDtos=mapUserToArtistDto(artists);
         return artistDtos;
     }
 
     public List<artistDto> searchArtists(String searchParam) {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
-        List<artistDto> artistDtos=transferUserToArtistDto(artists);
+        List<artistDto> artistDtos=mapUserToArtistDto(artists);
 
         return artistDtos;
     }
 
-    public List<artistDto> transferUserToArtistDto(List<users> artists) {
+    public List<artistDto> mapUserToArtistDto(List<users> artists) {
         List<artistDto> artistDtos=artists.stream().map(artist->{
             artistDto artistDto=new artistDto();
             artistDto.setName(artist.getName());

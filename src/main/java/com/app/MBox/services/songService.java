@@ -15,7 +15,7 @@ public interface songService {
 
     song findById (int id);
 
-    List<songDto> getMostRecentSongs();
+    List<songDto> getMostRecentSongs(Pageable pageable);
 
     String addSong(MultipartFile file,songDto songDto);
 

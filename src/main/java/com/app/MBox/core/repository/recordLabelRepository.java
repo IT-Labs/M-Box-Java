@@ -13,7 +13,7 @@ public interface recordLabelRepository extends CrudRepository<recordLabel,Intege
 
     recordLabel findByUserId(int userId);
 
-    @Query(value = "select * from record_label" ,nativeQuery=true)
+    @Query(value = "select r from recordLabel r")
     List<recordLabel> findAllRecordLabels(Pageable pageable);
 
 }
