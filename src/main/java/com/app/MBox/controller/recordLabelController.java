@@ -34,10 +34,10 @@ public class recordLabelController {
     artistService artistServiceImpl;
 
     @Autowired
-    properties properties;
+    springChecks springChecks;
 
     @Autowired
-    springChecks springChecks;
+    properties properties;
 
     public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public static int ARTIST_LAZY_LOAD_INITIAL_SIZE=20;
@@ -52,11 +52,11 @@ public class recordLabelController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/sort",method = RequestMethod.GET)
+    @RequestMapping(value = "/pageable-artists",method = RequestMethod.GET)
     @ResponseBody
     public List<artistDto> processSort(Pageable pageable) {
         List<artistDto> artists=new LinkedList<>();
-        artists=userServiceImpl.findAndSortArtists(pageable);
+        artists=userServiceImpl.findArtists(pageable);
         return artists;
     }
 
@@ -74,14 +74,6 @@ public class recordLabelController {
     }
 
 
-    @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
-    @ResponseBody
-    public List<artistDto> processLazyLoading(Pageable pageable) {
-        List<artistDto> artistDtos=new LinkedList<>();
-        artistDtos=userServiceImpl.findArtists(springChecks.getLoggedInUserId(),pageable);
-        return artistDtos;
-    }
-
     @RequestMapping(value = "/invite",method = RequestMethod.GET)
     public ModelAndView showInviteArtistPage(ModelAndView modelAndView) {
         modelAndView.setViewName("inviteArtist");
@@ -93,7 +85,7 @@ public class recordLabelController {
         try {
             users user=artistServiceImpl.inviteArtist(name,email,request);
             if(user==null) {
-                modelAndView.addObject("artistNumberError",properties.getArtistNumberMessage());
+                modelAndView.addObject("artistNumberError", properties.getArtistNumberMessage());
                 modelAndView.setViewName("inviteArtist");
                 return modelAndView;
             }
@@ -114,6 +106,7 @@ public class recordLabelController {
         modelAndView.setViewName("addMultipleArtists");
         return modelAndView;
     }
+
     @PostMapping(value = "/artists" , consumes = "multipart/form-data")
     public ModelAndView addArtists(ModelAndView modelAndView, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if(file.isEmpty()) {

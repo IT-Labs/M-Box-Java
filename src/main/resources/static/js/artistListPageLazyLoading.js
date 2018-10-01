@@ -8,13 +8,12 @@ jQuery(document).ready(
             if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
                     var page=document.getElementById("row_no").value;
                     var size=document.getElementById("size").value;
-                    var param="date_created,desc"
-                    $.get("/home/artist-lazyLoad", {
+                    var param="dateCreated,desc"
+                    $.get("/home/lazy-load-artist", {
                     page:page,
                     size:size,
                     sort:param
                 }, function(data) {
-                    console.log(data);
                     var html="";
                     for(i=0 ; i<data.length ; i++) {
                         html=html+'<li class="col-sm-2 table-bordered" style="margin-right:3.2%;margin-top:6px">';

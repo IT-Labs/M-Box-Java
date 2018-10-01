@@ -49,7 +49,7 @@ public interface userService {
      List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int size,int direction) ;
 
 
-     List<artistDto> findAndSortArtists(Pageable pageable) ;
+     List<artistDto> findArtists(Pageable pageable) ;
 
      List<artistDto> searchArtists(String searchParam) ;
 

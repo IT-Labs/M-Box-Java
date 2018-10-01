@@ -78,12 +78,11 @@ $(document).ready(function () {
                 }   else {
                     sortParam=sortParam+",asc";
                 }
-                $.get("/artist/lazyLoad", {
+                $.get("/artist/pageable-songs", {
         			page:0,
         			size:calculatedSize,
         			sort:sortParam
         		}, function(data) {
-        			console.log(data);
         			var html="";
                     for(i=0 ; i<data.length ; i++) {
                         html=html+'<tr><form role="form" action="delete" method="post" id="form">';

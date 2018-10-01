@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/home" )
+@RequestMapping(value = "/home")
 public class homeController {
     @Autowired
     songService songService;
@@ -43,7 +43,7 @@ public class homeController {
 
     @RequestMapping(value = "/artists")
     public ModelAndView showArtists(ModelAndView modelAndView,Model model) {
-        List<artistDto> artists=artistService.findAllArtists(PageRequest.of(0,25, Sort.Direction.DESC,"date_created"));
+        List<artistDto> artists=artistService.findAllArtists(PageRequest.of(0,25, Sort.Direction.DESC,"dateCreated"));
         model.addAttribute("artists",artists);
         modelAndView.setViewName("artistsListPage");
         return modelAndView;
@@ -57,14 +57,14 @@ public class homeController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/artist-lazyLoad",method = RequestMethod.GET)
+    @RequestMapping(value = "/lazy-load-artist",method = RequestMethod.GET)
     @ResponseBody
     public List<artistDto> processArtistLazyLoad(Pageable pageable) {
         List<artistDto> artists=artistService.findAllArtists(pageable);
         return artists;
     }
 
-    @RequestMapping(value = "/record-label-lazyLoad",method = RequestMethod.GET)
+    @RequestMapping(value = "/lazy-load-record-label",method = RequestMethod.GET)
     @ResponseBody
     public List<recordLabelDto> processRecordLabelLazyLoad(Pageable pageable) {
         List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(pageable);

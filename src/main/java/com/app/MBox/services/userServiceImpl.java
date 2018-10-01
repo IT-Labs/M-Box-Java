@@ -209,7 +209,7 @@ public class userServiceImpl implements userService {
     }
 
 
-    public List<artistDto> findAndSortArtists(Pageable pageable) {
+    public List<artistDto> findArtists(Pageable pageable) {
 
         List<artistDto> artistDtos=new LinkedList<>();
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();

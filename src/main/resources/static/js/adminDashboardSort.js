@@ -78,7 +78,6 @@ $(document).ready(function () {
 			size:size,
 			direction:direction
 		}, function(data) {
-			console.log(data);
 			var html="";
             for(i=0 ; i<data.length ; i++) {
                 html=html+'<tr><form role="form" action="delete" method="post" id="form1">';

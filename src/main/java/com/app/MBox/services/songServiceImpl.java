@@ -63,10 +63,8 @@ public class songServiceImpl implements songService {
             song.setAlbumName(songDto.getAlbumName());
             song.setGenre(songDto.getGenre());
             song.setLyrics(songDto.getSongLyrics());
-            String[] dateParts = songDto.getDateReleased().split("-");
-            String parseDate = String.format("%s/%s/%s", dateParts[2], dateParts[1], dateParts[0]);
             try {
-                Date date = new SimpleDateFormat("dd/MM/yyyy").parse(parseDate);
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(songDto.getDateReleased());
                 song.setDateOfRelease(date);
             } catch (Exception e) {
                 log.error(e.getMessage());

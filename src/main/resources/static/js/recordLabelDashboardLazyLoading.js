@@ -10,11 +10,10 @@ jQuery(document).ready(
 		    pixelsScrolled+=1000;
             var page=document.getElementById("row_no").value;
             var size=document.getElementById("size").value;
-			$.get("/record-label/lazyLoad", {
+			$.get("/record-label/pageable-artists", {
 			page:page,
 			size:size
 		}, function(data) {
-			console.log(data);
 			var html="";
             for(i=0 ; i<data.length ; i++) {
                 html=html+'<tr><form role="form" action="delete" method="post" id="form1">';

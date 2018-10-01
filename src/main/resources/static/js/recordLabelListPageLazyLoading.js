@@ -9,12 +9,11 @@ jQuery(document).ready(
                 var page=document.getElementById("row_no").value;
                     var size=document.getElementById("size").value;
                     var param="dateCreated,desc"
-                    $.get("/home/record-label-lazyLoad", {
+                    $.get("/home/lazy-load-record-label", {
                     page:page,
                     size:size,
                     sort:param
                 }, function(data) {
-                    console.log(data);
                     var html="";
                     for(i=0 ; i<data.length ; i++) {
                     html=html+'<li class="col-sm-2 table-bordered" style="margin-right:3.2% ; margin-bottom:4%;">'

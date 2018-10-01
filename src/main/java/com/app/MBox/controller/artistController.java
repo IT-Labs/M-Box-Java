@@ -32,6 +32,7 @@ public class artistController {
     @Autowired
     properties properties;
 
+
     @RequestMapping(value = "/song",method = RequestMethod.GET)
     public ModelAndView showSongPage (ModelAndView modelAndView,Model model) {
         songDto songDto=new songDto();
@@ -85,21 +86,15 @@ public class artistController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
+     //Used for lazy loading and sorting
+
+    @RequestMapping(value = "/pageable-songs",method = RequestMethod.GET)
     @ResponseBody
-    public List<songDto> processLazyLoading(Pageable pageable) {
+    public List<songDto> processPageableSongs(Pageable pageable) {
         List<songDto> songDtos=new LinkedList<>();
         songDtos=songService.findSongs(pageable);
         return songDtos;
     }
-
-//    @RequestMapping(value = "/sort",method = RequestMethod.GET)
-//    @ResponseBody
-//    public List<songDto> processSongsSort(Pageable pageable) {
-//        List<songDto> songs=new LinkedList<>();
-//        songs=songService.findSongs(pageable);
-//        return songs;
-//    }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     @ResponseBody
