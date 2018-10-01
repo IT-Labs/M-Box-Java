@@ -48,6 +48,8 @@ public class artistServiceImpl implements artistService {
     userRolesService userRolesServiceImpl;
     @Autowired
     amazonS3ClientService amazonS3ClientService;
+    @Autowired
+    configurationService configurationService;
 
 
     @Override
@@ -247,13 +249,11 @@ public class artistServiceImpl implements artistService {
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
             if(!artist.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
-            }   else {
-                artistDto.setRecordLabelName("_____");
             }
             if(artist.getUser().getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artistUser.getPicture()));
             }   else {
-                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getArtistDefaultPicture()).getValue()));
             }
             return artistDto;
         }).collect(Collectors.toList());

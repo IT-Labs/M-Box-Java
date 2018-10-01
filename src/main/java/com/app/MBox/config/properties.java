@@ -53,8 +53,8 @@ public class properties {
     @Value("${app.joinUrl}")
     private String joinUrl;
 
-    @Value("${app.songDefaultImage}")
-    private String songDefaultImage;
+    @Value("${app.songDefaultPicture}")
+    private String songDefaultPicture;
 
     @Value("${app.recordLabelDefaultPicture}")
     private String recordLabelDefaultPicture;

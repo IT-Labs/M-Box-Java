@@ -37,9 +37,14 @@
                     </div>
                     <div class="row">
                         <div>
-                            <div class="text-center text">
+                            <div th:unless="${artist.deleted}" class="text-center text">
 
                                 <h5 th:text="${artist.recordLabelName}"></h5>
+
+                            </div>
+                            <div th:if="${artist.deleted}" class="text-center text">
+
+                                <h5>/</h5>
 
                             </div>
                         </div>

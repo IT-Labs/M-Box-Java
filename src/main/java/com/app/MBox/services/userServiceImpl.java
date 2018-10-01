@@ -55,6 +55,8 @@ public class userServiceImpl implements userService {
     private springChecks springChecks;
     @Autowired
     private amazonS3ClientService amazonS3ClientService;
+    @Autowired
+    private configurationService configurationService;
 
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
     public users findByEmail(String email) {
@@ -235,14 +237,12 @@ public class userServiceImpl implements userService {
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
             if(!thisArtist.isDeleted() && recordLabelArtists!=null) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
-            }   else {
-                artistDto.setRecordLabelName("_____");
             }
             if(artist.getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artist.getPicture()));
 
             }   else {
-                artistDto.setPictureUrl(properties.getArtistDefaultPicture());
+                artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getArtistDefaultPicture()).getValue()));
             }
             return artistDto;
         }).collect(Collectors.toList());

@@ -37,7 +37,8 @@ public class recordLabelServiceImpl implements recordLabelService {
     emailService emailService;
     @Autowired
     amazonS3ClientService amazonS3ClientService;
-
+    @Autowired
+    configurationService configurationService;
     @Autowired
     recordLabelArtistsService recordLabelArtistsServiceImpl;
 
@@ -124,7 +125,7 @@ public class recordLabelServiceImpl implements recordLabelService {
             if(record.getPicture()!=null){
                 recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(record.getPicture()));
             }   else {
-                recordLabelDto.setPictureUrl(properties.getRecordLabelDefaultPicture());
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
             }
             return recordLabelDto;
         }).collect(Collectors.toList());

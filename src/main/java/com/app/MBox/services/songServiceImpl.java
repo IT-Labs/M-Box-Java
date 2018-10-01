@@ -34,6 +34,8 @@ public class songServiceImpl implements songService {
 
     @Autowired
     private amazonS3ClientService amazonS3ClientService;
+    @Autowired
+    configurationService configurationService;
 
     public static long FILE_SIZE=3*1024*1024;
 
@@ -142,7 +144,7 @@ public class songServiceImpl implements songService {
             if(temp.getImage()!=null) {
                 songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(temp.getImage()));
             }   else {
-                songDto.setSongImgUrl(properties.getSongDefaultImage());
+                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getSongDefaultPicture()).getValue()));
             }
             return songDto;
         }).collect(Collectors.toList());

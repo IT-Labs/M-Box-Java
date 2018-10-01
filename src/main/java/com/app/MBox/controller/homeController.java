@@ -5,10 +5,7 @@ package com.app.MBox.controller;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.songDto;
-import com.app.MBox.services.artistService;
-import com.app.MBox.services.recordLabelService;
-import com.app.MBox.services.songService;
-import com.app.MBox.services.userService;
+import com.app.MBox.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +26,7 @@ public class homeController {
     artistService artistService;
     @Autowired
     recordLabelService recordLabelService;
+
 
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
@@ -78,6 +76,8 @@ public class homeController {
         modelAndView.setViewName("about");
         return modelAndView;
     }
+
+
 
 
 
