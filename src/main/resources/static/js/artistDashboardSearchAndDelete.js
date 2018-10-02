@@ -1,15 +1,14 @@
 function deleteFunction(name,id) {
     if(confirm("Are you sure you want do delete " + name)) {
 
-          $.get("/artist/delete-song", {
-			id:id
-		}, function(data) {
-            redirectToMySongs();
-		}).done(function() {
-		}).fail(function(xhr, textStatus, errorThrown) {
-		}).complete(function() {
-            redirectToMySongs();
-		});
+        $.ajax({
+                                         url: '/artist/song/'+id,
+                                         headers: {"X-CSRF-TOKEN": $("input[name='_csrf']").val()},
+                                         type: 'DELETE',
+                                         success: function(result) {
+                                             redirectToMySongs();
+                                         }
+                                     });
 
     }
             }

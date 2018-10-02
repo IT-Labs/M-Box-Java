@@ -1,15 +1,15 @@
+
  function deleteFunction(name,email) {
      if(confirm("Are you sure you want do delete " + name)) {
 
-           $.get("/record-label/delete-artist", {
- 			email:email
- 		}, function(data) {
-             redirectToDashboard();
- 		}).done(function() {
- 		}).fail(function(xhr, textStatus, errorThrown) {
- 		}).complete(function() {
-             redirectToDashboard();
- 		});
+        $.ajax({
+                       url: '/record-label/artist/'+email,
+                       headers: {"X-CSRF-TOKEN": $("input[name='_csrf']").val()},
+                       type: 'DELETE',
+                       success: function(result) {
+                           redirectToDashboard();
+                       }
+                   });
 
      }
              }

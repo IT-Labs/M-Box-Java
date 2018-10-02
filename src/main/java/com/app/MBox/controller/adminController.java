@@ -82,10 +82,10 @@ public class adminController  {
         }
     }
 
-    @RequestMapping(value = "/delete-record-label",method = RequestMethod.GET)
-    public ModelAndView processDeleteRecordLabel(ModelAndView modelAndView,@RequestParam("email") String email) {
+    @RequestMapping(value = "/record-label/{email}",method = RequestMethod.DELETE)
+    public ModelAndView processDeleteRecordLabel(ModelAndView modelAndView,@PathVariable("email") String email) {
         recordLabelServiceImpl.deleteRecordLabel(email);
-        modelAndView.setViewName("redirect:dashboard");
+        modelAndView.setViewName("adminDashboard");
         return modelAndView;
         }
 

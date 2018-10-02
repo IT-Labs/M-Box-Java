@@ -12,7 +12,7 @@
     <script th:src="@{/js/recordLabelDashboardSort.js}"></script>
     <script th:src="@{/js/recordLabelDashboardSearchAndDelete.js}"></script>
     <script th:src="@{/js/recordLabelDashboardLazyLoading.js}"></script>
-    <script th:src="@{/js/searchOnEnter.js}"></script>
+    <script th:src="@{/js/recordLabelFormSubmit.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -58,7 +58,7 @@
             </thead>
             <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
             <tr th:each="artist : ${artists}">
-                <form role="form" th:action="@{delete-artist}" method="get" id="form">
+                <form role="form" th:action="@{delete-artist}" th:method="delete" id="form">
                     <td style="width: 30%;"><img th:src="${artist.pictureUrl}" style="width: 9%;" /></td>
                     <td th:text="${artist.name}" style="width: 27%;"></td>
                     <td th:text="${artist.email}" style="width: 36%;"></td>

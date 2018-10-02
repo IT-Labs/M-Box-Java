@@ -79,10 +79,10 @@ public class artistController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/delete-song",method = RequestMethod.GET)
-    public ModelAndView deleteSong(ModelAndView modelAndView,@RequestParam ("id") int id) {
+    @RequestMapping(value = "/song/{id}",method = RequestMethod.DELETE)
+    public ModelAndView deleteSong(ModelAndView modelAndView,@PathVariable ("id") int id) {
         songService.deleteSong(id);
-        modelAndView.setViewName("redirect:songs");
+        modelAndView.setViewName("artistAccount");
         return modelAndView;
     }
 

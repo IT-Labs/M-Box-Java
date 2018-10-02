@@ -15,7 +15,7 @@
     <script th:src="@{/js/adminDashboardSearchDelete.js}"></script>
     <script th:src="@{/js/adminDashboardLazyLoading.js}"></script>
     <script th:src="@{/js/adminDashboardSort.js}"></script>
-    <script th:src="@{/js/searchOnEnter.js}"></script>
+    <script th:src="@{/js/adminFormSubmit.js}"></script>
 
 </head>
 <body>
@@ -56,7 +56,7 @@
                 </thead>
                 <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
                 <tr th:each="recordLabel : ${recordLabels}">
-                    <form role="form" th:action="@{delete-record-label}" method="get" id="form">
+                    <form role="form" th:action="@{record-label}" method="delete" id="form">
                         <td th:text="${recordLabel.name}" style="width: 30%;"></td>
                         <td th:text="${recordLabel.email}" style="width: 27%;"></td>
                         <td th:text="${recordLabel.number}" style="width: 36%;"></td>
