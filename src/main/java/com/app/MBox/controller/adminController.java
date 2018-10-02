@@ -46,7 +46,7 @@ public class adminController  {
     return modelAndView;
 }
 
-    @RequestMapping(value = "/lazyLoad",method = RequestMethod.GET)
+    @RequestMapping(value = "/lazy-load-record-label",method = RequestMethod.GET)
     @ResponseBody
     public List<recordLabelDto> processLazyLoading(Pageable pageable) {
         List<recordLabelDto> recordLabels=new LinkedList<>();

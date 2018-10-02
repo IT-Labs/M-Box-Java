@@ -27,13 +27,17 @@ public class homeController {
     @Autowired
     recordLabelService recordLabelService;
 
+    public static int INITIAL_PAGE=0;
+    public static int INITIAL_SIZE=25;
+    public static String INITIAL_SORT_PARAMETAR="dateCreated";
+    public static Sort.Direction INITIAL_SORT_DIRECTION=Sort.Direction.DESC;
 
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
         List<songDto> songs;
-        songs=songService.getMostRecentSongs(PageRequest.of(0,5,Sort.Direction.DESC,"dateCreated"));
+        songs=songService.getMostRecentSongs(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         List<artistDto>artists;
-        artists=artistService.findRecentlyAddedArtist(PageRequest.of(0,5,Sort.Direction.DESC,"dateCreated"));
+        artists=artistService.findRecentlyAddedArtist(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         model.addAttribute("artists",artists);
         model.addAttribute("songs",songs);
         modelAndView.setViewName("home");
@@ -41,17 +45,17 @@ public class homeController {
 
     }
 
-    @RequestMapping(value = "/artists")
+    @RequestMapping(value = "/artist")
     public ModelAndView showArtists(ModelAndView modelAndView,Model model) {
-        List<artistDto> artists=artistService.findAllArtists(PageRequest.of(0,25, Sort.Direction.DESC,"dateCreated"));
+        List<artistDto> artists=artistService.findAllArtists(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         model.addAttribute("artists",artists);
         modelAndView.setViewName("artistsListPage");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/record-labels",method = RequestMethod.GET)
+    @RequestMapping(value = "/record-label",method = RequestMethod.GET)
     public ModelAndView showRecordLabels(ModelAndView modelAndView,Model model) {
-        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(PageRequest.of(0,25, Sort.Direction.DESC,"dateCreated"));
+        List<recordLabelDto> recordLabels=recordLabelService.getRecordLabels(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         model.addAttribute("recordLabels",recordLabels);
         modelAndView.setViewName("recordLabelsListPage");
         return modelAndView;

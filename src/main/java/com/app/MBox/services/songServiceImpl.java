@@ -8,6 +8,7 @@ import com.app.MBox.core.repository.songRepository;
 import com.app.MBox.dto.songDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,8 +51,9 @@ public class songServiceImpl implements songService {
     @Override
     public List<songDto> getMostRecentSongs(Pageable pageable) {
         List<songDto> songDtos=new LinkedList<>();
-        List<song> songs=songRepository.getMostRecentSongs(pageable);
-        songDtos=mapSongToSongDto(songs);
+        Page<song> songs=songRepository.getMostRecentSongs(pageable);
+
+        songDtos=mapSongToSongDto(songs.getContent());
         return songDtos;
     }
 
@@ -108,8 +110,8 @@ public class songServiceImpl implements songService {
 
     public List<songDto> findSongs(Pageable pageable) {
         artist artist=springChecks.getLoggedInArtist();
-        List<song> songs=songRepository.findSongs(artist.getId(),pageable);
-        List<songDto> songDtos=mapSongToSongDto(songs);
+        Page<song> songs=songRepository.findSongs(artist.getId(),pageable);
+        List<songDto> songDtos=mapSongToSongDto(songs.getContent());
         return songDtos;
     }
 
