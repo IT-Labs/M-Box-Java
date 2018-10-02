@@ -27,4 +27,6 @@ public interface recordLabelService {
      void deleteRecordLabel(String email);
 
      List<recordLabelDto> getRecordLabels(Pageable pageable);
+
+     List<recordLabelDto> getAllRecordLabels();
 }

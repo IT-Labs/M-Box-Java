@@ -43,7 +43,7 @@ public class artistServiceImpl implements artistService {
     properties properties;
     @Autowired
     @Lazy
-    emailService emailService;
+    emailService emailServiceImpl;
     @Autowired
     userRolesService userRolesServiceImpl;
     @Autowired
@@ -91,7 +91,7 @@ public class artistServiceImpl implements artistService {
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
         String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl, emailTemplateEnum.artistSignUpMail.toString());
-        emailService.setAndSendEmail(emailBodyDto,user);
+        emailServiceImpl.setAndSendEmail(emailBodyDto,user);
         return user;
     }
 
@@ -215,7 +215,7 @@ public class artistServiceImpl implements artistService {
         }
 
         artist.setDeleted(true);
-        emailService.sendDeleteArtistEmail(user);
+        emailServiceImpl.sendDeleteArtistEmail(user);
         save(artist);
         recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
         if(recordLabelArtists!=null) {

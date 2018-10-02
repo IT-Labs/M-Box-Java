@@ -23,6 +23,9 @@ public interface userRepository extends CrudRepository<users,Integer> {
     @Query(value="select u from users u , recordLabel r where u=r.user and u.isActivated=true")
     List<users>findAllActivatedRecordLabels(Pageable pageable);
 
+    @Query(value="select u from users u , recordLabel r where u=r.user and u.isActivated=true")
+    List<users>findAllActivatedRecordLabels();
+
     //select u.* from users u join record_label rl on u.id=rl.user_id where (name LIKE %?1% or email LIKE %?1%), nativeQuery=true
     @Query(value = "select u from users u ,recordLabel r where u=r.user and (u.name LIKE %?1% or u.email LIKE %?1%)")
     List<users>searchRecordLabels(String searchParam);

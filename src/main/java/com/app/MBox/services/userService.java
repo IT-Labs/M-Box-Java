@@ -63,4 +63,7 @@ public interface userService {
 
      List<artistDto> mapUserToArtistDto(List<users> artists);
 
+     List<users> findAllActiveRecordLabels();
+
+     List<recordLabelDto> mapUserToRecordLabelDto(List<users> users);
 }

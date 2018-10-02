@@ -2,6 +2,8 @@ package com.app.MBox.controller;
 
 
 
+import com.app.MBox.config.properties;
+import com.app.MBox.dto.aboutMessageDto;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.songDto;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -26,6 +29,10 @@ public class homeController {
     artistService artistService;
     @Autowired
     recordLabelService recordLabelService;
+    @Autowired
+    emailService emailService;
+    @Autowired
+    properties properties;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=25;
@@ -75,12 +82,23 @@ public class homeController {
         return recordLabels;
     }
 
-    @RequestMapping(value = "/about")
-    public ModelAndView showAbout(ModelAndView modelAndView) {
+    @RequestMapping(value = "/about",method = RequestMethod.GET)
+    public ModelAndView showAbout(ModelAndView modelAndView,Model model) {
+        List<recordLabelDto> recordLabels=recordLabelService.getAllRecordLabels();
+        aboutMessageDto aboutMessageDto=new aboutMessageDto();
+        model.addAttribute("recordLabels",recordLabels);
+        model.addAttribute("aboutMessageDto",aboutMessageDto);
         modelAndView.setViewName("about");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/about",method = RequestMethod.POST)
+    public ModelAndView proccesAbout(ModelAndView modelAndView,@ModelAttribute("aboutMessageDto") @Valid aboutMessageDto aboutMessageDto) {
+        emailService.sendAboutEmail(aboutMessageDto);
+        modelAndView.addObject("successfullMessage",properties.getSuccessfullMessage());
+        modelAndView.setViewName("about");
+        return modelAndView;
+    }
 
 
 

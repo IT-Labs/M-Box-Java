@@ -32,6 +32,8 @@ public class artistController {
     @Autowired
     properties properties;
 
+    public static int INITIAL_PAGE=0;
+    public static int INITIAL_SIZE=20;
 
     @RequestMapping(value = "/song",method = RequestMethod.GET)
     public ModelAndView showSongPage (ModelAndView modelAndView,Model model) {
@@ -69,7 +71,7 @@ public class artistController {
 
     @RequestMapping(value = "/songs",method = RequestMethod.GET)
     public ModelAndView showArtistMySongsPage(ModelAndView modelAndView,Model model) {
-        List<songDto> songs=songService.findSongs(PageRequest.of(0,20));
+        List<songDto> songs=songService.findSongs(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE));
         model.addAttribute("songs",songs);
         artist artist=springChecks.getLoggedInArtist();
         artistDto artistDto=new artistDto();

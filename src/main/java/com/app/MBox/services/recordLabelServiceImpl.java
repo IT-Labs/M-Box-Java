@@ -34,7 +34,7 @@ public class recordLabelServiceImpl implements recordLabelService {
     @Autowired
     properties properties;
     @Autowired
-    emailService emailService;
+    emailService emailServiceImpl;
     @Autowired
     amazonS3ClientService amazonS3ClientService;
     @Autowired
@@ -67,7 +67,7 @@ public class recordLabelServiceImpl implements recordLabelService {
 
         String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
-        emailService.setAndSendEmail(emailBodyDto,user);
+        emailServiceImpl.setAndSendEmail(emailBodyDto,user);
 
         return recordLabel;
     }
@@ -97,14 +97,14 @@ public class recordLabelServiceImpl implements recordLabelService {
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId());
         for (artist artist:artists) {
             artist.setDeleted(true);
-            emailService.sendDeleteArtistEmail(artist.getUser());
+            emailServiceImpl.sendDeleteArtistEmail(artist.getUser());
             artistServiceImpl.save(artist);
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
             if(recordLabelArtists!=null) {
                 recordLabelArtistsServiceImpl.delete(recordLabelArtists);
             }
         }
-        emailService.sendDeleteRecordLabelEmail(user);
+        emailServiceImpl.sendDeleteRecordLabelEmail(user);
         userRoles userRoles=userRolesServiceImpl.findByUserId(user.getId());
             if(userRoles!=null) {
                 userRolesServiceImpl.deleteUserRoles(userRoles);
@@ -130,5 +130,15 @@ public class recordLabelServiceImpl implements recordLabelService {
             return recordLabelDto;
         }).collect(Collectors.toList());
         return recordLabelsDto;
+    }
+
+    public List<recordLabelDto> getAllRecordLabels() {
+        List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels();
+        List<recordLabelDto> recordLabelDtos=recordLabels.stream().map(record->{
+            recordLabelDto recordLabelDto=new recordLabelDto();
+            recordLabelDto.setName(record.getName());
+            return recordLabelDto;
+        }).collect(Collectors.toList());
+        return recordLabelDtos;
     }
 }

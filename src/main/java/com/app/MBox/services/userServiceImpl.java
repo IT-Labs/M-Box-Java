@@ -48,7 +48,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private recordLabelService recordLabelServiceImpl;
     @Autowired
-    private emailService emailService;
+    private emailService emailServiceImpl;
     @Autowired
     private artistService artistServiceImpl;
     @Autowired
@@ -86,7 +86,7 @@ public class userServiceImpl implements userService {
             verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
             String appUrl=String.format("%s%s",properties.getConfirmUrl(),verificationToken.getToken());
             emailBodyDto emailBodyDto=parsingEmailBody(user,appUrl,emailTemplateEnum.verificationMail.toString());
-            emailService.setAndSendEmail(emailBodyDto,user);
+            emailServiceImpl.setAndSendEmail(emailBodyDto,user);
         return user;
     }
 
@@ -121,7 +121,7 @@ public class userServiceImpl implements userService {
             verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
             String appUrl=String.format("%s%s",properties.getResetPasswordUrl(),verificationToken.getToken());
             emailBodyDto emailBodyDto=parsingEmailBody(user,appUrl,emailTemplateEnum.forgotPassword.toString());
-            emailService.setAndSendEmail(emailBodyDto,user);
+            emailServiceImpl.setAndSendEmail(emailBodyDto,user);
              return true;
 
         }
@@ -272,6 +272,10 @@ public class userServiceImpl implements userService {
 
     public List<users> findAllActiveRecordLabels(Pageable pageable) {
         return userRepository.findAllActivatedRecordLabels(pageable);
+    }
+
+    public List<users>findAllActiveRecordLabels() {
+        return userRepository.findAllActivatedRecordLabels();
     }
 }
 
