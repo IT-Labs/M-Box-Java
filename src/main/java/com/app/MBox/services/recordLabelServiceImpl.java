@@ -148,4 +148,20 @@ public class recordLabelServiceImpl implements recordLabelService {
     public recordLabel findById(int id) {
        return  recordLabelRepository.findById(id);
     }
+
+    public  recordLabelDto findRecordLabel(int id) {
+        recordLabel recordLabel=findById(id);
+        recordLabelDto recordLabelDto=new recordLabelDto();
+        recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
+        recordLabelDto.setId(recordLabel.getId());
+        users user= recordLabel.getUser();
+        recordLabelDto.setName(user.getName());
+        recordLabelDto.setEmail(user.getEmail());
+        if(user.getPicture()!=null) {
+            recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(user.getPicture()));
+        }   else {
+            recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
+        }
+        return recordLabelDto;
+    }
 }

@@ -17,14 +17,14 @@
 <body>
 <header th:insert="shared/header.html :: header"> </header>
 
-<div class="container-fluid" style="text-align: center">
+<div class="container-fluid" style="text-align: center;margin-top:4%;">
     <div class="row">
-        <div class="col-sm-3" style="border-right : solid 1px black;height:800px;position:fixed">
+        <div class="col-sm-3" style="border-right : solid 1px black;height:800px;position:fixed;width:40%">
             <div class="row">
                 <h3 th:text="${recordLabel.name}" class="text-center"  style="margin: 50px 25px 0px 50px"></h3>
             </div>
             <div class="row">
-                <img class="img-responsive" style="height:300px;width: 400px;margin: 50px" th:src="${recordLabel.pictureUrl}"/>
+                <img class="img-responsive" style="height:300px;width: 320px;margin-top: 3%;margin-left: 21%;margin-bottom: 4%;" th:src="${recordLabel.pictureUrl}"/>
             </div>
             <div class="row">
                 <textarea th:value="@{recordLabel.aboutInfo}" style="resize:none; width:400px; height: 350px" disabled></textarea>
@@ -42,10 +42,7 @@
 
                                         <a th:href="@{artist-details(id=${artist.id})}"> <h5 th:text="${artist.name}"></h5> </a>
 
-
                                     </div>
-
-
                             </div>
                         </div>
                     </div>

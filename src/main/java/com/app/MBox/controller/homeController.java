@@ -132,8 +132,11 @@ public class homeController {
 
     @RequestMapping(value = "/record-label-details",method = RequestMethod.GET)
     public ModelAndView showRecordLabelDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
-        recordLabel recordLabel=recordLabelService.findById(id);
-
+        recordLabelDto recordLabel=recordLabelService.findRecordLabel(id);
+        model.addAttribute("recordLabel",recordLabel);
+        List<artist> artists=artistService.findAllArtists(recordLabel.getId());
+        List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
+        model.addAttribute("artists",artistDtos);
         modelAndView.setViewName("recordLabelDetails");
         return modelAndView;
     }

@@ -31,4 +31,6 @@ public interface recordLabelService {
      List<recordLabelDto> getAllRecordLabels();
 
      recordLabel findById(int id);
+
+     recordLabelDto findRecordLabel(int id);
 }
