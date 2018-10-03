@@ -13,6 +13,7 @@ public class recordLabelDto implements Comparable {
     private String email;
     private int number;
     private String pictureUrl;
+    private String aboutInfo;
 
 
     @Override

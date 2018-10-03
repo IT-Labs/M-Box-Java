@@ -26,7 +26,7 @@
                     <div class="row">
                         <div>
                             <div class="text-center text">
-                                <h5 th:text="${artist.name}"></h5>
+                                <a th:href="@{artist-details(id=${artist.id})}"> <h5 th:text="${artist.name}"></h5></a>
                             </div>
                         </div>
                     </div>

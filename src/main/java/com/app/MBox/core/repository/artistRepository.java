@@ -25,5 +25,7 @@ public interface artistRepository extends CrudRepository<artist,Integer> {
     @Query(value = "select a from users u , artist a where u=a.user and u.isActivated=true")
     List<artist> findRecentlyAddedArtist(Pageable pageable);
 
+    artist findById(int id);
+
 
 }

@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/homeCss.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<header th:insert="shared/header.html :: header"> </header>
 
+<div class="container-fluid" style="text-align: center">
+    <div class="row">
+        <div class="col-sm-3" style="border-right : solid 1px black;height:800px;position:fixed">
+            <div class="row">
+                <h3 th:text="${recordLabel.name}" class="text-center"  style="margin: 50px 25px 0px 50px"></h3>
+            </div>
+            <div class="row">
+                <img class="img-responsive" style="height:300px;width: 400px;margin: 50px" th:src="${recordLabel.pictureUrl}"/>
+            </div>
+            <div class="row">
+                <textarea th:value="@{recordLabel.aboutInfo}" style="resize:none; width:400px; height: 350px" disabled></textarea>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <ul th:each="artist : ${artists}" id="artistListId" class="list-group seperateLists" style="list-style:none;position:relative ;margin-left: 65%;margin-top:100px;margin-right:-350px">
+
+                <li class="col-sm-3 card-container-artist table-bordered" style="margin-right:3.2%; margin-bottom: 2%">
+                    <div class="row card-song-name">
+                        <div>
+                            <div class="text-center text">
+
+                                    <div class="text-center text">
+
+                                        <a th:href="@{artist-details(id=${artist.id})}"> <h5 th:text="${artist.name}"></h5> </a>
+
+
+                                    </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row card-song-img-hold">
+                        <img class="card-song-img img-circle" th:src="${artist.pictureUrl}" />
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
 </body>
 </html>

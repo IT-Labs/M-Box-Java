@@ -233,6 +233,7 @@ public class userServiceImpl implements userService {
             artistDto.setName(artist.getName());
             artistDto.setEmail(artist.getEmail());
             artist thisArtist=artistServiceImpl.findByUserId(artist.getId());
+            artistDto.setId(thisArtist.getId());
             artistDto.setDeleted(thisArtist.isDeleted());
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
             if(!thisArtist.isDeleted() && recordLabelArtists!=null) {

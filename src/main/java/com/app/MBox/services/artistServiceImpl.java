@@ -24,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
+
 @Service
 public class artistServiceImpl implements artistService {
 
@@ -242,6 +244,8 @@ public class artistServiceImpl implements artistService {
 
         List<artistDto> artistDtos=artists.stream().map(artist ->{
             artistDto artistDto=new artistDto();
+            artistDto.setId(artist.getId());
+            artistDto.setBio(artist.getBio());
             users artistUser=artist.getUser();
             artistDto.setName(artistUser.getName());
             artistDto.setDeleted(artist.isDeleted());
@@ -259,5 +263,9 @@ public class artistServiceImpl implements artistService {
         }).collect(Collectors.toList());
         return artistDtos;
 
+    }
+
+    public artist findById(int id) {
+           return artistRepository.findById(id);
     }
 }

@@ -1,10 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/homeCss.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<header th:insert="shared/header.html :: header"> </header>
 
+<div class="container-fluid" style="text-align: center;margin-top:4%;">
+    <div class="row" style="width:100%;height:150px;z-index:600;background:white;position:fixed;border-bottom: 1px solid black">
+
+    </div>
+    <div class="row" style="margin-top:170px">
+        <div class="col-sm-3" style="border-right: 1px solid grey; float: left; position:fixed; height:550px; z-index:600">
+            <div class="row">
+                <h2 th:text="${artist.name}"></h2>
+            </div>
+            <div class="row" style="margin-top:50px">
+                <label>Artist bio:</label>
+            </div>
+            <div class="row" style="margin-top:10px">
+                <textarea th:value="@{artist.bio}" style="resize:none; width:250px; height: 400px" disabled></textarea>
+            </div>
+        </div>
+        <div class="sol-sm-9" style="">
+            <div class="row" style="position:fixed;z-index:999">
+                <img class="img img-circle" style="width:200px;height:200px;margin-left: 500px;margin-top:-150px" th:src="${artist.pictureUrl}"/>
+            </div>
+            <div class="row" style="position:relative;z-index:0">
+
+                <ul th:each="song:${songs}" id="songListId" class="list-group seperateLists" style="list-style:none;position:relative ;margin-left: 45%;margin-top:100px;margin-right:-150px">
+
+                    <li class="col-sm-3 card-container-song table-bordered" style="margin-right:3.2%; margin-bottom: 2%;height:240px">
+                        <div>
+                            <div class="row card-song-name">
+
+                                    <div class="text-center text">
+
+                                        <a th:href="@{song(id=${song.id})}">   <h5 th:text="${song.songName}"></h5></a>
+
+                                    </div>
+
+                            </div>
+                            <div class="row card-song-img-hold">
+                                <img class="card-song-img" th:src="${song.songImgUrl}" />
+                            </div>
+                            <div class="row out-link-social">
+                                <div class="col-sm-6">
+                                    <a target=”_blank” th:href="${song.youtubeLink}">Youtube</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a target=”_blank” th:href="${song.vimeoLink}">Vimeo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

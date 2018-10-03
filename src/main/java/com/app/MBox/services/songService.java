@@ -24,4 +24,6 @@ public interface songService {
     void deleteSong(int songId);
 
     List<songDto> searchSongs(String searchParam);
+
+    List<songDto> mapSongToSongDto(List<song> songs);
 }

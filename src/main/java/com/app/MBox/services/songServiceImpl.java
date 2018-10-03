@@ -141,6 +141,10 @@ public class songServiceImpl implements songService {
             songDto.setVimeoLink(temp.getVimeoLink());
             songDto.setYoutubeLink(temp.getYoutubeLink());
             songDto.setArtistName(temp.getArtist().getUser().getName());
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date=simpleDateFormat.format(temp.getDateOfRelease());
+            songDto.setDateReleased(date);
             if(temp.getImage()!=null) {
                 songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(temp.getImage()));
             }   else {

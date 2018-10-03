@@ -1,10 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/homeCss.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<header th:insert="shared/header.html :: header"> </header>
 
+<div class="container-fluid" style="margin-top:2%;">
+    <hr />
+    <div class="row" style="margin: 15px">
+        <div class="col-md-4 col-sm-4">
+            <a class="btn btn-block btn-default" href="javascript:history.go(-1)">Back</a>
+        </div>
+    </div>
+    <div class="row" style="margin: 15px">
+        <div class="col-md-6 col-sm-6">
+            <div class="row">
+                <h3 th:text="${song.songName}"></h3>
+            </div>
+            <div class="row">
+                <img class="img-responsive" style="height:350px; width:500px" th:src="${song.songImgUrl}">
+            </div>
+            <div class="row" style="margin-bottom: 15px; margin-top: 15px">
+                <div class="form-group">
+                    <label for="artistName" style="float:left;margin-top: 4px;margin-right:6px">By:  </label>
+                    <h3 th:text="${song.artistName}" name="artistName" id="artistName"></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="albumName" style="float: left;margin-top: 4px;margin-right:6px">Album name: </label>
+                    <h3 th:text="${song.albumName}" id="albumName"></h3>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 15px">
+                <div class="form-group">
+                    <label for="genre" style="float: left;margin-top: 4px;margin-right:6px">Genre: </label>
+                    <h3 th:text="${song.genre}" id="genre"></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="dateReleased" style="float: left;margin-top: 4px;margin-right:6px">Release Date: </label>
+                    <h3 th:text="${song.dateReleased}" id="dateReleased"></h3>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px">
+                <div class="col-md-6 col-sm-6">
+                    <div class="row" style="text-align: center">
+                        <a target="_blank" th:href="${song.youtubeLink}" id="youtubeLink" style="font-size: x-large">Youtube</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+                    <div class="row" style="text-align: center">
+                        <a target="_blank" th:href="${song.vimeoLink}" id="vimeoLink" style="font-size: x-large">Vimeo </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+            <div class="row" style="text-align: center">
+                <h3>Song Lyrics</h3>
+            </div>
+            <div class="row" style="padding: 12px;">
+                <textarea th:text="${song.songLyrics}" class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none;" name="Message" id="songLyrics" disabled></textarea>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

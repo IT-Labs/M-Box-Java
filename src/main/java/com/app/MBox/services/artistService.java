@@ -35,4 +35,6 @@ public interface artistService {
     List<artistDto> findAllArtists(Pageable pageable);
 
     List<artistDto> mapArtistToArtistDto(List<artist> artists);
+
+    artist findById(int id);
 }

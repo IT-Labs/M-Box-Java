@@ -14,5 +14,7 @@ public class artistDto {
     private String email;
     private String recordLabelName;
     private boolean deleted;
+    private String bio;
+    private int id;
 
 }

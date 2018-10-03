@@ -3,6 +3,8 @@ package com.app.MBox.controller;
 
 
 import com.app.MBox.config.properties;
+import com.app.MBox.core.model.artist;
+import com.app.MBox.core.model.song;
 import com.app.MBox.dto.aboutMessageDto;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.recordLabelDto;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -36,15 +39,16 @@ public class homeController {
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=25;
+    public static int INITIAL_HOMEPAGE_SIZE=5;
     public static String INITIAL_SORT_PARAMETAR="dateCreated";
     public static Sort.Direction INITIAL_SORT_DIRECTION=Sort.Direction.DESC;
 
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
         List<songDto> songs;
-        songs=songService.getMostRecentSongs(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
+        songs=songService.getMostRecentSongs(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         List<artistDto>artists;
-        artists=artistService.findRecentlyAddedArtist(PageRequest.of(INITIAL_PAGE,INITIAL_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
+        artists=artistService.findRecentlyAddedArtist(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         model.addAttribute("artists",artists);
         model.addAttribute("songs",songs);
         modelAndView.setViewName("home");
@@ -100,6 +104,30 @@ public class homeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/song",method = RequestMethod.GET)
+    public ModelAndView showSongDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+        song song=songService.findById(id);
+        List<song> songs=new LinkedList<>();
+        songs.add(song);
+        List<songDto> songDtos=songService.mapSongToSongDto(songs);
+        model.addAttribute("song",songDtos.get(0));
+        modelAndView.setViewName("songDetails");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/artist-details",method = RequestMethod.GET)
+    public ModelAndView showArtistDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+        artist artist=artistService.findById(id);
+        List<artist> artists=new LinkedList<>();
+        artists.add(artist);
+        List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
+        model.addAttribute("artist",artistDtos.get(0));
+        List<song> songs=songService.findByArtistId(id);
+        List<songDto> songDtos=songService.mapSongToSongDto(songs);
+        model.addAttribute("songs",songDtos);
+        modelAndView.setViewName("artistDetails");
+        return modelAndView;
+    }
 
 
 
