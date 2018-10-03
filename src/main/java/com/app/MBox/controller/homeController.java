@@ -4,6 +4,7 @@ package com.app.MBox.controller;
 
 import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
+import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.song;
 import com.app.MBox.dto.aboutMessageDto;
 import com.app.MBox.dto.artistDto;
@@ -129,6 +130,12 @@ public class homeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/record-label-details",method = RequestMethod.GET)
+    public ModelAndView showRecordLabelDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+        recordLabel recordLabel=recordLabelService.findById(id);
 
+        modelAndView.setViewName("recordLabelDetails");
+        return modelAndView;
+    }
 
 }

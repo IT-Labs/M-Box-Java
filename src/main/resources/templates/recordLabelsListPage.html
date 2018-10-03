@@ -24,7 +24,7 @@
             <div class="row">
                 <div>
                     <div class="text-center text">
-                        <h5 th:text="${record.name}"></h5>
+                        <a th:href="@{record-label-details(id=${record.id})}"> <h5 th:text="${record.name}"></h5></a>
                     </div>
                 </div>
             </div>

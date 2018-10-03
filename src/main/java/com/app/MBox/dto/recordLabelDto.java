@@ -14,6 +14,7 @@ public class recordLabelDto implements Comparable {
     private int number;
     private String pictureUrl;
     private String aboutInfo;
+    private int id;
 
 
     @Override

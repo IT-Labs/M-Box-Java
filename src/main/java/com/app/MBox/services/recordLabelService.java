@@ -29,4 +29,6 @@ public interface recordLabelService {
      List<recordLabelDto> getRecordLabels(Pageable pageable);
 
      List<recordLabelDto> getAllRecordLabels();
+
+     recordLabel findById(int id);
 }
