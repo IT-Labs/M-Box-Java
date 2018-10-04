@@ -138,6 +138,7 @@ public class songServiceImpl implements songService {
             songDto.setSongName(temp.getName());
             songDto.setGenre(temp.getGenre());
             songDto.setId(temp.getId());
+            songDto.setSongLyrics(temp.getLyrics());
             songDto.setVimeoLink(temp.getVimeoLink());
             songDto.setYoutubeLink(temp.getYoutubeLink());
             songDto.setArtistName(temp.getArtist().getUser().getName());
@@ -153,5 +154,16 @@ public class songServiceImpl implements songService {
             return songDto;
         }).collect(Collectors.toList());
         return songDtos;
+    }
+
+    public void saveSong(songDto songDto)  {
+
+        song song=findById(songDto.getId());
+        song.setLyrics(songDto.getSongLyrics());
+        song.setName(songDto.getSongName());
+        song.setVimeoLink(songDto.getVimeoLink());
+        song.setYoutubeLink(songDto.getYoutubeLink());
+        song.setAlbumName(songDto.getAlbumName());
+        songRepository.save(song);
     }
 }

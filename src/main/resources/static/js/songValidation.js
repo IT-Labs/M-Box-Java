@@ -43,11 +43,11 @@ function isInvalid (url,type) {
     	counter++;
         }
 
-        if(isInvalid(youtubeLink,0)) {
+        if(isInvalid(youtubeLink,0) || youtubeLink.length>99) {
         counter++;
         $("#youtubeLinkError").show().html("It must be a youtube link");
         }
-        if(isInvalid(vimeoLink,1)) {
+        if(isInvalid(vimeoLink,1)|| vimeoLink.length>99) {
         counter++;
         $("#vimeoLinkError").show().html("It must be a vimeo link");
         }

@@ -26,4 +26,6 @@ public interface songService {
     List<songDto> searchSongs(String searchParam);
 
     List<songDto> mapSongToSongDto(List<song> songs);
+
+    void saveSong(songDto songDto);
 }

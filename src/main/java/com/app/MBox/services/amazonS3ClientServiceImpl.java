@@ -31,7 +31,7 @@ import java.util.UUID;
 @Component
 public class amazonS3ClientServiceImpl implements amazonS3ClientService {
 
-  //  private String awsS3AudioBucket;
+
     private AmazonS3 amazonS3;
     @Autowired private amazonS3Config amazonS3Config;
 
@@ -41,7 +41,7 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
         this.amazonS3 = AmazonS3ClientBuilder.standard()
                 .withCredentials(amazonS3Config.getAWSCredentials())
                 .withRegion(amazonS3Config.getAWSPollyRegion().getName()).build();
-       // this.awsS3AudioBucket = awsS3AudioBucket;
+
     }
 
     @Async

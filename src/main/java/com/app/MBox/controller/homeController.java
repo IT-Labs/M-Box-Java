@@ -2,6 +2,8 @@ package com.app.MBox.controller;
 
 
 
+import com.app.MBox.common.customHandler.springChecks;
+import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.core.model.recordLabel;
@@ -37,6 +39,8 @@ public class homeController {
     emailService emailService;
     @Autowired
     properties properties;
+    @Autowired
+    springChecks springChecks;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=25;
@@ -112,7 +116,14 @@ public class homeController {
         songs.add(song);
         List<songDto> songDtos=songService.mapSongToSongDto(songs);
         model.addAttribute("song",songDtos.get(0));
-        modelAndView.setViewName("songDetails");
+        String role=springChecks.getLoggedInUserRole();
+        if(rolesEnum.ARTIST.toString().equals(role) && springChecks.getLoggedInArtist().getId()==song.getArtist().getId()) {
+         modelAndView.setViewName("artistEditSong");
+         songDto songDto=new songDto();
+         model.addAttribute("songDto",songDto);
+        }else {
+            modelAndView.setViewName("songDetails");
+        }
         return modelAndView;
     }
 

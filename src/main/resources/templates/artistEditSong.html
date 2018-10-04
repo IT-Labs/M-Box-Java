@@ -27,13 +27,13 @@
         <div class="col-md-8 col-sm-8">
             <div class="row">
                 <div class="col-md-6 col-sm-6">
-
-                    <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
-
+                    <form th:action="@{/home/homepage}" method="get">
+                        <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Back</button>
+                    </form>
                 </div>
                 <div class="col-md-6 col-sm-6">
 
-                    <button class="btn btn-block btn-primary" style="margin: 5px" onclick="formSubmit()">Publish</button>
+
 
                 </div>
             </div>
@@ -41,11 +41,11 @@
     </div>
     <hr />
     <div class="row">
-        <form id="songForm" method="post" th:action="@{song}" enctype="multipart/form-data">
+        <form id="songForm" method="post" th:action="@{/artist/editSong}" th:object="${songDto}">
             <div class="col-md-6 col-sm-6">
                 <div class="row" style="text-align: center">
                     <div class="col-md-6 col-sm-6">
-                        <input class="form-control" placeholder="Song Name" name="songName" id="songName" disabled>
+                        <input th:value="${song.songName}" class="form-control" placeholder="Song Name" name="songName" id="songName" disabled>
                     </div>
                     <div class="col-md-1 col-sm-1">
                         <button type="button" class="btn btn-default edit" name="songName,editSongName,saveSongName,cancelSongName" id="editSongName" onclick="editDetails(this.name)">
@@ -64,14 +64,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <input type="file" name="file" id="file" accept=".jpg,.png"/>
+                    <img class="img-responsive" style="height:350px; width:500px" th:src="${song.songImgUrl}">
                 </div>
-                <div class="row">
-                    By: artist
+                <div class="row" style="margin-left: 1%;margin-bottom: 2%">
+                    <div class="form-group">
+                        <label for="artistName" style="float:left;margin-top: 4px;margin-right:6px">By:  </label>
+                        <h3 th:text="${song.artistName}" name="artistName" id="artistName"></h3>
+                    </div>
                 </div>
                 <div class="row" style="text-align: center">
                     <div class="col-md-6 col-sm-6">
-                        <input class="form-control" placeholder="Album Name" name="albumName" id="albumName" disabled>
+                        <input th:value="${song.albumName}" class="form-control" placeholder="Album Name" name="albumName" id="albumName" disabled>
                     </div>
                     <div class="col-md-1 col-sm-1">
                         <button  type="button" class="btn btn-default edit" name="albumName,editAlbumName,saveAlbumName,cancelAlbumName" id="editAlbumName" onclick="editDetails(this.name)">
@@ -89,35 +92,103 @@
                         </button>
                     </div>
                 </div>
-                <div class="row" style="text-align: center">
-                    genre
+                <div class="row" style="margin-top:4px;margin-bottom:4px;margin-left: 1%;margin-bottom: 2%">
+                    <div class="form-group">
+                        <label for="artistName" style="float:left;margin-top: 4px;margin-right:6px">Genre:  </label>
+                        <h3 th:text="${song.genre}" id="textGenre"></h3>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button  type="button" class="btn btn-default edit" name="editGenre" id="editGenre" onclick="editGenre1('editGenre','saveGenre','cancelGenre','genre')" style="margin-top: -183%;margin-left: 750%">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button type="button" class="btn btn-success save" id="saveGenre"  onclick="saveGenre1('editGenre','saveGenre','cancelGenre','genre')" style="margin-top: -30%;margin-left: 900%;display:none">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button type="button" class="btn btn-danger cancel" id="cancelGenre"   onclick="cancelGenre1('editGenre','saveGenre','cancelGenre','genre')" style="margin-top: -30%;margin-left: 1050%;display:none">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                    <select name="genre" id="genre" style="display:none;">
+                        <option>Rock</option>
+                        <option>Pop</option>
+                        <option>Electro</option>
+                        <option>Hip-Hop</option>
+                        <option>RnB</option>
+                        <option>Rap</option>
+                        <option>Metal</option>
+                        <option>Jazz</option>
+                        <option>Soul</option>
+                        <option>Classical</option>
+                        <option>Funk</option>
+                        <option>Drum ‘n Bass</option>
+                </select>
                 </div>
 
-                <div class="col-md-6 col-sm-6">
-                    <input type="date" class="form-control" placeholder="Release date" id="dateReleased" name="dateReleased" disabled>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button  type="button" class="btn btn-default edit" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" id="editDateRelease" onclick="editDetails(this.name)">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-success save" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" id="saveDateRelease" style="display:none" onclick="saveDetails(this.name)">
-                        <i class="fa fa-check"></i>
-                    </button>
-                </div>
-                <div class="col-md-1 col-sm-1">
-                    <button type="button" class="btn btn-danger cancel" id="cancelDateRelease" name="dateReleased,editDateRelease,saveDateRelease,cancelDateRelease" style="display:none" onclick="cancelEditing(this.name)">
-                        <i class="fa fa-remove"></i>
-                    </button>
-                </div>
+
 
                 <div class="row">
+                    <div class="col-md-3 col-sm-3" >
+                        <label>Release Date:</label>
+                    </div>
+                    <div class="col-md-7 col-sm-7">
+                        <label th:text="${song.dateReleased}"></label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 15px">
                     <div class="col-md-6 col-sm-6">
-                        <label>Youtube Link</label>
+                        <div class="row" style="text-align: center">
+                            <a target="_blank" th:href="${song.youtubeLink}" id="youtubeLink">Youtube</a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-default edit editDetails" id="editYoutube" onclick="editLink('youtubeLink', 'youtubeLinkUrl', 'editYoutube', 'saveYoutube', 'cancelYoutube')">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-success saveDetails" id="saveYoutube" onclick="saveLink('youtubeLink', 'youtubeLinkUrl', 'editYoutube', 'saveYoutube', 'cancelYoutube')" style="display:none">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-danger cancelDetails" id="cancelYoutube" onclick="cancelEditingLink('youtubeLink', 'youtubeLinkUrl', 'editYoutube', 'saveYoutube', 'cancelYoutube')" style="display:none">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 8px">
+                            <input class="form-control" th:value="${song.youtubeLink}" id="youtubeLinkUrl" name="youtubeLink" style="display:none">
+                        </div>
                     </div>
                     <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
-                        <label>Vimeo Link</label>
+                        <div class="row" style="text-align: center">
+                            <a target="_blank" th:href="${song.vimeoLink}" id="vimeoLink">Vimeo </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-default edit editDetails" id="editVimeo" onclick="editLink('vimeoLink', 'vimeoLinkUrl', 'editVimeo', 'saveVimeo', 'cancelVimeo')">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-success saveDetails" id="saveVimeo" onclick="saveLink('vimeoLink', 'vimeoLinkUrl', 'editVimeo', 'saveVimeo', 'cancelVimeo')" style="display:none">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-danger cancelDetails" id="cancelVimeo" onclick="cancelEditingLink('vimeoLink', 'vimeoLinkUrl', 'editVimeo', 'saveVimeo', 'cancelVimeo')" style="display:none">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 8px">
+                            <input class="form-control" th:value="${song.vimeoLink}" id="vimeoLinkUrl" name="vimeoLink" style="display:none">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,26 +197,26 @@
             <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
                 <div class="row">
                     <div class="col-md-1 col-sm-1">
-                        <button class="btn btn-default edit editDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="editLyrics" onclick="editDetails(this.name)">
+                        <button type="button" class="btn btn-default edit editDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="editLyrics" onclick="editDetails(this.name)">
                             <i class="fa fa-edit"></i>
                         </button>
                     </div>
                     <div class="col-md-1 col-sm-1" >
-                        <button class="btn btn-success saveDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="saveLyrics" onclick="saveDetails(this.name)" style="display:none">
+                        <button type="button" class="btn btn-success saveDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="saveLyrics" onclick="saveDetails(this.name)" style="display:none">
                             <i class="fa fa-check"></i>
                         </button>
                     </div>
                     <div class="col-md-1 col-sm-1">
-                        <button class="btn btn-danger cancelDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="cancelLyrics" onclick="cancelEditing(this.name)" style="display:none">
+                        <button type="button" class="btn btn-danger cancelDetails" name="songLyrics,editLyrics,saveLyrics,cancelLyrics" id="cancelLyrics" onclick="cancelEditing(this.name)" style="display:none">
                             <i class="fa fa-remove"></i>
                         </button>
                     </div>
                 </div>
                 <div class="row" style="padding: 12px;">
-                    <textarea  class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" name="songLyrics"  id="songLyrics" disabled></textarea>
+                    <textarea th:text="${song.songLyrics}"  class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" name="songLyrics"  id="songLyrics" disabled></textarea>
                 </div>
             </div>
-
+            <input type="hidden" th:value="${song.id}" name="id" id="id"\>
         </form>
     </div>
 
@@ -153,12 +224,10 @@
 
 <script>
 
-    function formSubmit(event) {
-    console.log("POSTING FORM NOW");
-       document.getElementById("songForm").submit();
 
 
-    }
+
+
 
 </script>
 

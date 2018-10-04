@@ -57,7 +57,7 @@
                     <tbody id="bodyScroll" style="height: 620px; overflow-y: auto; display: block">
                     <tr th:each="song : ${songs}">
                         <form role="form" th:action="@{song}" method="delete" id="form">
-                            <td th:text="${song.songName}" style="width: 30%;"></td>
+                            <td style="width: 30%;"><a th:href="@{/home/song(id=${song.id})}" th:text="${song.songName}"> </a></td>
                             <td th:text="${song.albumName}" style="width: 27%;"></td>
                             <td th:text="${song.genre}" style="width: 36%;"></td>
                             <input type="hidden" name="id" th:value=${song.id}>

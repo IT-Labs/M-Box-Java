@@ -7,6 +7,7 @@ import com.app.MBox.core.model.artist;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.songService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -58,7 +59,7 @@ public class artistController {
             return modelAndView;
         }
 
-        modelAndView.setViewName("artistAccount");
+        modelAndView.setViewName("artistMySongs");
         return modelAndView;
     }
 
@@ -107,5 +108,13 @@ public class artistController {
             }
             return songs;
 
+    }
+
+    @RequestMapping(value = "/editSong",method = RequestMethod.POST)
+    public ModelAndView showArtistAccountPage(@ModelAttribute("songDto") songDto song) {
+        songService.saveSong(song);
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("artistAccount");
+        return modelAndView;
     }
 }

@@ -27,7 +27,7 @@
                 <img class="img-responsive" style="height:300px;width: 320px;margin-top: 3%;margin-left: 21%;margin-bottom: 4%;" th:src="${recordLabel.pictureUrl}"/>
             </div>
             <div class="row">
-                <textarea th:value="@{recordLabel.aboutInfo}" style="resize:none; width:400px; height: 350px" disabled></textarea>
+                <textarea th:text="${recordLabel.aboutInfo}" style="resize:none; width:400px; height: 350px" disabled></textarea>
             </div>
         </div>
         <div class="col-sm-9">

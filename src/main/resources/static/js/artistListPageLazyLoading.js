@@ -18,7 +18,7 @@ jQuery(document).ready(
                     for(i=0 ; i<data.length ; i++) {
                         html=html+'<li class="col-sm-2 table-bordered" style="margin-right:3.2%;margin-top:6px">';
                         html=html+'<div><div class="row"><div><div class="text-center text">';
-                        html=html+'<h5>' + data[i].name + '</h5></div></div></div>';
+                        html=html+'<a href="/home/artist-details?id='+ data[i].id + '"><h5>' + data[i].name + '</h5></a></div></div></div>';
                         html=html+'<div class="row"><div><img class="img-circle img-responsive artistAlign" style="width: 80%;height: 80%;margin-left: auto;margin-right: auto;" src="' + data[i].pictureUrl + '" />';
                         html=html+'</div></div><div class="row"<div><div class="text-center text">';
                         html=html+'<h5>' + data[i].recordLabelName + '</h5>';

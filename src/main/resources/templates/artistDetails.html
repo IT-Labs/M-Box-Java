@@ -30,7 +30,7 @@
                 <label>Artist bio:</label>
             </div>
             <div class="row" style="margin-top:10px">
-                <textarea th:value="@{artist.bio}" style="resize:none; width:250px; height: 400px" disabled></textarea>
+                <textarea th:text="${artist.bio}" style="resize:none; width:250px; height: 400px" disabled></textarea>
             </div>
         </div>
         <div class="sol-sm-9" style="">

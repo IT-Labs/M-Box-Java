@@ -22,7 +22,7 @@ function deleteFunction(name,id) {
   			var html="";
               for(i=0 ; i<data.length ; i++) {
                                           html=html+'<tr><form role="form" action="delete" method="post" id="form">';
-                                          html=html+'<td style="width: 30%;">' + data[i].songName + '</td>';
+                                           html=html+'<td style="width: 30%;"><a href="/home/song?id=' + data[i].id +'">' + data[i].songName + '</a></td>';
                                           html=html+'<td style="width: 27%;">' + data[i].albumName + '</td>';
                                           html=html+'<td style="width: 36%;">' + data[i].genre + '</td>';
                                           html=html+'<input type="hidden" name="email" value=' + data[i].id + '>';
@@ -45,3 +45,4 @@ function deleteFunction(name,id) {
 
 
       }
+
