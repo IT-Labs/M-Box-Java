@@ -73,8 +73,20 @@ public class songServiceImpl implements songService {
             }
             artist artist = springChecks.getLoggedInArtist();
             song.setArtist(artist);
-            song.setYoutubeLink(songDto.getYoutubeLink());
-            song.setVimeoLink(songDto.getVimeoLink());
+            String [] youtube=songDto.getYoutubeLink().split("//");
+            String [] vimeo=songDto.getVimeoLink().split("//");
+            if(youtube.length>1) {
+                song.setYoutubeLink(songDto.getYoutubeLink());
+            }   else {
+                song.setYoutubeLink(String.format("//%s",songDto.getYoutubeLink()));
+            }
+
+            if(vimeo.length>1) {
+                song.setVimeoLink(songDto.getVimeoLink());
+            }   else {
+                song.setVimeoLink(String.format("//%s",songDto.getVimeoLink()));
+            }
+
             if (!file.isEmpty()) {
                 //logic for saving the picture on s3
                 String[] extension = file.getContentType().split("/");

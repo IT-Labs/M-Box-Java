@@ -6,6 +6,7 @@ import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.songDto;
+import com.app.MBox.services.artistService;
 import com.app.MBox.services.songService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class artistController {
     songService songService;
     @Autowired
     properties properties;
+    @Autowired
+    artistService artistService;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=20;
@@ -63,12 +66,6 @@ public class artistController {
         return modelAndView;
     }
 
-
-    @RequestMapping(value = "/account",method = RequestMethod.GET)
-    public ModelAndView showArtistAccountPage(ModelAndView modelAndView,Model model) {
-        modelAndView.setViewName("artistAccount");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "/songs",method = RequestMethod.GET)
     public ModelAndView showArtistMySongsPage(ModelAndView modelAndView,Model model) {
@@ -114,6 +111,17 @@ public class artistController {
     public ModelAndView showArtistAccountPage(@ModelAttribute("songDto") songDto song) {
         songService.saveSong(song);
         ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("artistAccount");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/account",method = RequestMethod.GET)
+    public ModelAndView showMyAccountPage(ModelAndView modelAndView,Model model) {
+        artist artist=springChecks.getLoggedInArtist();
+        List<artist> artists=new LinkedList<>();
+        artists.add(artist);
+        List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
+        model.addAttribute("artist",artistDtos.get(0));
         modelAndView.setViewName("artistAccount");
         return modelAndView;
     }

@@ -10,7 +10,7 @@ jQuery(document).ready(
 		    pixelsScrolled+=1000;
             var page=document.getElementById("row_no").value;
             var size=document.getElementById("size").value;
-			$.get("/pageable-songs", {
+			$.get("/artist/pageable-songs", {
 			page:page,
             size:size
 		}, function(data) {

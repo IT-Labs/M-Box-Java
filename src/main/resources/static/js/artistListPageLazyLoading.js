@@ -21,7 +21,7 @@ jQuery(document).ready(
                         html=html+'<a href="/home/artist-details?id='+ data[i].id + '"><h5>' + data[i].name + '</h5></a></div></div></div>';
                         html=html+'<div class="row"><div><img class="img-circle img-responsive artistAlign" style="width: 80%;height: 80%;margin-left: auto;margin-right: auto;" src="' + data[i].pictureUrl + '" />';
                         html=html+'</div></div><div class="row"<div><div class="text-center text">';
-                        html=html+'<h5>' + data[i].recordLabelName + '</h5>';
+                        html=html+'<a href="record-label-details?id=' + data[i].recordLabelId +'"><h5>' + data[i].recordLabelName + '</h5></a>';
                         html=html+'</div></div></div></div></li>';
                         }
                         $("#recordLabelsListId").append(html);
