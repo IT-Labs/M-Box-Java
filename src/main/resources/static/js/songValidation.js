@@ -1,5 +1,5 @@
 function isInvalid (url,type) {
-   if(url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/)){
+   if(url.match(/(http:|https:|)?\/?\/?(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/)){
     if (RegExp.$3.indexOf('youtu') > -1 && type=="1") {
         return true;
     } else if (RegExp.$3.indexOf('vimeo') > -1 && type=="0") {
@@ -28,10 +28,21 @@ function isInvalid (url,type) {
 	    var vimeoLink=$("#vimeoLinkUrl").val();
 	    var lyrics=$("#songLyrics").val();
 	    var counter=0;
+
+        if (!name.replace(/\s/g, '').length) {
+        $("#nameError").show().html("Name must be between 1 and 50 characters");
+            counter++;
+        }
         if ($("#name").val().length<2 || $("#name").val().length>50) {
         $("#nameError").show().html("Name must be between 1 and 50 characters");
     	counter++;
         }
+
+          if (!albumName.replace(/\s/g, '').length) {
+                 $("#albumNameError").show().html("Album name must be between 1 and 50 characters");
+                     counter++;
+                 }
+
 
         if(albumName.length<2 || albumName.length>50) {
         $("#albumNameError").show().html("Album name must be between 1 and 50 characters");

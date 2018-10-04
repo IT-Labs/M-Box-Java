@@ -132,22 +132,23 @@ public class songServiceImpl implements songService {
     }
 
     public List<songDto> mapSongToSongDto(List<song> songs) {
-        List<songDto> songDtos=songs.stream().map(temp-> {
+        List<songDto> songDtos=songs.stream().map(song-> {
             songDto songDto=new songDto();
-            songDto.setAlbumName(temp.getAlbumName());
-            songDto.setSongName(temp.getName());
-            songDto.setGenre(temp.getGenre());
-            songDto.setId(temp.getId());
-            songDto.setSongLyrics(temp.getLyrics());
-            songDto.setVimeoLink(temp.getVimeoLink());
-            songDto.setYoutubeLink(temp.getYoutubeLink());
-            songDto.setArtistName(temp.getArtist().getUser().getName());
+            songDto.setAlbumName(song.getAlbumName());
+            songDto.setSongName(song.getName());
+            songDto.setGenre(song.getGenre());
+            songDto.setId(song.getId());
+            songDto.setSongLyrics(song.getLyrics());
+            songDto.setVimeoLink(song.getVimeoLink());
+            songDto.setYoutubeLink(song.getYoutubeLink());
+            songDto.setArtistName(song.getArtist().getUser().getName());
+            songDto.setArtistId(song.getArtist().getId());
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            String date=simpleDateFormat.format(temp.getDateOfRelease());
+            String date=simpleDateFormat.format(song.getDateOfRelease());
             songDto.setDateReleased(date);
-            if(temp.getImage()!=null) {
-                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(temp.getImage()));
+            if(song.getImage()!=null) {
+                songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(song.getImage()));
             }   else {
                 songDto.setSongImgUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getSongDefaultPicture()).getValue()));
             }

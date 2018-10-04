@@ -59,7 +59,7 @@ public class artistController {
             return modelAndView;
         }
 
-        modelAndView.setViewName("artistMySongs");
+        modelAndView.setViewName("redirect:songs");
         return modelAndView;
     }
 

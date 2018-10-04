@@ -53,7 +53,7 @@
                     <div class="row">
                         <div>
                             <div class="text-center text">
-                                <h5 th:text="${song.artistName}"></h5>
+                                <a th:href="@{artist-details(id=${song.artistId})}"> <h5 th:text="${song.artistName}"></h5></a>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                         </div>
                         <div th:unless="${artist.deleted}" class="text-center text">
 
-                            <h5 th:text="${artist.recordLabelName}"></h5>
+                            <a th:href="@{record-label-details(id=${artist.recordLabelId})}"><h5 th:text="${artist.recordLabelName}"></h5></a>
 
                         </div>
                     </div>

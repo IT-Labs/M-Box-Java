@@ -236,8 +236,10 @@ public class userServiceImpl implements userService {
             artistDto.setId(thisArtist.getId());
             artistDto.setDeleted(thisArtist.isDeleted());
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
+
             if(!thisArtist.isDeleted() && recordLabelArtists!=null) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
+                artistDto.setRecordLabelId(recordLabelArtists.getRecordLabel().getId());
             }
             if(artist.getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artist.getPicture()));

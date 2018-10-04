@@ -39,7 +39,7 @@
                         <div>
                             <div th:unless="${artist.deleted}" class="text-center text">
 
-                                <h5 th:text="${artist.recordLabelName}"></h5>
+                                <a th:href="@{record-label-details(id=${artist.recordLabelId})}"><h5 th:text="${artist.recordLabelName}"></h5></a>
 
                             </div>
                             <div th:if="${artist.deleted}" class="text-center text">

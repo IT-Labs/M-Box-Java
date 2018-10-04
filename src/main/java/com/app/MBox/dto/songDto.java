@@ -33,4 +33,6 @@ public class songDto {
 
     private int id;
 
+    private int artistId;
+
 }

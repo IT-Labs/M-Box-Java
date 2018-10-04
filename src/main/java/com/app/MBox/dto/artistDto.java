@@ -16,5 +16,6 @@ public class artistDto {
     private boolean deleted;
     private String bio;
     private int id;
+    private int recordLabelId;
 
 }
