@@ -125,4 +125,30 @@ public class artistController {
         modelAndView.setViewName("artistAccount");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/account",method = RequestMethod.POST)
+    public ModelAndView editArtistAccountPage(ModelAndView modelAndView,@ModelAttribute("artistDto") artistDto artist) {
+        artistService.saveArtist(artist);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/picture",method = RequestMethod.POST)
+    public ModelAndView processSongPage(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@RequestParam("id") int id) {
+        String result=artistService.addPicture(file,id);
+        if(result.equals("wrongFormat")) {
+            modelAndView.addObject(result,properties.getImageExtensionError());
+            modelAndView.setViewName("artistAccount");
+            return modelAndView;
+        } else if (result.equals("sizeExceeded")) {
+            modelAndView.addObject(result,properties.getMaxUploadImageSize());
+            modelAndView.setViewName("artistAccount");
+            return modelAndView;
+        }
+
+        modelAndView.setViewName("redirect:account");
+        return modelAndView;
+    }
+
+
+
 }

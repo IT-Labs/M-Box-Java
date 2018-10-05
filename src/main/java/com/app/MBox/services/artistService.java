@@ -37,4 +37,8 @@ public interface artistService {
     List<artistDto> mapArtistToArtistDto(List<artist> artists);
 
     artist findById(int id);
+
+    String addPicture(MultipartFile file,int id);
+
+    void saveArtist(artistDto artist);
 }

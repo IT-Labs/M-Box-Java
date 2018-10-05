@@ -39,6 +39,9 @@ public class users extends audit implements Serializable {
     @Column(nullable = false,length =30)
     private String password;
 
+
+    private Date dateOfBirth;
+
     @Column(nullable = false)
     private boolean isActivated;
 

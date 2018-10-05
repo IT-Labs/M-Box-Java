@@ -17,5 +17,6 @@ public class artistDto {
     private String bio;
     private int id;
     private int recordLabelId;
+    private String dateOfBirth;
 
 }

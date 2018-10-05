@@ -25,37 +25,35 @@
                 <img class="img-circle img-responsive center-block" style="height:350px; width:40%" th:src="${artist.pictureUrl}">
             </div>
             <div class="row" style="margin:20px;">
-                <form method="post" enctype="multipart/form-data">
+                <form th:action="@{picture}" method="post" enctype="multipart/form-data">
                     <div class="col-sm-8 col-md-8">
                         <p>Change profle picture:</p>
-                        <input class="btn-default btn" type="file" id="uploadedFiles" name="uploadedFiles" accept=".jpg,.jpeg,.png">
-
+                        <input class="btn-default btn" type="file" id="file" name="file" accept=".jpg,.jpeg,.png">
                     </div>
                     <div class="col-sm-4 col-md-4" style="margin-top:35px; ">
                         <button type="submit" class="btn btn-primary">Upload</button>
                     </div>
+                    <input type="hidden" th:value="${artist.id}" id="id" name="id"\>
                 </form>
             </div>
             <div class="row" style="margin: 20px">
                 <div class="col-md-8 col-sm-8">
-                    <form  method="post" id="editName">
 
-                        <input class="form-control" th:value="${artist.name}" id="ArtistName" name="artistName" disabled>
+                        <input class="form-control" th:value="${artist.name}" name="artistName,editArtistName,saveArtistName,cancelArtistName" id="artistName" onclick="editDetails(this.name)" disabled>
 
-                    </form>
                 </div>
                 <div class="col-md-1 col-sm-1">
-                    <button class="btn btn-default edit editDetails" id="editArtistName" onclick="editDetails('ArtistName', 'editArtistName', 'saveArtistName', 'cancelArtistName')" >
+                    <button class="btn btn-default edit editDetails" id="editArtistName" name="artistName,editArtistName,saveArtistName,cancelArtistName" onclick="editDetails(this.name)" >
                         <i class="fa fa-edit"></i>
                     </button>
                 </div>
                 <div class="col-md-1 col-sm-1">
-                    <button class="btn btn-success save saveDetails" id="saveArtistName" type="submit" form="editName" style="display:none">
+                    <button class="btn btn-success save saveDetails" id="saveArtistName" name="artistName,editArtistName,saveArtistName,cancelArtistName" onclick="saveDetails(this.name)"  style="display:none">
                         <i class="fa fa-check"></i>
                     </button>
                 </div>
                 <div class="col-md-1 col-sm-1">
-                    <button class="btn btn-danger cancelDetails" id="cancelArtistName" onclick="cancelEditiong('ArtistName', 'editArtistName', 'saveArtistName', 'cancelArtistName')" style="display:none">
+                    <button class="btn btn-danger cancelDetails" id="cancelArtistName" name="artistName,editArtistName,saveArtistName,cancelArtistName" onclick="cancelEditing(this.name)" style="display:none">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
@@ -65,35 +63,45 @@
                     <label>Date of Birth:</label>
                 </div>
                 <div class="col-md-7 col-sm-7">
-                    <input class="form-control" type="date" />
+                    <input class="form-control"  type="date" id="date" disabled/>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <button type="button" class="btn btn-default edit editDetails" name="date,editDate,saveDate,cancelDate" id="editDate" onclick="editDetails(this.name)">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </div>
+                <div class="col-md-1 col-sm-1" >
+                    <button type="button" class="btn btn-success saveDetails" name="date,editDate,saveDate,cancelDate" id="saveDate" onclick="saveDetails(this.name)" style="display:none">
+                        <i class="fa fa-check"></i>
+                    </button>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <button type="button" class="btn btn-danger cancelDetails" name="date,editDate,saveDate,cancelDate" id="cancelDate" onclick="cancelEditing(this.name)" style="display:none">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
             </div>
-            <div class="row" style="margin: 20px">
-                <div class="row">
-                    <div class="col-md-8 col-sm-8">
-                        <label>Artist Bio</label>
+                <div class="col-md-6 col-sm-6">
+                    <div class="row">
+                        <div class="col-md-1 col-sm-1">
+                            <button type="button" class="btn btn-default edit editDetails" name="bio,editBio,saveBio,cancelBio" id="editBio" onclick="editDetails(this.name)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-1 col-sm-1" >
+                            <button type="button" class="btn btn-success saveDetails" name="bio,editBio,saveBio,cancelBio" id="saveBio" onclick="saveDetails(this.name)" style="display:none;margin-right:20px">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-1 col-sm-1">
+                            <button type="button" class="btn btn-danger cancelDetails" name="bio,editBio,saveBio,cancelBio" id="cancelBio" onclick="cancelEditing(this.name)" style="display:none">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-1 col-sm-1">
-                        <button class="btn btn-default edit editDetails" id="editBio" onclick="editDetails('bio', 'editBio', 'saveBio', 'cancelBio')">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                    <div class="row" style="padding: 12px;">
+                        <textarea th:text="${artist.bio}"  class="form-control" maxlength="10000" style="margin-top: 5px; height: 400px;width: 400px; resize: none" name="bio"  id="bio" disabled></textarea>
                     </div>
-                    <div class="col-md-1 col-sm-1">
-                        <button class="btn btn-success save saveDetails" id="saveBio" form="changeBio" type="submit" style="display:none">
-                            <i class="fa fa-check"></i>
-                        </button>
-                    </div>
-                    <div class="col-md-1 col-sm-1">
-                        <button class="btn btn-danger cancelDetails" id="cancelBio" onclick="cancelEditiong('bio', 'editBio', 'saveBio', 'cancelBio')" style="display:none">
-                            <i class="fa fa-remove"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <form  method="post" id="changeBio">
-                        <p style="margin-top: 10px" id="text-counter">Characters left: <span id="counter"></span></p>
-                    </form>
                 </div>
 
             </div>
@@ -103,6 +111,63 @@
     </div>
 </div>
 
+    <script>
 
+        window.onload = function () {
+    var previosValue = "";
+    var savedValue="";
+}
+
+function editDetails(id) {
+    result=id.split(",");
+    document.getElementById(result[0]).disabled = false;
+     document.getElementById(result[1]).style.display = 'none';
+    document.getElementById(result[2]).style.display = 'block';
+    document.getElementById(result[3]).style.display = 'block';
+    previosValue=document.getElementById(result[0]).value;
+
+}
+
+function saveDetails(id) {
+result=id.split(",");
+    document.getElementById(result[0]).disabled = true;
+    document.getElementById(result[1]).style.display = 'block';
+    document.getElementById(result[2]).style.display = 'none';
+    document.getElementById(result[3]).style.display = 'none';
+    formSubmit();
+}
+
+function cancelEditing(id) {
+    result=id.split(",");
+    document.getElementById(result[0]).value = previosValue;
+    document.getElementById(result[0]).disabled = true;
+    document.getElementById(result[1]).style.display = 'block';
+    document.getElementById(result[2]).style.display = 'none';
+    document.getElementById(result[3]).style.display = 'none';
+}
+
+
+
+
+function formSubmit() {
+
+        var artistName=document.getElementById("artistName").value;
+        var date=document.getElementById("date").value;
+        var bio=document.getElementById("bio").value;
+        var id=document.getElementById("id").value;
+        var artistDto={name:artistName,bio:bio,id:id,dateOfBirth:date};
+        $.ajax({
+        url: "/artist/account",
+        headers: {"X-CSRF-TOKEN": $("input[name='_csrf']").val()},
+        type: "post",
+        data:artistDto,
+        success: function (data) {
+        },
+        });
+
+
+}
+
+ </script>
 </body>
 </html>

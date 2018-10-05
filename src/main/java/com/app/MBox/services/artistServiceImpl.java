@@ -10,6 +10,7 @@ import com.app.MBox.core.repository.artistRepository;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.dto.emailBodyDto;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,12 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class artistServiceImpl implements artistService {
 
     @Autowired
@@ -51,6 +56,8 @@ public class artistServiceImpl implements artistService {
     amazonS3ClientService amazonS3ClientService;
     @Autowired
     configurationService configurationService;
+    @Autowired
+    songService songService;
 
 
     @Override
@@ -266,5 +273,32 @@ public class artistServiceImpl implements artistService {
 
     public artist findById(int id) {
            return artistRepository.findById(id);
+    }
+
+    public String addPicture(MultipartFile file,int id) {
+        String result=songService.isValidPicture(file);
+        if(result.equals("OK")) {
+            artist artist=findById(id);
+            String[] extension = file.getContentType().split("/");
+            String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
+            amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
+            artist.getUser().setPicture(imageName);
+            save(artist);
+        }
+
+        return result;
+    }
+
+    public void saveArtist(artistDto artistDto) {
+        artist artist=findById(artistDto.getId());
+        artist.setBio(artistDto.getBio());
+        artist.getUser().setName(artistDto.getName());
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(artistDto.getDateOfBirth());
+            artist.getUser().setDateOfBirth(date);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+       save(artist);
     }
 }

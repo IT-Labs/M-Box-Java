@@ -86,7 +86,7 @@ function cancelGenre1(edit, save, cancel, genre) {
 }
 
 function formSubmit() {
-     console.log("POSTING FORM NOW");
+
         var songName=document.getElementById("songName").value;
         var albumName=document.getElementById("albumName").value;
         var songLyrics=document.getElementById("songLyrics").value;
@@ -101,7 +101,6 @@ function formSubmit() {
          type: "post",
          data:songDto,
          success: function (data) {
-            console.log("successfull");
          },
      });
      }
