@@ -256,6 +256,12 @@ public class artistServiceImpl implements artistService {
             artistDto.setName(artistUser.getName());
             artistDto.setDeleted(artist.isDeleted());
             artistDto.setEmail(artistUser.getEmail());
+            if(artist.getUser().getDateOfBirth()!=null) {
+                String pattern = "dd-MM-yyyy";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                String date = simpleDateFormat.format(artist.getUser().getDateOfBirth());
+                artistDto.setDateOfBirth(date);
+            }
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
             if(!artist.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());

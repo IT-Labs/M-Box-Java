@@ -133,19 +133,36 @@ public class artistController {
     }
 
     @RequestMapping(value = "/picture",method = RequestMethod.POST)
-    public ModelAndView processSongPage(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@RequestParam("id") int id) {
+    public ModelAndView processArtistPicture(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@RequestParam("id") int id) {
         String result=artistService.addPicture(file,id);
         if(result.equals("wrongFormat")) {
             modelAndView.addObject(result,properties.getImageExtensionError());
-            modelAndView.setViewName("artistAccount");
+            modelAndView.setViewName("redirect:account");
             return modelAndView;
         } else if (result.equals("sizeExceeded")) {
             modelAndView.addObject(result,properties.getMaxUploadImageSize());
-            modelAndView.setViewName("artistAccount");
+            modelAndView.setViewName("redirect:account");
             return modelAndView;
         }
 
         modelAndView.setViewName("redirect:account");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/song-picture",method = RequestMethod.POST)
+    public ModelAndView processSongPicture(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@RequestParam("id") int id) {
+        String result=songService.addPicture(file,id);
+        if(result.equals("wrongFormat")) {
+            modelAndView.addObject(result,properties.getImageExtensionError());
+            modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
+            return modelAndView;
+        } else if (result.equals("sizeExceeded")) {
+            modelAndView.addObject(result,properties.getMaxUploadImageSize());
+            modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
+            return modelAndView;
+        }
+
+        modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
         return modelAndView;
     }
 

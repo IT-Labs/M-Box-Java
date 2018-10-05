@@ -28,4 +28,6 @@ public interface songService {
     List<songDto> mapSongToSongDto(List<song> songs);
 
     void saveSong(songDto songDto);
+
+    String addPicture(MultipartFile file, int id);
 }

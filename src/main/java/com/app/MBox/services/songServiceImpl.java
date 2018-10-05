@@ -179,4 +179,18 @@ public class songServiceImpl implements songService {
         song.setAlbumName(songDto.getAlbumName());
         songRepository.save(song);
     }
+
+    public String addPicture(MultipartFile file, int songId) {
+
+        String result=isValidPicture(file);
+        if(result.equals("OK")) {
+            song song=findById(songId);
+            String[] extension = file.getContentType().split("/");
+            String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
+            amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
+            song.setImage(imageName);
+            songRepository.save(song);
+        }
+        return result;
+    }
 }
