@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +31,7 @@ public class adminController  {
     recordLabelValidator recordLabelValidator;
     @Autowired
     properties properties;
+
     public static int RECORD_LABEL_LAZY_LOAD_SIZE=20;
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
 
@@ -100,19 +100,13 @@ public class adminController  {
            }    else {
                return recordLabels;
            }
-
-
     }
-
 
     @RequestMapping(value = "/sort",method = RequestMethod.GET)
     @ResponseBody
     public List<recordLabelDto> processSort(@RequestParam String sortParam,@RequestParam int page,@RequestParam int size,@RequestParam int direction) {
-        List<recordLabelDto> recordLabels=new LinkedList<>();
-        recordLabels=userServiceImpl.findAndSortRecordLabels(sortParam,page,size,direction);
+        List<recordLabelDto> recordLabels=userServiceImpl.findAndSortRecordLabels(sortParam,page,size,direction);
         return recordLabels;
     }
-
-
 
 }

@@ -11,7 +11,6 @@ import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.services.artistService;
 import com.app.MBox.services.recordLabelService;
 import com.app.MBox.services.userService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,8 +59,7 @@ public class recordLabelController {
     @RequestMapping(value = "/pageable-artists",method = RequestMethod.GET)
     @ResponseBody
     public List<artistDto> processSort(Pageable pageable) {
-        List<artistDto> artists=new LinkedList<>();
-        artists=userServiceImpl.findArtists(pageable);
+        List<artistDto> artists=userServiceImpl.findArtists(pageable);
         return artists;
     }
 
@@ -141,8 +138,6 @@ public class recordLabelController {
             modelAndView.addObject("artistAdded" ,String.format("%d new artists successfully added. Current artist status %d/50",result.getArtistAdded(),result.getArtistAdded()+result.getNumber()));
             modelAndView.setViewName("confirmationAddMultipleArtists");
             return modelAndView;
-
-
         }   catch (Exception e ) {
             log.error(e.getMessage());
         }

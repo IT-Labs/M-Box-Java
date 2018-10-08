@@ -239,7 +239,6 @@ public class artistServiceImpl implements artistService {
 
     public List<artistDto> findAllArtists(Pageable pageable) {
         List<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
-
         List<artistDto> artistDtos=userServiceImpl.mapUserToArtistDto(artists);
         return artistDtos;
 

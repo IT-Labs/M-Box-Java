@@ -23,7 +23,7 @@ public interface userService {
 
 
 
-     users registerNewUserAccount(userDto accountDto, HttpServletRequest request) throws emailAlreadyExistsException;
+     users registerNewUserAccount(userDto accountDto) throws emailAlreadyExistsException;
 
      users createUser(userDto accountDto,role role) ;
 

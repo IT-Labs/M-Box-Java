@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +67,6 @@ public class recordLabelServiceImpl implements recordLabelService {
         recordLabel.setUser(user);
         recordLabel=saveRecordLabel(recordLabel);
         verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
-
         String appUrl=String.format("%s%s",properties.getJoinUrl(),verificationToken.getToken());
         emailBodyDto emailBodyDto=userServiceImpl.parsingEmailBody(user,appUrl,emailTemplateEnum.recordLabelSignUp.toString());
         emailServiceImpl.setAndSendEmail(emailBodyDto,user);
@@ -129,12 +127,7 @@ public class recordLabelServiceImpl implements recordLabelService {
 
     public List<recordLabelDto> getAllRecordLabels() {
         List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels();
-        List<recordLabelDto> recordLabelDtos=recordLabels.stream().map(record->{
-            recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabelDto.setName(record.getName());
-            recordLabelDto.setId(record.getId());
-            return recordLabelDto;
-        }).collect(Collectors.toList());
+        List<recordLabelDto> recordLabelDtos=userServiceImpl.mapUserToRecordLabelDto(recordLabels);
         return recordLabelDtos;
     }
 

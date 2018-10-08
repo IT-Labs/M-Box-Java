@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -33,12 +32,12 @@ public class loginController {
     @Autowired
     springChecks springChecks;
 
-    @GetMapping(value = "/login")
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     public ModelAndView login(ModelAndView modelAndView) {
         String role=springChecks.getLoggedInUserRole();
         if(role!=null) {
             modelAndView.addObject("role",role);
-            modelAndView.addObject("errorMsg","You are not authorize to visit this page. Please return or start over");
+            modelAndView.addObject("errorMsg",properties.getNotAuthorizeMessage());
             modelAndView.setViewName("error");
             return modelAndView;
         }
@@ -55,7 +54,7 @@ public class loginController {
         return modelAndView;
 
     }
-    @GetMapping("/forgot-password")
+    @RequestMapping(value = "/forgot-password",method = RequestMethod.GET)
     public ModelAndView showForgotPasswordPage() {
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.setViewName("forgotPassword");
@@ -65,19 +64,14 @@ public class loginController {
 
     @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
     public ModelAndView processForgotPassword(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request) {
-
-
         if(userServiceImpl.forgotPassword(userEmail,request)) {
                 modelAndView.setViewName("passwordResetMail");
                 return modelAndView;
-
         }   else {
             modelAndView.addObject("errorMsg",properties.getIncorrectEmailMessage());
             modelAndView.setViewName("forgotPassword");
             return modelAndView;
         }
-
-
     }
 
 

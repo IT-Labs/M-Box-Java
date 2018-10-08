@@ -1,7 +1,6 @@
 package com.app.MBox.controller;
 
 import com.app.MBox.common.customHandler.springChecks;
-import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.common.validation.passwordChecker;
 import com.app.MBox.config.properties;
 import com.app.MBox.core.model.users;
@@ -13,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-
 
 @Controller
 @Slf4j
@@ -31,8 +28,6 @@ public class userController {
     verificationTokenService verificationTokenServiceImpl;
     @Autowired
     springChecks springChecks;
-    @Autowired
-    userRolesService userRolesService;
 
 
     @RequestMapping(value = "/change-password",method = RequestMethod.GET)
@@ -97,7 +92,6 @@ public class userController {
 
         userServiceImpl.setUserPassword(token,password);
         modelAndView.setViewName("login");
-
         return modelAndView;
     }
 

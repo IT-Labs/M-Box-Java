@@ -3,13 +3,9 @@ package com.app.MBox.core.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.engine.internal.Cascade;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+
 
 @Entity
 @Getter

@@ -4,5 +4,5 @@ public enum rolesEnum {
     ARTIST,
     LISTENER,
     ADMIN,
-    RECORDLABEL;
+    RECORDLABEL
 }

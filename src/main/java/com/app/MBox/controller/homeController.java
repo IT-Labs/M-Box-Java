@@ -6,7 +6,6 @@ import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.config.properties;
 import com.app.MBox.core.model.artist;
-import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.song;
 import com.app.MBox.dto.aboutMessageDto;
 import com.app.MBox.dto.artistDto;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;

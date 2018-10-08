@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -27,12 +26,9 @@ public class songServiceImpl implements songService {
     @Autowired
     private songRepository songRepository;
     @Autowired
-    private userService userService;
-    @Autowired
     private properties properties;
     @Autowired
     private springChecks springChecks;
-
     @Autowired
     private amazonS3ClientService amazonS3ClientService;
     @Autowired
@@ -114,7 +110,6 @@ public class songServiceImpl implements songService {
             if(file.getSize()>FILE_SIZE) {
                 return "sizeExceeded";
             }
-
 
         }
         return "OK";

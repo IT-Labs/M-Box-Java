@@ -1,6 +1,5 @@
 package com.app.MBox.core.repository;
 
-import com.app.MBox.core.model.artist;
 import com.app.MBox.core.model.recordLabelArtists;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

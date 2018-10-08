@@ -1,6 +1,5 @@
 package com.app.MBox.core.repository;
 
-import com.app.MBox.core.model.users;
 import com.app.MBox.core.model.verificationToken;
 import org.springframework.data.repository.CrudRepository;
 

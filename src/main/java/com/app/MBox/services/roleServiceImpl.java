@@ -7,10 +7,9 @@ import com.app.MBox.core.repository.roleRepository;
 
 @Service("roleServiceImpl")
 public class roleServiceImpl implements roleService {
+
     @Autowired
     private roleRepository roleRepository ;
-
-
 
 
     public role findByName(String name) {

@@ -40,6 +40,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAnyAuthority(rolesEnum.ADMIN.toString()).anyRequest().authenticated()
                 .antMatchers("/record-label/**").hasAnyAuthority(rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
                 .antMatchers("/artist/**").hasAnyAuthority(rolesEnum.ARTIST.toString()).anyRequest().authenticated()
+                .antMatchers("/listener/**").hasAnyAuthority(rolesEnum.LISTENER.toString()).anyRequest().authenticated()
                 .antMatchers("/change-password").hasAnyAuthority(rolesEnum.LISTENER.toString(),rolesEnum.ARTIST.toString(),rolesEnum.RECORDLABEL.toString()).anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").loginProcessingUrl("/app-login").usernameParameter("app_username").passwordParameter("app_password").permitAll().successHandler(myAuthenticationSuccessHandler())
                 .and().logout().logoutUrl("/app-logout").logoutSuccessUrl("/login")
@@ -49,10 +50,8 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
         auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(bCryptPasswordEncoder);
-
     }
 
     @Bean

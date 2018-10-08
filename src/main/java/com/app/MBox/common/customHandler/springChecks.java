@@ -1,6 +1,5 @@
 package com.app.MBox.common.customHandler;
 
-import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.core.model.artist;
 import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.userRoles;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class springChecks {
 
     @Autowired
-    private Environment environment;
+    Environment environment;
     @Autowired
     recordLabelService recordLabelService;
     @Autowired
@@ -33,7 +32,6 @@ public class springChecks {
         String[] profiles = environment.getActiveProfiles();
         if (profiles.length > 0 && profiles[0].equals("production")) {
             return true;
-
         }
         return false;
     }
@@ -72,7 +70,5 @@ public class springChecks {
         authenticatedUser authenticatedUser=(authenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return authenticatedUser.getUsername();
     }
-
-
 
 }

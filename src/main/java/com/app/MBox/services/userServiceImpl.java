@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.app.MBox.core.repository.userRepository;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -75,11 +74,11 @@ public class userServiceImpl implements userService {
 
 
 
-    public users registerNewUserAccount(userDto accountDto,HttpServletRequest request) throws emailAlreadyExistsException {
+    public users registerNewUserAccount(userDto accountDto) throws emailAlreadyExistsException {
 
 
             if(findByEmail(accountDto.getEmail())!=null) {
-                throw new emailAlreadyExistsException("Email already exists");
+                throw new emailAlreadyExistsException(properties.getEmailAlreadyExistsMessage());
             }
             role role= roleServiceImpl.findByName(rolesEnum.LISTENER.toString());
             users user=createUser(accountDto,role);
@@ -179,10 +178,9 @@ public class userServiceImpl implements userService {
     }
 
     public List<artistDto> findArtists(int userId,Pageable pageable) {
-        List<artistDto> artistsDto=new LinkedList<>();
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(userId);
         List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
-        artistsDto=artistServiceImpl.mapArtistToArtistDto(artists);
+        List<artistDto> artistsDto=artistServiceImpl.mapArtistToArtistDto(artists);
         return artistsDto;
     }
 
@@ -217,12 +215,10 @@ public class userServiceImpl implements userService {
 
 
     public List<artistDto> findArtists(Pageable pageable) {
-
-        List<artistDto> artistDtos=new LinkedList<>();
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists;
         artists = userRepository.findArtists(recordLabel.getId(), pageable);
-        artistDtos=mapUserToArtistDto(artists);
+        List<artistDto> artistDtos=mapUserToArtistDto(artists);
         return artistDtos;
     }
 
@@ -230,7 +226,6 @@ public class userServiceImpl implements userService {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
         List<users> artists=userRepository.searchArtists(recordLabel.getId(),searchParam);
         List<artistDto> artistDtos=mapUserToArtistDto(artists);
-
         return artistDtos;
     }
 

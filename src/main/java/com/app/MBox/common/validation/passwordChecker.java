@@ -2,7 +2,6 @@ package com.app.MBox.common.validation;
 
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.util.regex.Pattern;
 
 @Component

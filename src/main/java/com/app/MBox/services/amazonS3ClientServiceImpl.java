@@ -2,15 +2,12 @@ package com.app.MBox.services;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.app.MBox.core.model.users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -24,8 +21,7 @@ import java.net.URL;
 import com.app.MBox.config.amazonS3Config;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.UUID;
+
 
 @Slf4j
 @Component
@@ -33,7 +29,8 @@ public class amazonS3ClientServiceImpl implements amazonS3ClientService {
 
 
     private AmazonS3 amazonS3;
-    @Autowired private amazonS3Config amazonS3Config;
+    @Autowired
+    private amazonS3Config amazonS3Config;
 
     @PostConstruct
     public void init()

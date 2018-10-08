@@ -8,7 +8,6 @@ import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.artistService;
 import com.app.MBox.services.songService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,7 +85,6 @@ public class artistController {
     }
 
      //Used for lazy loading and sorting
-
     @RequestMapping(value = "/pageable-songs",method = RequestMethod.GET)
     @ResponseBody
     public List<songDto> processPageableSongs(Pageable pageable) {
@@ -165,7 +162,4 @@ public class artistController {
         modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
         return modelAndView;
     }
-
-
-
 }

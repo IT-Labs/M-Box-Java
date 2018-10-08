@@ -12,27 +12,19 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-public class customUrlAuthenticationSuccessHandler
-        implements AuthenticationSuccessHandler {
+public class customUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response, Authentication authentication)
-            throws IOException {
-
+    public void onAuthenticationSuccess(HttpServletRequest request,HttpServletResponse response, Authentication authentication) throws IOException {
         handle(request, response, authentication);
         clearAuthenticationAttributes(request);
     }
 
-    protected void handle(HttpServletRequest request,
-                          HttpServletResponse response, Authentication authentication)
-            throws IOException {
-
+    protected void handle(HttpServletRequest request,HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(authentication);
-
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
@@ -41,8 +33,7 @@ public class customUrlAuthenticationSuccessHandler
         boolean isAdmin = false;
         boolean isRecordLabel=false;
         boolean isArtist=false;
-        Collection<? extends GrantedAuthority> authorities
-                = authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("LISTENER")) {
                 isListener = true;

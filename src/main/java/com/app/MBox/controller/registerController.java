@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -36,7 +35,7 @@ public class registerController {
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public ModelAndView showRegistrationForm(ModelAndView modelAndView,WebRequest request, Model model) {
+    public ModelAndView showRegistrationForm(ModelAndView modelAndView, Model model) {
         userDto userDto = new userDto();
         model.addAttribute("user", userDto);
         modelAndView.setViewName("registration");
@@ -45,12 +44,10 @@ public class registerController {
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid userDto accountDto, BindingResult result, HttpServletRequest request) {
-        users registered = new users();
-
+    public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid userDto accountDto, BindingResult result) {
         if (!result.hasErrors()) {
                 try {
-                    registered = userServiceImpl.registerNewUserAccount(accountDto, request);
+                    userServiceImpl.registerNewUserAccount(accountDto);
                     return new ModelAndView("successRegister");
                 }
                 catch (emailAlreadyExistsException e) {
@@ -71,7 +68,6 @@ public class registerController {
 
     @RequestMapping(value = "/registration/success")
     public String success () {
-
         return "successRegister";
     }
 
@@ -86,9 +82,6 @@ public class registerController {
         }   else {
                 return "unSuccessfullConfirm";
         }
-
-
     }
-
 
 }
