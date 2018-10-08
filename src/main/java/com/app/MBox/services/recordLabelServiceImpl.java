@@ -140,6 +140,7 @@ public class recordLabelServiceImpl implements recordLabelService {
         List<recordLabelDto> recordLabelDtos=recordLabels.stream().map(record->{
             recordLabelDto recordLabelDto=new recordLabelDto();
             recordLabelDto.setName(record.getName());
+            recordLabelDto.setId(record.getId());
             return recordLabelDto;
         }).collect(Collectors.toList());
         return recordLabelDtos;
@@ -151,16 +152,19 @@ public class recordLabelServiceImpl implements recordLabelService {
 
     public  recordLabelDto findRecordLabel(int id) {
         recordLabel recordLabel=findById(id);
-        recordLabelDto recordLabelDto=new recordLabelDto();
-        recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
-        recordLabelDto.setId(recordLabel.getId());
-        users user= recordLabel.getUser();
-        recordLabelDto.setName(user.getName());
-        recordLabelDto.setEmail(user.getEmail());
-        if(user.getPicture()!=null) {
-            recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(user.getPicture()));
-        }   else {
-            recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
+        recordLabelDto recordLabelDto = new recordLabelDto();
+        if(recordLabel!=null) {
+            recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
+            recordLabelDto.setId(recordLabel.getId());
+            users user = recordLabel.getUser();
+            recordLabelDto.setName(user.getName());
+            recordLabelDto.setEmail(user.getEmail());
+            if (user.getPicture() != null) {
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(user.getPicture()));
+            } else {
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
+            }
+
         }
         return recordLabelDto;
     }

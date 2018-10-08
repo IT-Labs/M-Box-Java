@@ -8,6 +8,7 @@ import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
 import com.app.MBox.services.artistService;
 import com.app.MBox.services.userService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -155,6 +156,12 @@ public class recordLabelController {
     public ModelAndView processDeleteArtist(ModelAndView modelAndView,@PathVariable("email") String email) {
         artistServiceImpl.deleteArtist(email);
         modelAndView.setViewName("recordLabelDashboard");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/account",method = RequestMethod.GET)
+    public ModelAndView showRecordLabelAccountPage(ModelAndView modelAndView) {
+        modelAndView.setViewName("recordLabelAccount");
         return modelAndView;
     }
 

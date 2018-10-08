@@ -265,6 +265,7 @@ public class artistServiceImpl implements artistService {
             recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
             if(!artist.isDeleted()) {
                 artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
+                artistDto.setRecordLabelId(recordLabelArtists.getRecordLabel().getId());
             }
             if(artist.getUser().getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artistUser.getPicture()));

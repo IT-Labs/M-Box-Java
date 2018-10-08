@@ -62,13 +62,7 @@ public class userController {
         }
         userServiceImpl.setUserPassword(user,changePasswordDto.getNewPassword());
         String role=springChecks.getLoggedInUserRole();
-        if(role.equals(rolesEnum.ARTIST)) {
-            modelAndView.addObject("role",rolesEnum.ARTIST.toString());
-        } else if (role.equals(rolesEnum.RECORDLABEL)) {
-            modelAndView.addObject("role",rolesEnum.RECORDLABEL.toString());
-        }   else if (role.equals(rolesEnum.LISTENER)) {
-            modelAndView.addObject("role",rolesEnum.LISTENER.toString());
-        }
+        modelAndView.addObject("role",role);
         modelAndView.setViewName("confirmationChangePassword");
         return modelAndView;
 

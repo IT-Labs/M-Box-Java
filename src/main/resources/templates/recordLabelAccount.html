@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/editArtistAccount.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<div th:insert="shared/dashboardHeader :: dashboardHeader"></div>
 
 </body>
 </html>

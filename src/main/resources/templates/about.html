@@ -56,7 +56,7 @@
             <div class="row" style="border: 1px solid black; height: 720px; padding: 7px">
                 <ul th:each="recordLabel : ${recordLabels}" style="text-align: center; list-style: none; margin-left: auto; margin-right: auto; width: 90%; padding: 0px; max-height: 700px; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;">
 
-                    <li th:text="${recordLabel.name}" style="margin-top: 5px;"></li>
+                    <a th:href="@{record-label-details(id=${recordLabel.id})}"><li th:text="${recordLabel.name}" style="margin-top: 5px;"></li></a>
 
                 </ul>
             </div>
