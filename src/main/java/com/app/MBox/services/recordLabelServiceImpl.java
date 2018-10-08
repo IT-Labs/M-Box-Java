@@ -11,9 +11,11 @@ import com.app.MBox.dto.recordLabelDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service("recordLabelServiceImpl")
@@ -41,6 +43,8 @@ public class recordLabelServiceImpl implements recordLabelService {
     configurationService configurationService;
     @Autowired
     recordLabelArtistsService recordLabelArtistsServiceImpl;
+    @Autowired
+    songService songService;
 
     public recordLabel findByUserId(int userId) {
         return recordLabelRepository.findByUserId(userId);
@@ -168,4 +172,30 @@ public class recordLabelServiceImpl implements recordLabelService {
         }
         return recordLabelDto;
     }
+
+   public void saveRecordLabel(recordLabelDto recordLabelDto) {
+
+        recordLabel recordLabel=findById(recordLabelDto.getId());
+        if(recordLabel!=null) {
+            recordLabel.setAboutInfo(recordLabelDto.getAboutInfo());
+            recordLabel.getUser().setName(recordLabelDto.getName());
+            saveRecordLabel(recordLabel);
+        }
+   }
+
+   public String addPicture(MultipartFile file, int id) {
+
+       String result=songService.isValidPicture(file);
+       if(result.equals("OK")) {
+           recordLabel recordLabel=findById(id);
+           String[] extension = file.getContentType().split("/");
+           String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
+           amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
+           recordLabel.getUser().setPicture(imageName);
+           saveRecordLabel(recordLabel);
+       }
+
+       return result;
+
+   }
 }

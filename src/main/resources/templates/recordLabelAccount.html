@@ -10,13 +10,105 @@
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
-    <script th:src="@{/js/editArtistAccount.js}"></script>
+    <script th:src="@{/js/editRecordLabelAccount.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div th:insert="shared/dashboardHeader :: dashboardHeader"></div>
+
+<div class="container-fluid" style="text-align: center">
+    <div class="row">
+        <div class="col-md-2 col-sm-2">
+        </div>
+        <div class="col-md-8 col-sm-8">
+            <div class="row" style="margin: 15px">
+                <label class="col-sm-2" style="margin-top: 5px">Name: </label>
+
+                    <div class="col-md-7 col-sm-7">
+                        <input class="form-control" th:value="${record.name}" name="recordLabelName" type="text" id="recordLabelName" disabled>
+                        <p id="nameError" class="errorConfirmationCss" style="display:none ; color:red;">Your name has to be between 2 and 50 characters</p>
+                    </div>
+
+                <div class="col-md-1 col-sm-1">
+                    <button class="btn btn-default edit editDetails" id="editRecordLabelName" name="recordLabelName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="editDetails(this.name)" type="button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                    <button class="btn btn-success save saveDetails" id="saveRecordLabelName" name="recordLabelName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="saveDetails(this.name)" type="button" style="display:none">
+                        <i class="fa fa-check"></i>
+                    </button>
+                </div>
+
+                <div class="col-md-1 col-sm-1">
+                    <button class="btn btn-danger cancelDetails" id="cancelRecordLabelName" name="recordLabelName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="cancelEditing(this.name)" type="button" style="display:none">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <img class="img-responsive center-block" style="height:350px; width:500px" th:src="${record.pictureUrl}">
+                </div>
+            </div>
+            <div class="row" style="margin:15px">
+                <form th:action="@{picture}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="id" name="id" th:value="${record.id}">
+                    <div class="col-sm-8 col-md-8">
+                        <p>Change profle picture:</p>
+                        <input class="btn-default btn" type="file" id="file" name="file" accept=".jpg,.jpeg,.png">
+                        <p th:text="${param.wrongFormat}" class="error" style="color:red;"></p>
+                        <p th:text="${param.sizeExceeded}" class="error" style="color:red;"></p>
+                    </div>
+                    <div class="col-sm-4 col-md-4" style="margin-top:35px; ">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row" style="margin: 15px">
+                <div class="row">
+                    <div class="col-md-8 col-sm-8">
+                        <label style="margin-top: 2%;">Record Label Information</label>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button class="btn btn-default edit editDetails" id="editRecordLabelAboutInfo" name="recordLabelAboutInfo,editRecordLabelAboutInfo,saveRecordLabelAboutInfo,cancelRecordLabelAboutInfo" onclick="editDetails(this.name)" type="button" >
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button class="btn btn-success save saveDetails" id="saveRecordLabelAboutInfo" name="recordLabelAboutInfo,editRecordLabelAboutInfo,saveRecordLabelAboutInfo,cancelRecordLabelAboutInfo" onclick="saveDetails(this.name)" type="button" style="display:none">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <button class="btn btn-danger cancelDetails" id="cancelRecordLabelAboutInfo" name="recordLabelAboutInfo,editRecordLabelAboutInfo,saveRecordLabelAboutInfo,cancelRecordLabelAboutInfo" onclick="cancelEditing(this.name)" style="display:none">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="row" style="padding: 12px;margin-left:14%;">
+                        <textarea th:text="${record.aboutInfo}"  class="form-control" maxlength="350" style="margin-top: 5px; height: 400px;width: 400px; resize: none" name="recordLabelAboutInfo"  id="recordLabelAboutInfo" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-2">
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+
+</script>
+
 
 </body>
 </html>

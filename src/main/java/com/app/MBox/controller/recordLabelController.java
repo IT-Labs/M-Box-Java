@@ -3,10 +3,13 @@ package com.app.MBox.controller;
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.config.properties;
+import com.app.MBox.core.model.recordLabel;
 import com.app.MBox.core.model.users;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
+import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.services.artistService;
+import com.app.MBox.services.recordLabelService;
 import com.app.MBox.services.userService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,8 @@ public class recordLabelController {
 
     @Autowired
     properties properties;
+    @Autowired
+    recordLabelService recordLabelService;
 
     public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public static int ARTIST_LAZY_LOAD_INITIAL_SIZE=20;
@@ -160,8 +165,34 @@ public class recordLabelController {
     }
 
     @RequestMapping(value="/account",method = RequestMethod.GET)
-    public ModelAndView showRecordLabelAccountPage(ModelAndView modelAndView) {
+    public ModelAndView showRecordLabelAccountPage(ModelAndView modelAndView,Model model) {
+        recordLabel recordLabel=springChecks.getLoggedInRecordLabel();
+        recordLabelDto recordLabelDto=recordLabelService.findRecordLabel(recordLabel.getId());
+        model.addAttribute("record",recordLabelDto);
         modelAndView.setViewName("recordLabelAccount");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/account",method = RequestMethod.POST)
+    public ModelAndView processRecordLabelAccountPage(ModelAndView modelAndView,@ModelAttribute("recordLabelDto") recordLabelDto recordLabelDto) {
+        recordLabelService.saveRecordLabel(recordLabelDto);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/picture",method = RequestMethod.POST)
+    public ModelAndView processArtistPicture(ModelAndView modelAndView,@RequestParam("file") MultipartFile file,@RequestParam("id") int id) {
+        String result=recordLabelService.addPicture(file,id);
+        if(result.equals("wrongFormat")) {
+            modelAndView.addObject(result,properties.getImageExtensionError());
+            modelAndView.setViewName("redirect:account");
+            return modelAndView;
+        } else if (result.equals("sizeExceeded")) {
+            modelAndView.addObject(result,properties.getMaxUploadImageSize());
+            modelAndView.setViewName("redirect:account");
+            return modelAndView;
+        }
+
+        modelAndView.setViewName("redirect:account");
         return modelAndView;
     }
 

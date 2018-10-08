@@ -177,6 +177,13 @@ public class songServiceImpl implements songService {
         song.setVimeoLink(songDto.getVimeoLink());
         song.setYoutubeLink(songDto.getYoutubeLink());
         song.setAlbumName(songDto.getAlbumName());
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(songDto.getDateReleased());
+            song.setDateOfRelease(date);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        song.setGenre(songDto.getGenre());
         songRepository.save(song);
     }
 

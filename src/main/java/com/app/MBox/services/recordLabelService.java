@@ -6,6 +6,7 @@ import com.app.MBox.core.model.users;
 import com.app.MBox.dto.recordLabelDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -33,4 +34,9 @@ public interface recordLabelService {
      recordLabel findById(int id);
 
      recordLabelDto findRecordLabel(int id);
+
+
+     void saveRecordLabel(recordLabelDto recordLabelDto);
+
+     String addPicture(MultipartFile file, int id);
 }
