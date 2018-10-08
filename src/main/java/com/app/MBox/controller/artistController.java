@@ -107,7 +107,7 @@ public class artistController {
 
     }
 
-    @RequestMapping(value = "/editSong",method = RequestMethod.POST)
+    @RequestMapping(value = "/edit-song",method = RequestMethod.POST)
     public ModelAndView showArtistAccountPage(@ModelAttribute("songDto") songDto song) {
         songService.saveSong(song);
         ModelAndView modelAndView=new ModelAndView();

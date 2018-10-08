@@ -166,6 +166,13 @@ public class userServiceImpl implements userService {
             recordLabelDto.setName(recordLabelUser.getName());
             recordLabel recordLabel=recordLabelServiceImpl.findByUserId(recordLabelUser.getId());
             recordLabelDto.setNumber(recordLabelArtistsServiceImpl.findNumberOfArtistsInRecordLabel(recordLabel.getId()));
+            recordLabelDto.setId(recordLabel.getId());
+            recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
+            if(recordLabelUser.getPicture()!=null){
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(recordLabelUser.getPicture()));
+            }   else {
+                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
+            }
             return recordLabelDto;
         }).collect(Collectors.toList());
         return recordLabelDtos;

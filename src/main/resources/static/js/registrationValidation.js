@@ -10,20 +10,30 @@ $(document).ready(function () {
 });
 function register(event){
     counter=0;
-    if ($("#name").val().length<2 || $("#name").val().length>50) {
-        $("#firstNameError").show().html("Name must be between 1 and 50 characters");
+    if ($("#name").val().length<2) {
+        $("#firstNameError").show().html("Name must contain more than 1 alphanumerical characters!");
     	counter++;
     }
 
+    if ($("#name").val().length>50) {
+            $("#firstNameError").show().html("Name must contain less than 50 alphanumerical characters!");
+        	counter++;
+        }
+
 
      if (checkEmail($("#email").val())==false) {
-        $("#emailError").show().html("Email address not in valid format");
+        $("#emailError").show().html("Email address should be in format example@exp.exp!");
     	counter++;
     }
 
     if (checkPwd($("#password").val())==0) {
-        $("#passwordError").show().html("Password must be between 8 and 64 characters and be alphanumeric");
+        $("#passwordError").show().html("Password must be at least 8 characters long with one number or symbol!");
     	counter++;
+    }
+
+    if(checkPwd($("#password").val())==2) {
+        $("#passwordError").show().html("Password cannot contain more than 64 characters!");
+            	counter++;
     }
 
     if(counter>0) {
@@ -42,8 +52,8 @@ function register(event){
     function checkPwd(str) {
     if (str.length < 8) {
         return 0;
-    } else if (str.length > 50) {
-        return 0;
+    } else if (str.length > 64) {
+        return 2;
     } else if (str.search(/[a-zA-Z]/) == -1) {
        return 0;
     } else if (str.search(/\d/) == -1 && str.search(/[^\w\s]/) == -1) {

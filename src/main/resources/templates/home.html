@@ -38,10 +38,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row card-song-img-hold">
-                            <img class="card-song-img" th:src="${song.songImgUrl}" />
+                        <a th:href="@{song(id=${song.id})}">
+                            <div class="row card-song-img-hold">
+                                 <img class="card-song-img" th:src="${song.songImgUrl}" />
 
-                    </div>
+                            </div>
+                        </a>
                     <div class="row out-link-social">
                         <div class="col-sm-6 alignforvl">
                             <a th:href="${song.youtubeLink}"  target="_blank">Youtube</a>
@@ -75,8 +77,8 @@
             <h5>More artists to be added soon.</h5>
         </li>
 
-        <li th:each="artist : ${artists}" class="col-sm-2 table-bordered card-container" style="margin-right:3.2%">
-            <div>
+        <li th:each="artist : ${artists}" class="col-sm-2 table-bordered card-container" style="margin-right:3.2%;">
+
                 <div class="row card-song-name">
                     <div>
                         <div class="text-center text">
@@ -84,26 +86,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="row card-song-img-hold">
+                    <a th:href="@{artist-details(id=${artist.id})}">
+                        <div class="row card-song-img-hold">
 
-                        <img class="card-song-img" th:src="${artist.pictureUrl}" style="width: 80%;height: 80%;margin-left: auto;margin-right: auto;" />
+                                <img class="card-song-img" th:src="${artist.pictureUrl}"/>
 
-                </div>
+                        </div>
+                    </a>
                 <div class="row">
                     <div>
                         <div th:if="${artist.deleted}" class="text-center text">
                             <h5 >/</h5>
-
-
                         </div>
                         <div th:unless="${artist.deleted}" class="text-center text">
-
                             <a th:href="@{record-label-details(id=${artist.recordLabelId})}"><h5 th:text="${artist.recordLabelName}"></h5></a>
-
                         </div>
                     </div>
                 </div>
-            </div>
+
         </li>
 
     </ul>

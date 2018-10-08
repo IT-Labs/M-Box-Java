@@ -123,19 +123,7 @@ public class recordLabelServiceImpl implements recordLabelService {
 
     public List<recordLabelDto> getRecordLabels(Pageable pageable) {
         List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels(pageable);
-        List<recordLabelDto> recordLabelsDto=recordLabels.stream().map(record->{
-            recordLabelDto recordLabelDto=new recordLabelDto();
-            recordLabel recordLabel=findByUserId(record.getId());
-            recordLabelDto.setId(recordLabel.getId());
-            recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
-            recordLabelDto.setName(record.getName());
-            if(record.getPicture()!=null){
-                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(record.getPicture()));
-            }   else {
-                recordLabelDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getRecordLabelDefaultPicture()).getValue()));
-            }
-            return recordLabelDto;
-        }).collect(Collectors.toList());
+        List<recordLabelDto> recordLabelsDto=userServiceImpl.mapUserToRecordLabelDto(recordLabels);
         return recordLabelsDto;
     }
 

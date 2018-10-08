@@ -16,12 +16,12 @@ jQuery(document).ready(
                 }, function(data) {
                     var html="";
                     for(i=0 ; i<data.length ; i++) {
-                    html=html+'<li class="col-sm-2 table-bordered" style="margin-right:3.2% ; margin-bottom:4%;">'
-                    html=html+'<div class="row"><div><div class="text-center text"><a href="home/record-label-details?id=' + data[i].id + '"><h5>' + data[i].name + '</h5></a>';
-                    html=html+'</div></div></div><div class="row"><div><img class="img-responsive center-block text-center" src="' + data[i].pictureUrl + '"/>';
-                    html=html+'</div></div></li>';
+                    html=html+'<li class="col-sm-2 table-bordered card-container" style="margin-right:3.2% ; margin-bottom:4%;height:200px;">'
+                    html=html+'<div class="row card-song-name"><div><div class="text-center text"><a href="/home/record-label-details?id=' + data[i].id + '"><h5>' + data[i].name + '</h5></a>';
+                    html=html+'</div></div></div><a href="/home/record-label-details?id=' + data[i].id + '"><div class="row card-song-img-hold"><img class="card-song-img" src="' + data[i].pictureUrl + '"/>';
+                    html=html+'</div></a></li>';
 
-                                       }
+                     }
                         $("#recordLabelsListId").append(html);
                         document.getElementById("row_no").value=Number(page)+1;
                 }).done(function() {

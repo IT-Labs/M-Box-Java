@@ -30,24 +30,34 @@ function isInvalid (url,type) {
 	    var counter=0;
 
         if (!name.replace(/\s/g, '').length) {
-        $("#nameError").show().html("Name must be between 1 and 50 characters");
+        $("#nameError").show().html("Song name must contain more than 1 alphanumeric characters!");
             counter++;
         }
-        if ($("#name").val().length<2 || $("#name").val().length>50) {
-        $("#nameError").show().html("Name must be between 1 and 50 characters");
+        if ($("#name").val().length<2) {
+        $("#nameError").show().html("Song name must contain more than 1 alphanumeric characters!");
     	counter++;
         }
 
+        if ($("#name").val().length>50) {
+                $("#nameError").show().html("Song name cannot contain more than 50 alphanumeric characters!");
+            	counter++;
+         }
+
           if (!albumName.replace(/\s/g, '').length) {
-                 $("#albumNameError").show().html("Album name must be between 1 and 50 characters");
+                 $("#albumNameError").show().html("Album name  must contain more than 1 alphanumeric characters!");
                      counter++;
                  }
 
 
-        if(albumName.length<2 || albumName.length>50) {
-        $("#albumNameError").show().html("Album name must be between 1 and 50 characters");
+        if(albumName.length<2) {
+        $("#albumNameError").show().html("Album name  must contain more than 1 alphanumeric characters!");
     	counter++;
         }
+
+        if(albumName.length>50) {
+                $("#albumNameError").show().html("Album name cannot contain more than 50 alphanumeric characters!");
+            	counter++;
+                }
 
         if(lyrics.length>10000) {
          $("#songLyricsError").show().html("Lyrics can not contain more than 10000 characters");
@@ -56,11 +66,11 @@ function isInvalid (url,type) {
 
         if(isInvalid(youtubeLink,0) || youtubeLink.length>99) {
         counter++;
-        $("#youtubeLinkError").show().html("It must be a youtube link");
+        $("#youtubeLinkError").show().html("Please enter a valid YouTube link!");
         }
         if(isInvalid(vimeoLink,1)|| vimeoLink.length>99) {
         counter++;
-        $("#vimeoLinkError").show().html("It must be a vimeo link");
+        $("#vimeoLinkError").show().html("Please enter a valid Vimeo link!");
         }
 
         if(counter>0) {

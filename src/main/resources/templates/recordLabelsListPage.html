@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/homeCss.css}">
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
@@ -20,19 +21,21 @@
 <div class="container-fluid" style="margin-top:4%">
     <ul id="recordLabelsListId" class="list-group recordLabelList" style="list-style:none;margin-top:30px">
 
-        <li th:each="record : ${recordLabels}" class="col-sm-2 table-bordered" style="margin-right:3.2% ; margin-bottom:4%;">
-            <div class="row">
+        <li th:each="record : ${recordLabels}" class="col-sm-2 table-bordered card-container" style="margin-right:3.2% ; margin-bottom:4%;height:200px;">
+            <div class="row card-song-name">
                 <div>
                     <div class="text-center text">
                         <a th:href="@{record-label-details(id=${record.id})}"> <h5 th:text="${record.name}"></h5></a>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div>
-                    <img class="img-responsive center-block text-center" th:src="${record.pictureUrl}" />
-                </div>
-            </div>
+                <a th:href="@{record-label-details(id=${record.id})}">
+                    <div class="row card-song-img-hold">
+
+                            <img class="card-song-img" th:src="${record.pictureUrl}" />
+
+                    </div>
+                </a>
         </li>
 
     </ul>

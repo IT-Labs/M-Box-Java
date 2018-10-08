@@ -38,6 +38,6 @@ public interface userRepository extends CrudRepository<users,Integer> {
     List<users>searchArtists(int recordLabelId,String searchParam);
 
     //select u.* from users u join artist a on u.id=a.user_id where u.is_activated=true, nativeQuery=true
-    @Query(value = "select u from users u,artist a where u=a.user") //and u.isActivated=true
+    @Query(value = "select u from users u,artist a where u=a.user and u.isActivated=true")
     List<users> findAllRecentlyAddedArtists(Pageable pageable);
 }

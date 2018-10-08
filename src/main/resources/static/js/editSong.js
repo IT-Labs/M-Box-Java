@@ -142,7 +142,7 @@ function formSubmit() {
         var dateReleased=document.getElementById("date").value;
         var songDto={songName:songName,albumName:albumName,songLyrics:songLyrics,youtubeLink:youtubeLink,vimeoLink:vimeoLink,genre:genre,id:id,dateReleased:dateReleased};
         $.ajax({
-         url: "/artist/editSong",
+         url: "/artist/edit-song",
          headers: {"X-CSRF-TOKEN": $("input[name='_csrf']").val()},
          type: "post",
          data:songDto,

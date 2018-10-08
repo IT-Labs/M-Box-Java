@@ -64,7 +64,7 @@
                                 <i class="fa fa-user-circle" style="font-size:35px; margin-top: 8px; margin-left: 8px"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a th:href="@{/listenerAccount}">My Account</a></li>
+                                <li><a th:href="@{/listener/account}">My Account</a></li>
                                 <li><a th:href="@{/change-password}">Change Password</a></li>
                                 <li><a href="javascript:{}" onclick="document.getElementById('form').submit();">Sign out</a></li>
                                 <form id="form" th:action="@{/app-logout}" method="POST">
