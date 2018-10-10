@@ -50,6 +50,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <input name="songName" class="form-control" placeholder="Song Name" id="name">
+                    <p class="star">  *</p>
                     <p id="nameError" class="error"></p>
                 </div>
                 </div>
@@ -67,6 +68,7 @@
                     </div>
                     <div class="col-md-6 col-sm-6">
                         <input class="form-control" name="albumName" placeholder="Album Name" id="albumName">
+                        <p class="star">  *</p>
                         <p id="albumNameError" class="error"></p>
                     </div>
                 </div>
@@ -96,7 +98,7 @@
                         <label>Release Date:</label>
                     </div>
                     <div class="col-md-7 col-sm-7">
-                        <input name="dateReleased" class="form-control" type="date" required />
+                        <input name="dateReleased" class="form-control" type="date" min="1753-01-01" value="2018-10-10" id="date" required />
                     </div>
                 </div>
                 <div class="row" style="margin: 15px">
@@ -106,6 +108,7 @@
                         </div>
                         <div class="row" style="padding: 8px">
                             <input name="youtubeLink" class="form-control" placeholder="Youtube Link" id="youtubeLinkUrl">
+                            <p class="star">  *</p>
                             <p id="youtubeLinkError" class="error"></p>
                         </div>
                     </div>
@@ -115,6 +118,7 @@
                         </div>
                         <div class="row" style="padding: 8px">
                             <input name="vimeoLink" class="form-control" placeholder="Vimeo Link" id="vimeoLinkUrl">
+                            <p class="star">  *</p>
                             <p id="vimeoLinkError" class="error"></p>
                         </div>
                     </div>
