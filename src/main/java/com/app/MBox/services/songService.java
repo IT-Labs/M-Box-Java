@@ -2,6 +2,7 @@ package com.app.MBox.services;
 
 import com.app.MBox.core.model.song;
 import com.app.MBox.dto.songDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,4 +31,16 @@ public interface songService {
     void saveSong(songDto songDto);
 
     String addPicture(MultipartFile file, int id);
+
+    List<songDto> searchAllExactMatchSongs(String param);
+
+    List<songDto> searchAllStartingSearchQuery(String param);
+
+    List<songDto> searchAllExactMatchSongsLyrics(String param);
+
+    List<songDto> searchAllStartingSearchQueryLyrics(String param);
+
+    List<songDto> searchAllSongs(String param);
+
+    List<songDto> searchAllSongsLyrics(String param);
 }

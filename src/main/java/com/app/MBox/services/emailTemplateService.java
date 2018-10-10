@@ -8,6 +8,4 @@ public interface emailTemplateService {
 
      emailTemplate findByName(String name) ;
 
-
-     void saveEmailTemplate(emailTemplate emailTemplate) ;
 }

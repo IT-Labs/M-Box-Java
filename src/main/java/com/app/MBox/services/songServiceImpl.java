@@ -185,7 +185,7 @@ public class songServiceImpl implements songService {
     public String addPicture(MultipartFile file, int songId) {
 
         String result=isValidPicture(file);
-        if(result.equals("OK")) {
+        if(result.equals("OK") && !file.isEmpty()) {
             song song=findById(songId);
             String[] extension = file.getContentType().split("/");
             String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
@@ -194,5 +194,44 @@ public class songServiceImpl implements songService {
             songRepository.save(song);
         }
         return result;
+    }
+
+    public List<songDto> searchAllExactMatchSongs(String searchParam) {
+        List<song> songs=songRepository.findAllExactMatchSongs(searchParam);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
+    }
+
+    public List<songDto> searchAllExactMatchSongsLyrics(String searchParam) {
+        List<song> songs=songRepository.findAllExactMatchSongsLyrics(searchParam);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
+
+    }
+
+    public List<songDto> searchAllStartingSearchQuery(String searchParam) {
+        List<song> songs=songRepository.findAllStartingSearchQuery(searchParam);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
+
+    }
+
+    public List<songDto> searchAllStartingSearchQueryLyrics(String param) {
+        List<song> songs=songRepository.findAllStartingSearchQueryLyrics(param);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
+    }
+
+    public List<songDto> searchAllSongs(String param) {
+
+        List<song> songs=songRepository.findAllSongs(param);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
+    }
+
+    public  List<songDto> searchAllSongsLyrics(String param) {
+        List<song> songs=songRepository.findAllSongsLyrics(param);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos;
     }
 }

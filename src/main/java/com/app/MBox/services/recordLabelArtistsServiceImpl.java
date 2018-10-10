@@ -5,6 +5,8 @@ import com.app.MBox.core.repository.recordLabelArtistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service("recordLabelArtistsImpl")
 public class recordLabelArtistsServiceImpl implements recordLabelArtistsService {
 
@@ -27,7 +29,7 @@ public class recordLabelArtistsServiceImpl implements recordLabelArtistsService 
         recordLabelArtistsRepository.delete(recordLabelArtists);
     }
 
-    public recordLabelArtists findByArtistId(int id) {
+    public Optional<recordLabelArtists> findByArtistId(int id) {
         return recordLabelArtistsRepository.findByArtistId(id);
     }
 

@@ -9,6 +9,7 @@ import com.app.MBox.config.properties;
 import com.app.MBox.dto.*;
 import com.app.MBox.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("userServiceImpl")
@@ -146,8 +148,8 @@ public class userServiceImpl implements userService {
     }
 
     public List<recordLabelDto> findRecordLabels(Pageable pageable) {
-        List<users> users=userRepository.findRecordLabels(pageable);
-        List<recordLabelDto> recordLabelDtos=mapUserToRecordLabelDto(users);
+        Page<users> users=userRepository.findRecordLabels(pageable);
+        List<recordLabelDto> recordLabelDtos=mapUserToRecordLabelDto(users.getContent());
         return recordLabelDtos;
     }
 
@@ -179,15 +181,15 @@ public class userServiceImpl implements userService {
 
     public List<artistDto> findArtists(int userId,Pageable pageable) {
         recordLabel recordLabel=recordLabelServiceImpl.findByUserId(userId);
-        List<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
-        List<artistDto> artistsDto=artistServiceImpl.mapArtistToArtistDto(artists);
+        Page<artist> artists=artistServiceImpl.findAllArtists(recordLabel.getId(),pageable);
+        List<artistDto> artistsDto=artistServiceImpl.mapArtistToArtistDto(artists.getContent());
         return artistsDto;
     }
 
 
     public List<recordLabelDto> findAndSortRecordLabels(String sortParam,int page,int size,int direction) {
         List<recordLabelDto> recordLabelDtos;
-        List<users> users;
+        Page<users> users;
         if(!sortParam.equals("number")) {
             if (direction == 0) {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.DESC, sortParam));
@@ -195,12 +197,12 @@ public class userServiceImpl implements userService {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size, Sort.Direction.ASC, sortParam));
             }
 
-            recordLabelDtos=mapUserToRecordLabelDto(users);
+            recordLabelDtos=mapUserToRecordLabelDto(users.getContent());
 
         }
         else {
                 users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
-                recordLabelDtos=mapUserToRecordLabelDto(users);
+                recordLabelDtos=mapUserToRecordLabelDto(users.getContent());
 
                 if(direction==0) {
                     Collections.sort(recordLabelDtos,Collections.reverseOrder());
@@ -216,9 +218,9 @@ public class userServiceImpl implements userService {
 
     public List<artistDto> findArtists(Pageable pageable) {
         recordLabel recordLabel= springChecks.getLoggedInRecordLabel();
-        List<users> artists;
+        Page<users> artists;
         artists = userRepository.findArtists(recordLabel.getId(), pageable);
-        List<artistDto> artistDtos=mapUserToArtistDto(artists);
+        List<artistDto> artistDtos=mapUserToArtistDto(artists.getContent());
         return artistDtos;
     }
 
@@ -237,11 +239,11 @@ public class userServiceImpl implements userService {
             artist thisArtist=artistServiceImpl.findByUserId(artist.getId());
             artistDto.setId(thisArtist.getId());
             artistDto.setDeleted(thisArtist.isDeleted());
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
+            Optional<recordLabelArtists> recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(thisArtist.getId());
 
-            if(!thisArtist.isDeleted() && recordLabelArtists!=null) {
-                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
-                artistDto.setRecordLabelId(recordLabelArtists.getRecordLabel().getId());
+            if(!thisArtist.isDeleted() && recordLabelArtists.isPresent()) {
+                artistDto.setRecordLabelName(recordLabelArtists.get().getRecordLabel().getUser().getName());
+                artistDto.setRecordLabelId(recordLabelArtists.get().getRecordLabel().getId());
             }
             if(artist.getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artist.getPicture()));
@@ -271,16 +273,55 @@ public class userServiceImpl implements userService {
         saveUser(user);
     }
 
-    public List<users> findAllRecentlyAddedArtists(Pageable pageable) {
+    public Page<users> findAllRecentlyAddedArtists(Pageable pageable) {
         return userRepository.findAllRecentlyAddedArtists(pageable);
     }
 
-    public List<users> findAllActiveRecordLabels(Pageable pageable) {
+    public Page<users> findAllActiveRecordLabels(Pageable pageable) {
         return userRepository.findAllActivatedRecordLabels(pageable);
     }
 
     public List<users>findAllActiveRecordLabels() {
         return userRepository.findAllActivatedRecordLabels();
     }
+
+    public List<artistDto> searchAllExactMatchArtists(String param) {
+        List<users> artistsExactMatch=userRepository.findAllExactMatchArtists(param);
+        List<artistDto> artistsDtoExactMatch=mapUserToArtistDto(artistsExactMatch);
+        return artistsDtoExactMatch;
+    }
+
+    public List<recordLabelDto> searchAllExactMatchRecords(String param) {
+
+        List<users> recordsExactMatch=userRepository.findAllExactMatchRecords(param);
+        List<recordLabelDto> records=mapUserToRecordLabelDto(recordsExactMatch);
+        return records;
+    }
+
+    public List<artistDto> searchAllStartingSearchQuery(String param) {
+
+        List<users> artistsExactMatch=userRepository.findAllStartingSearchQuery(param);
+        List<artistDto> artistsDtoExactMatch=mapUserToArtistDto(artistsExactMatch);
+        return artistsDtoExactMatch;
+    }
+
+    public List<recordLabelDto> searchAllRecordsStartingSearchQuery(String param) {
+        List<users> recordsExactMatch=userRepository.findAllRecordsStartingSearchQuery(param);
+        List<recordLabelDto> records=mapUserToRecordLabelDto(recordsExactMatch);
+        return records;
+    }
+
+    public List<artistDto> searchAllArtists(String param) {
+        List<users> artists=userRepository.findAllArtists(param);
+        List<artistDto> artistsDtos=mapUserToArtistDto(artists);
+        return artistsDtos;
+    }
+
+    public List<recordLabelDto> searchAllRecordsLabels(String param) {
+        List<users> recordsLabels=userRepository.findAllRecordsLabels(param);
+        List<recordLabelDto> records=mapUserToRecordLabelDto(recordsLabels);
+        return records;
+    }
+
 }
 

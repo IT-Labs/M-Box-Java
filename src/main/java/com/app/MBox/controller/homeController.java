@@ -2,6 +2,7 @@ package com.app.MBox.controller;
 
 
 
+import com.amazonaws.util.StringUtils;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.config.properties;
@@ -13,6 +14,7 @@ import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping(value = "/home")
@@ -39,6 +44,8 @@ public class homeController {
     properties properties;
     @Autowired
     springChecks springChecks;
+    @Autowired
+    userService userService;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=25;
@@ -108,7 +115,11 @@ public class homeController {
     }
 
     @RequestMapping(value = "/song",method = RequestMethod.GET)
-    public ModelAndView showSongDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+    public ModelAndView showSongDetails(ModelAndView modelAndView, Model model, @RequestParam("id") int id, @RequestParam("search")Optional<String> search) {
+
+        if(search.isPresent()){
+            modelAndView.addObject("search",search.get());
+        }
         song song=songService.findById(id);
         List<song> songs=new LinkedList<>();
         songs.add(song);
@@ -126,7 +137,10 @@ public class homeController {
     }
 
     @RequestMapping(value = "/artist-details",method = RequestMethod.GET)
-    public ModelAndView showArtistDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+    public ModelAndView showArtistDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id, @RequestParam("search")Optional<String> search) {
+        if(search.isPresent()){
+            modelAndView.addObject("search",search.get());
+        }
         artist artist=artistService.findById(id);
         List<artist> artists=new LinkedList<>();
         artists.add(artist);
@@ -140,7 +154,10 @@ public class homeController {
     }
 
     @RequestMapping(value = "/record-label-details",method = RequestMethod.GET)
-    public ModelAndView showRecordLabelDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id) {
+    public ModelAndView showRecordLabelDetails(ModelAndView modelAndView,Model model,@RequestParam("id") int id, @RequestParam("search")Optional<String> search) {
+        if(search.isPresent()){
+            modelAndView.addObject("search",search.get());
+        }
         recordLabelDto recordLabel=recordLabelService.findRecordLabel(id);
         model.addAttribute("recordLabel",recordLabel);
         List<artist> artists=artistService.findAllArtists(recordLabel.getId());
@@ -150,4 +167,65 @@ public class homeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "search",method = RequestMethod.GET)
+    public ModelAndView showSearchDetails(ModelAndView modelAndView,Model model,@RequestParam("searchParam") String param) {
+        List<Object> result=new LinkedList<>();
+        result=results(param);
+        model.addAttribute("result",result);
+        modelAndView.setViewName("searchResults");
+        return modelAndView;
+    }
+
+
+
+    private List<Object> results(String param) {
+
+        List<songDto> songsMatchName=songService.searchAllExactMatchSongs(param);
+        List<artistDto> artistsMatch=userService.searchAllExactMatchArtists(param);
+        List<recordLabelDto> recordLabelsMatch=userService.searchAllExactMatchRecords(param);
+        List<songDto> songsMatchLyrics=songService.searchAllExactMatchSongsLyrics(param);
+
+        List<songDto> songsStartSearchQuery=songService.searchAllStartingSearchQuery(param);
+        List<artistDto> artistsMatchStartSearchQuery=userService.searchAllStartingSearchQuery(param);
+        List<recordLabelDto> recordLabelsMatchStartSearchQuery=userService.searchAllRecordsStartingSearchQuery(param);
+        List<songDto> songsStartSearchQueryLyrics=songService.searchAllStartingSearchQueryLyrics(param);
+
+        List<songDto> songs=songService.searchAllSongs(param);
+        List<artistDto> artists=userService.searchAllArtists(param);
+        List<recordLabelDto> recordLabels=userService.searchAllRecordsLabels(param);
+        List<songDto> songsLyrics=songService.searchAllSongsLyrics(param);
+
+        songsStartSearchQuery.removeAll(songsMatchName);
+        songs.removeAll(songsMatchName);
+        songs.removeAll(songsStartSearchQuery);
+
+        artistsMatchStartSearchQuery.removeAll(artistsMatch);
+        artists.removeAll(artistsMatch);
+        artists.removeAll(artistsMatchStartSearchQuery);
+
+        recordLabelsMatchStartSearchQuery.removeAll(recordLabelsMatch);
+        recordLabels.removeAll(recordLabelsMatch);
+        recordLabels.removeAll(recordLabelsMatchStartSearchQuery);
+
+        songsStartSearchQueryLyrics.removeAll(songsMatchLyrics);
+        songsLyrics.removeAll(songsMatchLyrics);
+        songsLyrics.removeAll(songsStartSearchQueryLyrics);
+        songsMatchLyrics.removeAll(songsMatchName);
+        songsLyrics.removeAll(songsMatchName);
+        songsStartSearchQueryLyrics.removeAll(songsMatchName);
+
+        songsMatchLyrics.removeAll(songsStartSearchQuery);
+        songsLyrics.removeAll(songsStartSearchQuery);
+        songsStartSearchQueryLyrics.removeAll(songsStartSearchQuery);
+
+        songsMatchLyrics.removeAll(songs);
+        songsLyrics.removeAll(songs);
+        songsStartSearchQueryLyrics.removeAll(songs);
+
+        List<Object> result=new LinkedList<>();
+        Stream.of(songsMatchName,artistsMatch,recordLabelsMatch,songsMatchLyrics,songsStartSearchQuery,
+                artistsMatchStartSearchQuery,recordLabelsMatchStartSearchQuery,songsStartSearchQueryLyrics,
+                songs,artists,recordLabels,songsLyrics).forEach(result::addAll);
+        return result;
+    }
 }

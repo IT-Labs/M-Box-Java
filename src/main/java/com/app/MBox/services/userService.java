@@ -3,10 +3,8 @@ package com.app.MBox.services;
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.role;
 import com.app.MBox.core.model.users;
-import com.app.MBox.dto.artistDto;
-import com.app.MBox.dto.emailBodyDto;
-import com.app.MBox.dto.recordLabelDto;
-import com.app.MBox.dto.userDto;
+import com.app.MBox.dto.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -57,13 +55,25 @@ public interface userService {
 
      void setUserPassword(users user,String password);
 
-     List<users> findAllRecentlyAddedArtists(Pageable pageable);
+     Page<users> findAllRecentlyAddedArtists(Pageable pageable);
 
-     List<users> findAllActiveRecordLabels(Pageable pageable);
+     Page<users> findAllActiveRecordLabels(Pageable pageable);
 
      List<artistDto> mapUserToArtistDto(List<users> artists);
 
      List<users> findAllActiveRecordLabels();
 
      List<recordLabelDto> mapUserToRecordLabelDto(List<users> users);
+
+     List<artistDto> searchAllExactMatchArtists(String param);
+
+     List<recordLabelDto> searchAllExactMatchRecords(String param);
+
+    List<artistDto> searchAllStartingSearchQuery(String param);
+
+     List<recordLabelDto> searchAllRecordsStartingSearchQuery(String param);
+
+     List<artistDto> searchAllArtists(String param);
+
+     List<recordLabelDto> searchAllRecordsLabels(String param);
 }

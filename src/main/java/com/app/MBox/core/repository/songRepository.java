@@ -24,4 +24,22 @@ public interface songRepository extends CrudRepository<song,Integer> {
 
     @Query(value = "select s from song s where s.artist.id=?1 and (s.albumName LIKE %?2% or s.genre LIKE %?2% or s.name LIKE %?2%)")
     List<song> findSongs(int artistId, String searchParam);
+
+    @Query(value = "select s from song s where LOWER(s.name) LIKE LOWER(?1)")
+    List<song> findAllExactMatchSongs(String searchParam);
+
+    @Query(value = "select s from song s where LOWER(s.lyrics) LIKE LOWER(?1)")
+    List<song> findAllExactMatchSongsLyrics(String searchParam);
+
+    @Query(value = "select s from song s where LOWER(s.name) LIKE LOWER (concat(?1,'%'))")
+    List<song> findAllStartingSearchQuery(String searchParam);
+
+    @Query(value = "select s from song s where LOWER(s.lyrics) LIKE LOWER(concat(?1,'%'))")
+    List<song> findAllStartingSearchQueryLyrics(String searchParam);
+
+    @Query(value = "select s from song s where LOWER(s.name) LIKE LOWER(concat('%',?1,'%'))")
+    List<song> findAllSongs(String param);
+
+    @Query(value = "select s from song s where LOWER(s.lyrics) LIKE LOWER(concat('%',?1,'%'))")
+    List<song> findAllSongsLyrics(String param);
 }

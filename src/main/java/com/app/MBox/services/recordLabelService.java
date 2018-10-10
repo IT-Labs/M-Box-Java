@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public interface recordLabelService {
@@ -31,7 +32,7 @@ public interface recordLabelService {
 
      List<recordLabelDto> getAllRecordLabels();
 
-     recordLabel findById(int id);
+     Optional<recordLabel> findById(int id);
 
      recordLabelDto findRecordLabel(int id);
 

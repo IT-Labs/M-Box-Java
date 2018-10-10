@@ -19,9 +19,9 @@
 
 <div class="container-fluid" style="margin-top:2%;">
     <hr />
-    <div class="row" style="margin: 15px">
+    <div th:if="${search!=null}" class="row" style="margin: 15px">
         <div class="col-md-4 col-sm-4">
-            <a class="btn btn-block btn-default" href="javascript:history.go(-1)">Back</a>
+            <a class="btn btn-block btn-default" href="javascript:history.go(-1)">Back to search result</a>
         </div>
     </div>
     <div class="row" style="margin: 15px">

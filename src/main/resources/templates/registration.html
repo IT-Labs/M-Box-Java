@@ -14,6 +14,7 @@
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
     <script th:src="@{/js/registrationValidation.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <script th:src="@{/js/searchFilter.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
     <title>MBox</title>
 
@@ -32,7 +33,7 @@
     <div class="col-md-4">
         <h1>Registration form</h1>
         <br/>
-        <form method="POST" enctype="utf8" th:action="@{/registration}" >
+        <form method="POST" enctype="utf8" th:action="@{/registration}" id="registrationForm">
             <div class="form-group" >
                 <label>Name</label>
                 <span><input class="form-control" id="name" name="name" value=""/></span>

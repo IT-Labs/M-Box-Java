@@ -9,13 +9,14 @@ import com.app.MBox.core.repository.recordLabelRepository;
 import com.app.MBox.dto.emailBodyDto;
 import com.app.MBox.dto.recordLabelDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service("recordLabelServiceImpl")
 public class recordLabelServiceImpl implements recordLabelService {
@@ -101,9 +102,9 @@ public class recordLabelServiceImpl implements recordLabelService {
             artist.setDeleted(true);
             emailServiceImpl.sendDeleteArtistEmail(artist.getUser());
             artistServiceImpl.save(artist);
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
-            if(recordLabelArtists!=null) {
-                recordLabelArtistsServiceImpl.delete(recordLabelArtists);
+            Optional<recordLabelArtists> recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+            if(recordLabelArtists.isPresent()) {
+                recordLabelArtistsServiceImpl.delete(recordLabelArtists.get());
             }
         }
         emailServiceImpl.sendDeleteRecordLabelEmail(user);
@@ -120,8 +121,8 @@ public class recordLabelServiceImpl implements recordLabelService {
     }
 
     public List<recordLabelDto> getRecordLabels(Pageable pageable) {
-        List<users> recordLabels=userServiceImpl.findAllActiveRecordLabels(pageable);
-        List<recordLabelDto> recordLabelsDto=userServiceImpl.mapUserToRecordLabelDto(recordLabels);
+        Page<users> recordLabels=userServiceImpl.findAllActiveRecordLabels(pageable);
+        List<recordLabelDto> recordLabelsDto=userServiceImpl.mapUserToRecordLabelDto(recordLabels.getContent());
         return recordLabelsDto;
     }
 
@@ -131,17 +132,17 @@ public class recordLabelServiceImpl implements recordLabelService {
         return recordLabelDtos;
     }
 
-    public recordLabel findById(int id) {
+    public Optional<recordLabel> findById(int id) {
        return  recordLabelRepository.findById(id);
     }
 
     public  recordLabelDto findRecordLabel(int id) {
-        recordLabel recordLabel=findById(id);
+        Optional<recordLabel> recordLabel=findById(id);
         recordLabelDto recordLabelDto = new recordLabelDto();
-        if(recordLabel!=null) {
-            recordLabelDto.setAboutInfo(recordLabel.getAboutInfo());
-            recordLabelDto.setId(recordLabel.getId());
-            users user = recordLabel.getUser();
+        if(recordLabel.isPresent()) {
+            recordLabelDto.setAboutInfo(recordLabel.get().getAboutInfo());
+            recordLabelDto.setId(recordLabel.get().getId());
+            users user = recordLabel.get().getUser();
             recordLabelDto.setName(user.getName());
             recordLabelDto.setEmail(user.getEmail());
             if (user.getPicture() != null) {
@@ -156,24 +157,24 @@ public class recordLabelServiceImpl implements recordLabelService {
 
    public void saveRecordLabel(recordLabelDto recordLabelDto) {
 
-        recordLabel recordLabel=findById(recordLabelDto.getId());
-        if(recordLabel!=null) {
-            recordLabel.setAboutInfo(recordLabelDto.getAboutInfo());
-            recordLabel.getUser().setName(recordLabelDto.getName());
-            saveRecordLabel(recordLabel);
+        Optional<recordLabel> recordLabel=findById(recordLabelDto.getId());
+        if(recordLabel.isPresent()) {
+            recordLabel.get().setAboutInfo(recordLabelDto.getAboutInfo());
+            recordLabel.get().getUser().setName(recordLabelDto.getName());
+            saveRecordLabel(recordLabel.get());
         }
    }
 
    public String addPicture(MultipartFile file, int id) {
 
        String result=songService.isValidPicture(file);
-       if(result.equals("OK")) {
-           recordLabel recordLabel=findById(id);
+       Optional<recordLabel> recordLabel=findById(id);
+       if(result.equals("OK") && recordLabel.isPresent() && !file.isEmpty()) {
            String[] extension = file.getContentType().split("/");
            String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
            amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
-           recordLabel.getUser().setPicture(imageName);
-           saveRecordLabel(recordLabel);
+           recordLabel.get().getUser().setPicture(imageName);
+           saveRecordLabel(recordLabel.get());
        }
 
        return result;

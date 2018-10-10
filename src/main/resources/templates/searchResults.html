@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>MBox</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/bootstrap-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/homeCss.css}">
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/searchFilter.js}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+    <header th:insert="shared/header.html :: header"> </header>
+
+
+    <div class="container-fluid">
+        <div class="row" style="margin-top: 50px">
+            <div class="col-sm-3" style="border-right:solid 1px black;height:750px">
+                <div class="row">
+                    <h3>Show Results by: </h3>
+                </div>
+                <form th:action="@{search}" method="get" id="form">
+                    <div class="radio-inline">
+                        <label><input type="radio" name="showBy" value="mostRelevant" checked="checked">Most Relevant</label>
+                    </div>
+                    <br />
+                    <div class="radio-inline">
+                        <label><input type="radio" name="showBy" value="song"> Song Name</label>
+                    </div>
+                    <br />
+                    <div class="radio-inline">
+                        <label><input type="radio" name="showBy" value="song"> Lyrics</label>
+                    </div>
+                    <br />
+                    <div class="radio-inline">
+                        <label><input type="radio" name="showBy" value="artist"> Artist Name</label>
+                    </div>
+                    <br />
+                    <div class="radio-inline">
+                        <label><input type="radio" name="showBy" value="recordLabel"> Record Label Name</label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-9" style="padding-left:50px">
+
+                <h3 th:if="${#lists.isEmpty(result)}" id="resultsH3">No Results Found.</h3>
+                <h3 id="noResults" style="display:none">No Results Found.</h3>
+
+                <ul th:each="object : ${result}" id="resultsList" class="list-group recordLabelList" style="list-style:none;margin-top:3%;">
+
+                    <li th:if="${object instanceof T(com.app.MBox.dto.artistDto)}" class="col-sm-3 card-container table-bordered artist" style="margin-right:3.2%; margin-bottom: 2%">
+                        <div>
+                            <div class="row card-song-name">
+
+                                    <div class="text-center text">
+                                        <a th:href="@{artist-details(id=${object.id},search=search)}"> <h5 th:text="${object.name}"></h5></a>
+                                    </div>
+
+                            </div>
+                                <a th:href="@{artist-details(id=${object.id},search=search)}">
+                                    <div class="row card-song-img-hold">
+                                        <img class="card-song-img img-circle" th:src="${object.pictureUrl}" />
+                                    </div>
+                                </a>
+                            <div class="row">
+                                <div>
+
+                                    <div th:if="${object.deleted}" class="text-center text">
+                                        <h5 >/</h5>
+                                    </div>
+
+                                    <div th:unless="${object.deleted}" class="text-center text">
+                                        <a th:href="@{record-label-details(id=${object.recordLabelId},search=search)}">  <h5 th:text="${object.recordLabelName}"></h5></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li th:if="${object instanceof T(com.app.MBox.dto.recordLabelDto)}" class="col-sm-3 card-container table-bordered recordLabel" style="margin-right:3.2%; margin-bottom: 2%">
+                        <div class="row card-song-name">
+                            <div>
+                                <div class="text-center text">
+
+                                        <div class="text-center text">
+
+
+                                            <a th:href="@{record-label-details(id=${object.id},search=search)}"><h5 th:text="${object.name}"></h5></a>
+
+
+
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                            <a th:href="@{record-label-details(id=${object.id},search=search)}">
+                                <div class="row card-song-img-hold">
+                                    <img class="card-song-img" th:src="${object.pictureUrl}" />
+                                </div>
+                            </a>
+                    </li>
+
+                    <li th:if="${object instanceof T(com.app.MBox.dto.songDto)}" class="col-sm-3 card-container table-bordered song" style="margin-right:3.2%; margin-bottom: 2%">
+                        <div>
+                            <div class="row card-song-name">
+
+                                    <div class="text-center text">
+
+                                        <a th:href="@{song(id=${object.id},search=search)}"> <h5 th:text="${object.songName}"></h5> </a>
+
+
+
+                                    </div>
+
+                            </div>
+                                <a th:href="@{song(id=${object.id},search=search)}">
+                                    <div class="row card-song-img-hold">
+                                        <img class="card-song-img" th:src="${object.songImgUrl}" />
+                                    </div>
+                                </a>
+                            <div class="row out-link-social">
+                                <div class="col-sm-6">
+                                    <a target=”_blank” th:href="${object.youtubeLink}">Youtube</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a target=”_blank” th:href="${object.vimeoLink}">Vimeo</a>
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+                                    <div class="text-center text">
+
+                                        <a th:href="@{artist-details(id=${object.artistId},search=search)}">   <h5 th:text="${object.artistName}"></h5></a>
+
+                                    </div>
+
+
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

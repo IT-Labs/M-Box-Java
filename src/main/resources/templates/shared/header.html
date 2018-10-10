@@ -37,9 +37,9 @@
 
             </ul>
             <div class="col-sm-4 col-md-4">
-                <form class="navbar-form" role="search">
+                <form method="get" th:action="@{/home/search}" class="navbar-form" role="search" id="searchForm">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" aria-label="Search">
+                        <input type="text" id="searchParam" name="searchParam" class="form-control" placeholder="Search" aria-label="Search">
                         <div class="input-group-btn">
                             <button class="btn btn-light" type="submit">Search</button>
                         </div>
@@ -102,7 +102,6 @@
         </div>
     </div>
 </nav>
-
 
 </body>
 </html>

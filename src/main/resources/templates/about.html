@@ -11,6 +11,7 @@
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
     <script th:src="@{/js/aboutPageValidation.js}"></script>
+    <script th:src="@{/js/searchFilter.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -80,7 +81,7 @@
                 </div>
             </div>
             <div class="row">
-                <form th:action="@{about}" th:method="post" style="border: 1px solid black; padding: 20px" id="form">
+                <form th:action="@{about}" th:method="post" style="border: 1px solid black; padding: 20px" id="aboutForm">
                     <div class="form-group">
                         <label class="control-label">Name</label>
                         <input name="name" id="name" class="form-control" />

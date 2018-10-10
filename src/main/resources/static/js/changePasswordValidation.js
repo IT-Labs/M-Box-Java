@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	$('form').submit(function(event) {
+	$('passwordForm').submit(function(event) {
 	$("#errorPassword").show().html("");
 	 $("#errorConfirmPassword").show().html("");
 		       if (checkPwd($("#password").val())==0) {

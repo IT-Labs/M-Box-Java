@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	$('form').submit(function(event) {
+	$("#registrationForm").submit(function(event) {
 	$("#firstNameError").show().html("");
 	 $("#emailError").show().html("");
 	 $("#globalError").show().html("");

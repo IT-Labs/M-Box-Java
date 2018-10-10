@@ -3,6 +3,8 @@ package com.app.MBox.services;
 import com.app.MBox.core.model.recordLabelArtists;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public interface recordLabelArtistsService {
      int findNumberOfArtistsInRecordLabel(int recordLabelId);
@@ -13,5 +15,5 @@ public interface recordLabelArtistsService {
 
      void delete(recordLabelArtists recordLabelArtists) ;
 
-     recordLabelArtists findByArtistId(int id) ;
+     Optional<recordLabelArtists> findByArtistId(int id) ;
 }

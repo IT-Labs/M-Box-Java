@@ -21,4 +21,15 @@ public class recordLabelDto implements Comparable {
     public int compareTo(Object o) {
         return  (Integer.compare(this.getNumber(), ((recordLabelDto) o).getNumber()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof recordLabelDto)) {
+            return false;
+        }
+
+        recordLabelDto record=(recordLabelDto) obj;
+        return this.id==record.getId();
+    }
+
 }

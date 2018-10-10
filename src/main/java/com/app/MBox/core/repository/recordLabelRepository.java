@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -16,6 +17,6 @@ public interface recordLabelRepository extends CrudRepository<recordLabel,Intege
     @Query(value = "select r from recordLabel r")
     List<recordLabel> findAllRecordLabels(Pageable pageable);
 
-    recordLabel findById(int id);
+    Optional<recordLabel> findById(int id);
 
 }

@@ -18,6 +18,11 @@
 <header th:insert="shared/header.html :: header"> </header>
 
 <div class="container-fluid" style="text-align: center;margin-top:4%;">
+    <div th:if="${search!=null}" class="row" style="margin: 15px">
+        <div class="col-md-4 col-sm-4">
+            <a class="btn btn-block btn-default" href="javascript:history.go(-1)">Back to search result</a>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-3" style="border-right : solid 1px black;height:800px;position:fixed;width:40%">
             <div class="row">

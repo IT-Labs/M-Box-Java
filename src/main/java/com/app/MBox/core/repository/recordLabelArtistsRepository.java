@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface recordLabelArtistsRepository extends CrudRepository <recordLabelArtists,Integer> {
 
@@ -14,5 +16,5 @@ public interface recordLabelArtistsRepository extends CrudRepository <recordLabe
 
      recordLabelArtists findByRecordLabelId(int recordLabelId);
 
-     recordLabelArtists findByArtistId(int artistId);
+     Optional <recordLabelArtists> findByArtistId(int artistId);
 }

@@ -4,6 +4,7 @@ import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.*;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,7 @@ public interface artistService {
 
     List<artist> findAllArtists(int recordLabelId);
 
-    List<artist> findAllArtists(int recordLabelId, Pageable pageable);
+    Page<artist> findAllArtists(int recordLabelId, Pageable pageable);
 
     void save(artist artist);
 
@@ -41,4 +42,6 @@ public interface artistService {
     String addPicture(MultipartFile file,int id);
 
     void saveArtist(artistDto artist);
+
+
 }

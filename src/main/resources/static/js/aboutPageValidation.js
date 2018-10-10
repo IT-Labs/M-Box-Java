@@ -9,7 +9,7 @@ $(function () {
 
 
 $(document).ready(function () {
-	$('form').submit(function(event) {
+	$("#aboutForm").submit(function(event) {
 	$("#nameError").show().html("");
 	 $("#emailError").show().html("");
 	 $("#messageError").show().html("");

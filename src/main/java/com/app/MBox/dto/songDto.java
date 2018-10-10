@@ -35,4 +35,13 @@ public class songDto {
 
     private int artistId;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof songDto)) {
+            return false;
+        }
+
+        songDto songDto=(songDto)obj;
+        return this.id==songDto.getId();
+    }
 }

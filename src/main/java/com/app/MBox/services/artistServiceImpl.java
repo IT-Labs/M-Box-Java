@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -65,7 +63,7 @@ public class artistServiceImpl implements artistService {
         return artistRepository.findAllArtists(recordLabelId);
     }
 
-    public List<artist> findAllArtists(int recordLabelId, Pageable pageable) {
+    public Page<artist> findAllArtists(int recordLabelId, Pageable pageable) {
         return artistRepository.findAllArtists(recordLabelId,pageable);
     }
 
@@ -225,21 +223,21 @@ public class artistServiceImpl implements artistService {
         artist.setDeleted(true);
         emailServiceImpl.sendDeleteArtistEmail(user);
         save(artist);
-        recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
-        if(recordLabelArtists!=null) {
-            recordLabelArtistsServiceImpl.delete(recordLabelArtists);
+        Optional<recordLabelArtists> recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+        if(recordLabelArtists.isPresent()) {
+            recordLabelArtistsServiceImpl.delete(recordLabelArtists.get());
         }
     }
 
     public List<artistDto> findRecentlyAddedArtist(Pageable pageable){
-        List<artist>artists=artistRepository.findRecentlyAddedArtist(pageable);
-        List<artistDto> artistDtos=mapArtistToArtistDto(artists);
+        Page<artist>artists=artistRepository.findRecentlyAddedArtist(pageable);
+        List<artistDto> artistDtos=mapArtistToArtistDto(artists.getContent());
         return artistDtos;
     }
 
     public List<artistDto> findAllArtists(Pageable pageable) {
-        List<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
-        List<artistDto> artistDtos=userServiceImpl.mapUserToArtistDto(artists);
+        Page<users> artists=userServiceImpl.findAllRecentlyAddedArtists(pageable);
+        List<artistDto> artistDtos=userServiceImpl.mapUserToArtistDto(artists.getContent());
         return artistDtos;
 
     }
@@ -261,10 +259,10 @@ public class artistServiceImpl implements artistService {
                 String date = simpleDateFormat.format(artist.getUser().getDateOfBirth());
                 artistDto.setDateOfBirth(date);
             }
-            recordLabelArtists recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
+            Optional<recordLabelArtists> recordLabelArtists=recordLabelArtistsServiceImpl.findByArtistId(artist.getId());
             if(!artist.isDeleted()) {
-                artistDto.setRecordLabelName(recordLabelArtists.getRecordLabel().getUser().getName());
-                artistDto.setRecordLabelId(recordLabelArtists.getRecordLabel().getId());
+                artistDto.setRecordLabelName(recordLabelArtists.get().getRecordLabel().getUser().getName());
+                artistDto.setRecordLabelId(recordLabelArtists.get().getRecordLabel().getId());
             }
             if(artist.getUser().getPicture()!=null) {
                 artistDto.setPictureUrl(amazonS3ClientService.getPictureUrl(artistUser.getPicture()));
@@ -283,7 +281,7 @@ public class artistServiceImpl implements artistService {
 
     public String addPicture(MultipartFile file,int id) {
         String result=songService.isValidPicture(file);
-        if(result.equals("OK")) {
+        if(result.equals("OK") && !file.isEmpty()) {
             artist artist=findById(id);
             String[] extension = file.getContentType().split("/");
             String imageName = String.format("%s.%s", UUID.randomUUID().toString(),extension[1]);
@@ -307,4 +305,5 @@ public class artistServiceImpl implements artistService {
         }
        save(artist);
     }
+
 }

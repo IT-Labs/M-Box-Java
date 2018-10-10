@@ -19,4 +19,14 @@ public class artistDto {
     private int recordLabelId;
     private String dateOfBirth;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof artistDto)) {
+            return false;
+        }
+
+        artistDto artist=(artistDto)obj;
+        return this.id==artist.getId();
+    }
+
 }
