@@ -10,7 +10,7 @@
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.js}"></script>
-    <script th:src="@{/js/editArtistAccount.js}"></script>
+    <script th:src="@{/js/editListenerAccount.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,7 +18,68 @@
 <body>
 <header th:insert="shared/header.html :: header"> </header>
 
+<div class="container-fluid" style="text-align: center;margin-top:5%;">
+    <div class="row" style="width:100%;height:150px;z-index:600;background:white;position:fixed;border-bottom: 1px solid black">
+        <div class="col-sm-5 col-sm-offset-4" style="padding-left:">
+            <img class="img img-circle" style="width:200px;height:200px;margin-top:5px" th:src="${listener.pictureUrl}" />
+        </div>
+        <div class="col-sm-2" style="margin-top:20px">
+            <div class="row"><h1 id="followingCount" th:text="${listener.numberFollowing}" onmouseover="" style="cursor: pointer;margin-left:-20px;margin-right:115%;"></h1></div>
+            <div class="row"><h4 style="margin-left:-39px;margin-right:115%;">following</h4></div>
+        </div>
+    </div>
 
-<h1 style="margin-top:300px;">This page is under heavy construction!!!</h1>
+    <div class="row" style="margin-top:250px">
+        <form th:action="@{picture}" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-3">
+                    <label>Change profle picture:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 col-sm-offset-4 " style="margin-top:17px">
+                    <input class="btn-default btn" type="file" id="file" name="file" accept=".jpg,.jpeg,.png">
+                    <p th:text="${param.wrongFormat}" class="error" style="color:red;"></p>
+                    <p th:text="${param.sizeExceeded}" class="error" style="color:red;"></p>
+                    <input type="hidden" th:value="${listener.id}" id="id" name="id"/>
+                </div>
+                <div class="col-sm-2" style="margin-top: 18px">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-sm-3 col-sm-offset-3">
+                <label class="" style="margin: 12px">Name: </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-sm-offset-4">
+                <form th:action="@{account}" method="post" id="editForm">
+                    <input th:value="${listener.listenerName}" id="listenerName" name="listenerName" style="margin-right:50%;" disabled/>
+                    <p id="nameError" class="errorConfirmationCss" style="display:none ; color:red;">Listener name has to be between 2 and 50 characters</p>
+                </form>
+            </div>
+            <div class="col-md-1 col-sm-1">
+                <button class="btn btn-default edit editDetails" id="editRecordLabelName" name="listenerName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="editDetails(this.name)" type="button" style="margin-top:-0.5%;">
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+            <div class="col-md-1 col-sm-1">
+                <button class="btn btn-success save saveDetails" id="saveRecordLabelName" name="listenerName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="saveDetails(this.name)" type="button" style="display:none;margin-top:-0.5%;">
+                    <i class="fa fa-check"></i>
+                </button>
+            </div>
+
+            <div class="col-md-1 col-sm-1">
+                <button class="btn btn-danger cancelDetails" id="cancelRecordLabelName" name="listenerName,editRecordLabelName,saveRecordLabelName,cancelRecordLabelName" onclick="cancelEditing(this.name)" type="button" style="display:none;margin-top:-0.5%;">
+                    <i class="fa fa-remove"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

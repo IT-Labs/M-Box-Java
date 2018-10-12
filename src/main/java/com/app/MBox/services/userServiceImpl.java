@@ -13,14 +13,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.app.MBox.core.repository.userRepository;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("userServiceImpl")
@@ -58,6 +58,8 @@ public class userServiceImpl implements userService {
     private amazonS3ClientService amazonS3ClientService;
     @Autowired
     private configurationService configurationService;
+    @Autowired
+    private songService songService;
 
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
     public users findByEmail(String email) {
@@ -321,6 +323,57 @@ public class userServiceImpl implements userService {
         List<users> recordsLabels=userRepository.findAllRecordsLabels(param);
         List<recordLabelDto> records=mapUserToRecordLabelDto(recordsLabels);
         return records;
+    }
+
+    public listenerDto getListener() {
+        int listenerId=springChecks.getLoggedInUserId();
+        Optional<users> listener=userRepository.findById(listenerId);
+        listenerDto listenerDto=new listenerDto();
+        if(listener.isPresent()) {
+            listenerDto=mapUserToListenerDto(listener);
+        }
+        return listenerDto;
+    }
+
+    private listenerDto mapUserToListenerDto(Optional<users> listener) {
+
+        listenerDto listenerDto=new listenerDto();
+        if(listener.isPresent()) {
+            users user=listener.get();
+            listenerDto.setId(user.getId());
+            listenerDto.setListenerName(user.getName());
+            listenerDto.setNumberFollowing(0); //it is hard coded because following functionality does not exist yet
+            if(user.getPicture()!=null) {
+                listenerDto.setPictureUrl(amazonS3ClientService.getPictureUrl(user.getPicture()));
+            }   else {
+                listenerDto.setPictureUrl(amazonS3ClientService.getPictureUrl(configurationService.findByKey(properties.getArtistDefaultPicture()).getValue()));
+            }
+        }
+        return listenerDto;
+    }
+
+    public void saveListener(listenerDto listener) {
+        Optional<users> user=userRepository.findById(listener.getId());
+        if(user.isPresent()) {
+            user.get().setName(listener.getListenerName());
+            saveUser(user.get());
+        }
+    }
+
+    public String addListenerPicture(MultipartFile file, int id) {
+        String result=songService.isValidPicture(file);
+        if(result.equals("OK") && !file.isEmpty()) {
+            Optional<users> user=userRepository.findById(id);
+            if(user.isPresent()) {
+                String[] extension = file.getContentType().split("/");
+                String imageName = String.format("%s.%s", UUID.randomUUID().toString(), extension[1]);
+                amazonS3ClientService.uploadFileToS3Bucket(file, false, imageName);
+                user.get().setPicture(imageName);
+                saveUser(user.get());
+            }
+        }
+
+        return result;
     }
 
 }

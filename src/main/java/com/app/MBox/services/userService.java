@@ -7,6 +7,7 @@ import com.app.MBox.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -76,4 +77,10 @@ public interface userService {
      List<artistDto> searchAllArtists(String param);
 
      List<recordLabelDto> searchAllRecordsLabels(String param);
+
+    listenerDto getListener();
+
+     void saveListener(listenerDto listener);
+
+     String addListenerPicture(MultipartFile file, int id);
 }
