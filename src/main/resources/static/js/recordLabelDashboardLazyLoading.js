@@ -1,13 +1,13 @@
 jQuery(document).ready(
 
 	function($) {
-        var pixelsScrolled=400;
+        var pixelsScrolled=600;
 		$("#bodyScroll").scroll(function () {
 
             var scrolltop=$('#bodyScroll').scrollTop();
             console.log(scrolltop);
 		    if(scrolltop==pixelsScrolled) {
-		    pixelsScrolled+=1000;
+		    pixelsScrolled+=1220;
             var page=document.getElementById("row_no").value;
             var size=document.getElementById("size").value;
 			$.get("/record-label/pageable-artists", {

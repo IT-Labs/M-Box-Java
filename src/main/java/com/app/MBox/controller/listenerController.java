@@ -45,7 +45,7 @@ public class listenerController {
         String result=userService.addListenerPicture(file,id);
         if(result.equals("wrongFormat")) {
             modelAndView.addObject(result, properties.getImageExtensionError());
-            
+
         } else if (result.equals("sizeExceeded")) {
             modelAndView.addObject(result,properties.getMaxUploadImageSize());
 
