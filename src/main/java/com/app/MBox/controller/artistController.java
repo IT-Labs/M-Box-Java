@@ -26,13 +26,13 @@ import java.util.List;
 public class artistController {
 
     @Autowired
-    springChecks springChecks;
+    private springChecks springChecks;
     @Autowired
-    songService songService;
+    private songService songService;
     @Autowired
-    properties properties;
+    private properties properties;
     @Autowired
-    artistService artistService;
+    private artistService artistService;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=20;

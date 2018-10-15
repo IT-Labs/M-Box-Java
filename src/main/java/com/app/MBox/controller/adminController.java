@@ -24,13 +24,13 @@ import java.util.List;
 public class adminController  {
 
     @Autowired
-    userService userServiceImpl;
+    private userService userServiceImpl;
     @Autowired
-    recordLabelService recordLabelServiceImpl;
+    private recordLabelService recordLabelServiceImpl;
     @Autowired
-    recordLabelValidator recordLabelValidator;
+    private recordLabelValidator recordLabelValidator;
     @Autowired
-    properties properties;
+    private properties properties;
 
     public static int RECORD_LABEL_LAZY_LOAD_SIZE=20;
     public static int RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE=0;
@@ -49,8 +49,7 @@ public class adminController  {
     @RequestMapping(value = "/lazy-load-record-label",method = RequestMethod.GET)
     @ResponseBody
     public List<recordLabelDto> processLazyLoading(Pageable pageable) {
-        List<recordLabelDto> recordLabels=new LinkedList<>();
-        recordLabels=userServiceImpl.findRecordLabels(pageable);
+        List<recordLabelDto> recordLabels=userServiceImpl.findRecordLabels(pageable);
         return recordLabels;
     }
 

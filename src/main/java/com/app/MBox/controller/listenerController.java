@@ -19,10 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class listenerController {
 
     @Autowired
-    userService userService;
+    private userService userService;
 
     @Autowired
-    properties properties;
+    private properties properties;
 
     @RequestMapping(value = "/account",method = RequestMethod.GET)
     public ModelAndView showAccountPage(ModelAndView modelAndView, Model model) {

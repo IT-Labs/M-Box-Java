@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface songService {
 
-    List<song> findByArtistId (int artistId);
+    List<song> findByArtistId (int artistId,Pageable pageable);
 
     song findById (int id);
 

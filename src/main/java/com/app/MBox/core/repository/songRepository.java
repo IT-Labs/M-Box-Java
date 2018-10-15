@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface songRepository extends CrudRepository<song,Integer> {
 
-    List<song> findByArtistId (int artistId);
+    List<song> findByArtistId (int artistId,Pageable pageable);
 
     song findById (int id);
 

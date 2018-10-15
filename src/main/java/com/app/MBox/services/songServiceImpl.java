@@ -36,8 +36,8 @@ public class songServiceImpl implements songService {
 
     public static long FILE_SIZE=3*1024*1024;
 
-    public List<song> findByArtistId (int artistId) {
-        return songRepository.findByArtistId(artistId);
+    public List<song> findByArtistId (int artistId,Pageable pageable) {
+        return songRepository.findByArtistId(artistId,pageable);
     }
 
     public song findById (int id) {

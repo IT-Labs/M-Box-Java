@@ -20,17 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 public class loginController {
 
     @Autowired
-    userService userServiceImpl;
+    private userService userServiceImpl;
     @Autowired
-    verificationTokenService verificationTokenServiceImpl;
+    private verificationTokenService verificationTokenServiceImpl;
 
     @Autowired
-    properties properties;
+    private properties properties;
 
     @Autowired
-    passwordChecker passwordChecker;
+    private passwordChecker passwordChecker;
     @Autowired
-    springChecks springChecks;
+    private springChecks springChecks;
 
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public ModelAndView login(ModelAndView modelAndView) {

@@ -9,7 +9,8 @@
     <link rel="stylesheet" th:href="@{/css/homeCss.css}">
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/bootstrap/bootstrap.min.js}"></script>
-    <script th:src="@{/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/bootstrap/bootstrap.js}">
+    <script th:src="@{/js/songLazyLoad.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,7 +19,7 @@
 <header th:insert="shared/header.html :: header"> </header>
 
 <div class="container-fluid" style="text-align: center;margin-top:4%;">
-
+    <input type="hidden" th:value="${artist.id}" id="artistId">
     <div th:if="${search!=null}" class="row" style="margin: 15px">
         <div class="col-md-4 col-sm-4">
             <a class="btn btn-block btn-default" href="javascript:history.go(-1)">Back to search result</a>
@@ -78,5 +79,7 @@
 
     </div>
 </div>
+<input type="hidden" id="row_no" name="pageNumber" value="1">
+<input type="hidden" id="size" name="sizeNumber" value="20">
 </body>
 </html>

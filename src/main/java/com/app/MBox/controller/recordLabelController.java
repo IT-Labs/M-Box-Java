@@ -30,18 +30,18 @@ import java.util.List;
 public class recordLabelController {
 
     @Autowired
-    userService userServiceImpl;
+    private userService userServiceImpl;
 
     @Autowired
-    artistService artistServiceImpl;
+    private artistService artistServiceImpl;
 
     @Autowired
-    springChecks springChecks;
+    private springChecks springChecks;
 
     @Autowired
-    properties properties;
+    private properties properties;
     @Autowired
-    recordLabelService recordLabelService;
+    private recordLabelService recordLabelService;
 
     public static int ARTIST_LAZY_LOAD_INITIAL_PAGE=0;
     public static int ARTIST_LAZY_LOAD_INITIAL_SIZE=20;

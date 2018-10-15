@@ -33,19 +33,19 @@ import java.util.stream.Stream;
 @RequestMapping(value = "/home")
 public class homeController {
     @Autowired
-    songService songService;
+    private songService songService;
     @Autowired
-    artistService artistService;
+    private artistService artistService;
     @Autowired
-    recordLabelService recordLabelService;
+    private recordLabelService recordLabelService;
     @Autowired
-    emailService emailService;
+    private emailService emailService;
     @Autowired
-    properties properties;
+    private properties properties;
     @Autowired
-    springChecks springChecks;
+    private springChecks springChecks;
     @Autowired
-    userService userService;
+    private userService userService;
 
     public static int INITIAL_PAGE=0;
     public static int INITIAL_SIZE=25;
@@ -146,11 +146,19 @@ public class homeController {
         artists.add(artist);
         List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
         model.addAttribute("artist",artistDtos.get(0));
-        List<song> songs=songService.findByArtistId(id);
+        List<song> songs=songService.findByArtistId(id,PageRequest.of(INITIAL_PAGE,INITIAL_SIZE-INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         List<songDto> songDtos=songService.mapSongToSongDto(songs);
         model.addAttribute("songs",songDtos);
         modelAndView.setViewName("artistDetails");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/song-lazy-load",method = RequestMethod.GET)
+    @ResponseBody
+    public List<songDto> processPageableSongs(Pageable pageable,@RequestParam int artistId) {
+        List<song> songs=songService.findByArtistId(artistId,pageable);
+        List<songDto>songDtos=songService.mapSongToSongDto(songs);
+        return songDtos;
     }
 
     @RequestMapping(value = "/record-label-details",method = RequestMethod.GET)

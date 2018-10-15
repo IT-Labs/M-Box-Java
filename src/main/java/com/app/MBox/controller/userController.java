@@ -17,17 +17,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class userController {
     @Autowired
-    userService userServiceImpl;
+    private userService userServiceImpl;
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    properties properties;
+    private properties properties;
     @Autowired
-    passwordChecker passwordChecker;
+    private passwordChecker passwordChecker;
     @Autowired
-    verificationTokenService verificationTokenServiceImpl;
+    private verificationTokenService verificationTokenServiceImpl;
     @Autowired
-    springChecks springChecks;
+    private springChecks springChecks;
 
 
     @RequestMapping(value = "/change-password",method = RequestMethod.GET)

@@ -16,10 +16,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/errorConfirmationCss.css}">
-
 </head>
 <body>
-
 <div class="container-fluid">
     <hr />
     <div class="row">
@@ -27,115 +25,118 @@
             <div class="col-md-8 col-sm-8">
             </div>
             <div class="col-md-4 col-sm-4">
-            <form th:action="@{account}" method="get">
-                <button type="submit" class="btn btn-block btn-default" style="margin: 5px">Cancel</button>
-            </form>
+                <form th:action="@{account}" method="get">
+                    <button type="submit" class="btn btn-block btn-default" style="width: 60%;margin-left: 25%;">Cancel</button>
+                </form>
             </div>
         </div>
     </div>
     <div class="row">
         <form th:action="@{song}" method="post" enctype="multipart/form-data" id="form">
             <div class="row" style="margin: 15px">
-                <div class="col-md-8 col-sm-8">
-                </div>
                 <div class="col-md-4 col-sm-4">
-            <button type="submit" class="btn btn-block btn-primary" style="margin: 5px">Publish</button>
+                    <button type="submit" class="btn btn-block btn-primary" style="width: 60%; margin-top: -18%; margin-left: 164%">Publish</button>
                 </div>
             </div>
             <div class="row" style="margin: 15px">
-            <div class="col-md-6 col-sm-6">
-                <div class="row form-group" style="margin: 15px">
-                <div class="col-md-2 col-sm-2">
-                    <label>Song Name:</label>
-                </div>
                 <div class="col-md-6 col-sm-6">
-                    <input name="songName" class="form-control" placeholder="Song Name" id="name">
-                    <p class="star">  *</p>
-                    <p id="nameError" class="error"></p>
-                </div>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <input type="file" name="file" id="file" accept=".jpg,.png,.jpeg">
-                    <p th:text="${wrongFormat}" class="error"></p>
-                    <p th:text="${sizeExceeded}" class="error"></p>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <label th:text="${artistName}"></label>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <div class="col-md-2 col-sm-2">
-                        <label>Album Name:</label>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <input class="form-control" name="albumName" placeholder="Album Name" id="albumName">
-                        <p class="star">  *</p>
-                        <p id="albumNameError" class="error"></p>
-                    </div>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <div class="col-md-4 col-sm-3" style="margin-top: 5px">
-                        <label>Genre:</label>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <select name="genre">
-                            <option>Rock</option>
-                            <option>Pop</option>
-                            <option>Electro</option>
-                            <option>Hip-Hop</option>
-                            <option>RnB</option>
-                            <option>Rap</option>
-                            <option>Metal</option>
-                            <option>Jazz</option>
-                            <option>Soul</option>
-                            <option>Classical</option>
-                            <option>Funk</option>
-                            <option>Drum ‘n Bass</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <div class="col-md-3 col-sm-3" style="margin-top: 5px">
-                        <label>Release Date:</label>
-                    </div>
-                    <div class="col-md-7 col-sm-7">
-                        <input name="dateReleased" class="form-control" type="date" min="1753-01-01" value="2018-10-10" id="date" required />
-                    </div>
-                </div>
-                <div class="row" style="margin: 15px">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row" style="text-align: center">
-                            <label>Youtube</label>
+                    <div class="row form-group" style="margin: 15px">
+                        <div class="col-md-2 col-sm-2">
+                            <label>Song Name:</label>
                         </div>
-                        <div class="row" style="padding: 8px">
-                            <input name="youtubeLink" class="form-control" placeholder="Youtube Link" id="youtubeLinkUrl">
-                            <p class="star">  *</p>
-                            <p id="youtubeLinkError" class="error"></p>
+                        <div class="col-md-6 col-sm-6" style="margin-left:8.5%;">
+                            <input name="songName" class="form-control" placeholder="Song Name" id="name" style="width:117%;">
+                            <p style="margin-left: 120%;margin-top: -14%">  *</p>
+                            <p id="nameError" class="error"></p>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
-                        <div class="row" style="text-align: center">
-                            <label>Vimeo</label>
+                    <div class="row" style="width:88%;margin-left:2%;">
+                        <div class="col-sm-8 col-md-8">
+                            <input class="btn-default btn" type="file" id="file" name="file" accept=".jpg,.jpeg,.png">
+                            <p th:text="${param.wrongFormat}" class="error" style="color:red;"></p>
+                            <p th:text="${param.sizeExceeded}" class="error" style="color:red;"></p>
                         </div>
-                        <div class="row" style="padding: 8px">
-                            <input name="vimeoLink" class="form-control" placeholder="Vimeo Link" id="vimeoLinkUrl">
-                            <p class="star">  *</p>
-                            <p id="vimeoLinkError" class="error"></p>
+                        <div class="col-sm-4 col-md-4" style="margin-top:1px;">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:4.8%">
+                        <label th:text="${artistName}"></label>
+                    </div>
+                    <div class="row" style="margin: 15px">
+                        <div class="col-md-2 col-sm-2">
+                            <label>Album Name:</label>
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="margin-left:9%;">
+                            <input class="form-control" name="albumName" placeholder="Album Name" id="albumName" style="width:117%;">
+                            <p style="margin-left: 120%;margin-top: -14%">  *</p>
+                            <p id="albumNameError" class="error"></p>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 15px">
+                        <div class="col-md-4 col-sm-3" style="margin-top: 5px">
+                            <label>Genre:</label>
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="margin-left:-8%;">
+                            <select name="genre">
+                                <option>Rock</option>
+                                <option>Pop</option>
+                                <option>Electro</option>
+                                <option>Hip-Hop</option>
+                                <option>RnB</option>
+                                <option>Rap</option>
+                                <option>Metal</option>
+                                <option>Jazz</option>
+                                <option>Soul</option>
+                                <option>Classical</option>
+                                <option>Funk</option>
+                                <option>Drum ‘n Bass</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 15px">
+                        <div class="col-md-3 col-sm-3" style="margin-top: 5px">
+                            <label>Release Date:</label>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                            <input name="dateReleased" class="form-control" type="date" min="1753-01-01" value="2018-10-10" id="date" required />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 15px">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row" style="text-align: center">
+                                <label>Youtube</label>
+                            </div>
+                            <div class="row" style="padding: 8px">
+                                <input name="youtubeLink" class="form-control" placeholder="Youtube Link" id="youtubeLinkUrl">
+                                <p class="star">  *</p>
+                                <p id="youtubeLinkError" class="error"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+                            <div class="row" style="text-align: center">
+                                <label>Vimeo</label>
+                            </div>
+                            <div class="row" style="padding: 8px">
+                                <input name="vimeoLink" class="form-control" placeholder="Vimeo Link" id="vimeoLinkUrl">
+                                <p class="star">  *</p>
+                                <p id="vimeoLinkError" class="error"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
-                <div class="row" style="text-align: center">
-                    <label>Song Lyrics</label>
-                </div>
-                <div class="row" style="padding: 12px;">
-                    <textarea name="songLyrics" class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" id="songLyrics"></textarea>
-                    <p id="songLyricsError"></p>
+                <div class="col-md-6 col-sm-6" style="border-left: solid 2px #d3d3d3">
+                    <div class="row" style="text-align: center">
+                        <label>Song Lyrics</label>
+                    </div>
+                    <div class="row" style="padding: 12px;">
+                        <textarea name="songLyrics" class="form-control" maxlength="10000" style="margin-top: 5px; height: 550px; resize: none" id="songLyrics"></textarea>
+                        <p id="songLyricsError"></p>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
 </body>
 </html>
