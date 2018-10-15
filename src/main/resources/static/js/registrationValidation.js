@@ -20,6 +20,12 @@ function register(event){
         	counter++;
         }
 
+      var trimName=$("#name").val()
+         if (!trimName.replace(/\s/g, '').length) {
+            $("#firstNameError").show().html("Name must contain more than 1 alphanumerical characters!");
+                     counter++;
+                 }
+
 
      if (checkEmail($("#email").val())==false) {
         $("#emailError").show().html("Email address should be in format example@exp.exp!");
@@ -65,7 +71,7 @@ function register(event){
 function checkEmail(email)
 {
     //regular expression for email
-    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,64})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
     if(pattern.test(email)){
         if(email.length<321) {
         return true;

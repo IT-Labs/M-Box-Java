@@ -8,6 +8,12 @@ $(document).ready(function () {
     	counter++;
     }
 
+    var trimName=$("#name").val()
+    if (!trimName.replace(/\s/g, '').length) {
+            $("#nameError").show().html("Name must be between 2 and 50 characters");
+                counter++;
+            }
+
     if(checkEmail($("#email").val())==false) {
         $("#emailError").show().html("Your email is invalid");
         counter++;

@@ -37,6 +37,13 @@ result=id.split(",");
         document.getElementById("nameError").style.display='block';
         return;
     }
+
+ var trimResult=document.getElementById("artistName").value;
+    if (!trimResult.replace(/\s/g, '').length) {
+        document.getElementById("nameError").style.display='block';
+        return;
+            }
+
     document.getElementById(result[0]).disabled = true;
     if(result[0]=="date") {
            document.getElementById(result[0]).style.display = 'none';

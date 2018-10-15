@@ -3,7 +3,7 @@ $(document).ready(function () {
 	$("#errorPassword").show().html("");
 	 $("#errorConfirmPassword").show().html("");
 		       if (checkPwd($("#password").val())==0) {
-        $("#errorPassword").show().html("Your password must contain AT least 8 characters and be alphanumeric");
+        $("#errorPassword").show().html("Your password must contain at least 8 characters and be alphanumeric");
     	event.preventDefault();
     	return;
     }
