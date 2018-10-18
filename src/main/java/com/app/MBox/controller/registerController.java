@@ -3,7 +3,6 @@ package com.app.MBox.controller;
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.config.properties;
 import com.app.MBox.dto.userDto;
-import com.app.MBox.core.model.*;
 import com.app.MBox.services.userService;
 import com.app.MBox.services.verificationTokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -66,22 +63,24 @@ public class registerController {
     }
 
 
-    @RequestMapping(value = "/registration/success")
-    public String success () {
-        return "successRegister";
+    @RequestMapping(value = "/registration/success",method = RequestMethod.GET)
+    public ModelAndView success (ModelAndView modelAndView) {
+        modelAndView.setViewName("successRegister");
+        return modelAndView;
     }
 
 
     @RequestMapping(value = "/confirm" , method = RequestMethod.GET)
-    public String showConfirmationPage(@RequestParam("token") String token) {
+    public ModelAndView showConfirmationPage(ModelAndView modelAndView,@RequestParam("token") String token) {
 
         boolean result= verificationTokenServiceImpl.confirmUser(token);
         if(result) {
-
-            return "successfullConfirm";
+            modelAndView.setViewName("successfullConfirm");
         }   else {
-                return "unSuccessfullConfirm";
+            modelAndView.setViewName("unSuccessfullConfirm");
+
         }
+        return modelAndView;
     }
 
 }

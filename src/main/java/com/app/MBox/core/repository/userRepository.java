@@ -15,6 +15,9 @@ public interface userRepository extends CrudRepository<users,Integer> {
     users findByEmail(String email);
 
     @Query(value="select u from users u,recordLabel r where u=r.user")
+    List<users> findAllRecordLabels();
+
+    @Query(value="select u from users u,recordLabel r where u=r.user")
     Page<users> findRecordLabels(Pageable pageable);
 
     //select u.* from users u join record_label r on u.id=r.user_id where u.is_activated=true, nativeQuery=true

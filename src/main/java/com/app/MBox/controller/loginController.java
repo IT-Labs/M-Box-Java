@@ -7,7 +7,6 @@ import com.app.MBox.services.userService;
 import com.app.MBox.services.verificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,8 +62,8 @@ public class loginController {
 
 
     @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
-    public ModelAndView processForgotPassword(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request) {
-        if(userServiceImpl.forgotPassword(userEmail,request)) {
+    public ModelAndView processForgotPassword(ModelAndView modelAndView, @RequestParam("email") String userEmail) {
+        if(userServiceImpl.forgotPassword(userEmail)) {
                 modelAndView.setViewName("passwordResetMail");
                 return modelAndView;
         }   else {
@@ -79,6 +78,7 @@ public class loginController {
     public ModelAndView showResetPassword(ModelAndView modelAndView, @RequestParam("token") String token) {
 
         if (verificationTokenServiceImpl.checkTokenExpired(token)) {
+            modelAndView.addObject("expiredToken",properties.getExpiredToken());
             modelAndView.setViewName("error");
             return modelAndView;
         }   else {

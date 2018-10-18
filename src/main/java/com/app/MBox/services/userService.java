@@ -31,7 +31,7 @@ public interface userService {
      void savePassword(String password, String token) ;
 
 
-     boolean forgotPassword(String email,HttpServletRequest request) ;
+     boolean forgotPassword(String email) ;
 
 
 

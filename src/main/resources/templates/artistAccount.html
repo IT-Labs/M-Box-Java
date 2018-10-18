@@ -70,7 +70,7 @@
                     <label th:text="${artist.dateOfBirth}" id="dateLabel"></label>
                 </div>
                 <div class="col-md-7 col-sm-7">
-                    <input class="form-control"  type="date" id="date" min="1753-01-01" value="1996-07-21" style="display:none" disabled/>
+                    <input class="form-control"  type="date" id="date" min="1753-01-01" value="1996-07-21" onkeydown="return false" style="display:none" required disabled/>
                 </div>
                 <div class="col-md-1 col-sm-1" style="margin-top:-4.5%;">
                     <button type="button" class="btn btn-default edit editDetails" name="date,editDate,saveDate,cancelDate" id="editDate" onclick="editDetails(this.name)">

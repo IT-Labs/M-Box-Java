@@ -79,8 +79,6 @@ public class userServiceImpl implements userService {
 
 
     public users registerNewUserAccount(userDto accountDto) throws emailAlreadyExistsException {
-
-
             if(findByEmail(accountDto.getEmail())!=null) {
                 throw new emailAlreadyExistsException(properties.getEmailAlreadyExistsMessage());
             }
@@ -118,7 +116,7 @@ public class userServiceImpl implements userService {
     }
 
 
-    public boolean forgotPassword(String email,HttpServletRequest request) {
+    public boolean forgotPassword(String email) {
         users user=findByEmail(email);
         if(user!=null && user.isActivated()) {
             verificationToken verificationToken=verificationTokenServiceImpl.createToken(user);
@@ -203,16 +201,16 @@ public class userServiceImpl implements userService {
 
         }
         else {
-                users = userRepository.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE, page*size+size));
-                recordLabelDtos=mapUserToRecordLabelDto(users.getContent());
+               List<users> recordLabels = userRepository.findAllRecordLabels();
+                List<recordLabelDto> recordLabelsList=mapUserToRecordLabelDto(recordLabels);
 
                 if(direction==0) {
-                    Collections.sort(recordLabelDtos,Collections.reverseOrder());
+                    Collections.sort(recordLabelsList,Collections.reverseOrder());
                 }   else {
-                    Collections.sort(recordLabelDtos);
+                    Collections.sort(recordLabelsList);
                 }
 
-
+            recordLabelDtos = recordLabelsList.stream().limit(page*size+size).collect(Collectors.toList());
         }
         return recordLabelDtos;
     }

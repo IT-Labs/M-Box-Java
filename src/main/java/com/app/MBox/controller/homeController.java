@@ -2,7 +2,6 @@ package com.app.MBox.controller;
 
 
 
-import com.amazonaws.util.StringUtils;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.common.enumeration.rolesEnum;
 import com.app.MBox.config.properties;
@@ -14,7 +13,6 @@ import com.app.MBox.dto.recordLabelDto;
 import com.app.MBox.dto.songDto;
 import com.app.MBox.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +24,6 @@ import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -55,10 +52,8 @@ public class homeController {
 
     @GetMapping("/homepage")
     public ModelAndView home(ModelAndView modelAndView, Model model) {
-        List<songDto> songs;
-        songs=songService.getMostRecentSongs(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
-        List<artistDto>artists;
-        artists=artistService.findRecentlyAddedArtist(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
+        List<songDto> songs=songService.getMostRecentSongs(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
+        List<artistDto> artists=artistService.findRecentlyAddedArtist(PageRequest.of(INITIAL_PAGE,INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         model.addAttribute("artists",artists);
         model.addAttribute("songs",songs);
         modelAndView.setViewName("home");
@@ -120,13 +115,10 @@ public class homeController {
         if(search.isPresent()){
             modelAndView.addObject("search",search.get());
         }
-        song song=songService.findById(id);
-        List<song> songs=new LinkedList<>();
-        songs.add(song);
-        List<songDto> songDtos=songService.mapSongToSongDto(songs);
-        model.addAttribute("song",songDtos.get(0));
+        songDto song=songService.findAndMapSong(id);
+        model.addAttribute("song",song);
         String role=springChecks.getLoggedInUserRole();
-        if(rolesEnum.ARTIST.toString().equals(role) && springChecks.getLoggedInArtist().getId()==song.getArtist().getId()) {
+        if(rolesEnum.ARTIST.toString().equals(role) && springChecks.getLoggedInArtist().getId()==song.getArtistId()) {
          modelAndView.setViewName("artistEditSong");
          songDto songDto=new songDto();
          model.addAttribute("songDto",songDto);
@@ -141,11 +133,8 @@ public class homeController {
         if(search.isPresent()){
             modelAndView.addObject("search",search.get());
         }
-        artist artist=artistService.findById(id);
-        List<artist> artists=new LinkedList<>();
-        artists.add(artist);
-        List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
-        model.addAttribute("artist",artistDtos.get(0));
+        artistDto artist=artistService.findAndMapArtistById(id);
+        model.addAttribute("artist",artist);
         List<song> songs=songService.findByArtistId(id,PageRequest.of(INITIAL_PAGE,INITIAL_SIZE-INITIAL_HOMEPAGE_SIZE,INITIAL_SORT_DIRECTION,INITIAL_SORT_PARAMETAR));
         List<songDto> songDtos=songService.mapSongToSongDto(songs);
         model.addAttribute("songs",songDtos);
@@ -177,8 +166,7 @@ public class homeController {
 
     @RequestMapping(value = "search",method = RequestMethod.GET)
     public ModelAndView showSearchDetails(ModelAndView modelAndView,Model model,@RequestParam("searchParam") String param) {
-        List<Object> result=new LinkedList<>();
-        result=results(param);
+        List<Object> result=results(param);
         model.addAttribute("result",result);
         modelAndView.setViewName("searchResults");
         return modelAndView;

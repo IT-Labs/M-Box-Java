@@ -88,8 +88,7 @@ public class artistController {
     @RequestMapping(value = "/pageable-songs",method = RequestMethod.GET)
     @ResponseBody
     public List<songDto> processPageableSongs(Pageable pageable) {
-        List<songDto> songDtos=new LinkedList<>();
-        songDtos=songService.findSongs(pageable);
+        List<songDto> songDtos=songService.findSongs(pageable);
         return songDtos;
     }
 
@@ -114,11 +113,8 @@ public class artistController {
 
     @RequestMapping(value = "/account",method = RequestMethod.GET)
     public ModelAndView showMyAccountPage(ModelAndView modelAndView,Model model) {
-        artist artist=springChecks.getLoggedInArtist();
-        List<artist> artists=new LinkedList<>();
-        artists.add(artist);
-        List<artistDto> artistDtos=artistService.mapArtistToArtistDto(artists);
-        model.addAttribute("artist",artistDtos.get(0));
+        artistDto artistDto=artistService.loggedInArtist();
+        model.addAttribute("artist",artistDto);
         modelAndView.setViewName("artistAccount");
         return modelAndView;
     }
@@ -134,14 +130,9 @@ public class artistController {
         String result=artistService.addPicture(file,id);
         if(result.equals("wrongFormat")) {
             modelAndView.addObject(result,properties.getImageExtensionError());
-            modelAndView.setViewName("redirect:account");
-            return modelAndView;
         } else if (result.equals("sizeExceeded")) {
             modelAndView.addObject(result,properties.getMaxUploadImageSize());
-            modelAndView.setViewName("redirect:account");
-            return modelAndView;
         }
-
         modelAndView.setViewName("redirect:account");
         return modelAndView;
     }
@@ -151,14 +142,9 @@ public class artistController {
         String result=songService.addPicture(file,id);
         if(result.equals("wrongFormat")) {
             modelAndView.addObject(result,properties.getImageExtensionError());
-            modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
-            return modelAndView;
         } else if (result.equals("sizeExceeded")) {
             modelAndView.addObject(result,properties.getMaxUploadImageSize());
-            modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
-            return modelAndView;
         }
-
         modelAndView.setViewName(String.format("redirect:/home/song?id=%d",id));
         return modelAndView;
     }

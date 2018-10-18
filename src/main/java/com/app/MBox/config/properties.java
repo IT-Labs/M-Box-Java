@@ -98,4 +98,7 @@ public class properties {
 
     @Value("${message.successfullMessage}")
     private String successfullMessage;
+
+    @Value("${message.expiredToken}")
+    private String expiredToken;
 }

@@ -234,4 +234,12 @@ public class songServiceImpl implements songService {
         List<songDto> songDtos=mapSongToSongDto(songs);
         return songDtos;
     }
+
+    public songDto findAndMapSong(int id) {
+        song song=findById(id);
+        List<song> songs=new LinkedList<>();
+        songs.add(song);
+        List<songDto> songDtos=mapSongToSongDto(songs);
+        return songDtos.get(0);
+    }
 }

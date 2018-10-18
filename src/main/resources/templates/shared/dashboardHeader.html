@@ -6,14 +6,14 @@
 
 </head>
 <body>
-<div th:fragment="dashboardHeader" style="margin-left: 7%;width: 90%;">
+<div th:fragment="dashboardHeader" style="margin-left: 14%;width: 76%;">
     <a class="navbar-brand">
         <img th:src="@{/images/mBoxLogo.jpg}" width="40" height="40"/>
     </a>
 <div sec:authorize="hasAuthority('ADMIN')" class="navbar-center">
 
     <div class="collapse navbar-collapse" id="codebrainery-toggle-nav" style="margin-right:7% ; margin-top:40px">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" style="margin-top:2%;">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="margin: 0; padding: 0">
                     <i class="fa fa-user-circle" style="font-size:35px; margin-top: 8px; margin-left: 8px"></i>
@@ -32,7 +32,7 @@
 <div sec:authorize="hasAuthority('RECORDLABEL')" class="navbar-center">
 
     <div class="collapse navbar-collapse" id="codebrainery-toggle-navv" style="margin-right:7% ; margin-top:40px">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" style="margin-top:2%;">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="margin: 0; padding: 0">
                     <i class="fa fa-user-circle" style="font-size:35px; margin-top: 8px; margin-left: 8px"></i>

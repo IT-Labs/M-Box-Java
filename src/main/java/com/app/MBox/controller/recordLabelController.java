@@ -1,5 +1,6 @@
 package com.app.MBox.controller;
 
+import com.amazonaws.util.StringUtils;
 import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.common.customHandler.springChecks;
 import com.app.MBox.config.properties;
@@ -67,7 +68,7 @@ public class recordLabelController {
     @ResponseBody
     public List<artistDto> processSearch(@RequestParam String searchParam) {
         List<artistDto> artists=new LinkedList<>();
-        if(!searchParam.equals("")) {
+        if(!StringUtils.isNullOrEmpty(searchParam)) {
             artists = userServiceImpl.searchArtists(searchParam);
             return artists;
         }    else {
@@ -84,9 +85,9 @@ public class recordLabelController {
     }
 
     @RequestMapping(value = "/invite",method = RequestMethod.POST)
-    public ModelAndView processArtistInvite(ModelAndView modelAndView, @RequestParam("name") String name, @RequestParam("email") String email, HttpServletRequest request) {
+    public ModelAndView processArtistInvite(ModelAndView modelAndView, @RequestParam("name") String name, @RequestParam("email") String email) {
         try {
-            users user=artistServiceImpl.inviteArtist(name,email,request);
+            users user=artistServiceImpl.inviteArtist(name,email);
             if(user==null) {
                 modelAndView.addObject("artistNumberError", properties.getArtistNumberMessage());
                 modelAndView.setViewName("inviteArtist");
@@ -125,7 +126,7 @@ public class recordLabelController {
         }
 
         try {
-            csvParseResultDto result=artistServiceImpl.addArtistsByCsvFile(file,request);
+            csvParseResultDto result=artistServiceImpl.addArtistsByCsvFile(file);
             if(result.isHasErrors()) {
                 modelAndView.addObject("artistLimitExceded",result.getArtistLimitExceded());
                 modelAndView.addObject("invalidEmailFormat",result.getInvalidEmailFormatDetectedRows());
@@ -179,12 +180,8 @@ public class recordLabelController {
         String result=recordLabelService.addPicture(file,id);
         if(result.equals("wrongFormat")) {
             modelAndView.addObject(result,properties.getImageExtensionError());
-            modelAndView.setViewName("redirect:account");
-            return modelAndView;
         } else if (result.equals("sizeExceeded")) {
             modelAndView.addObject(result,properties.getMaxUploadImageSize());
-            modelAndView.setViewName("redirect:account");
-            return modelAndView;
         }
 
         modelAndView.setViewName("redirect:account");

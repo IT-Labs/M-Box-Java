@@ -43,4 +43,6 @@ public interface songService {
     List<songDto> searchAllSongs(String param);
 
     List<songDto> searchAllSongsLyrics(String param);
+
+    songDto findAndMapSong(int id);
 }

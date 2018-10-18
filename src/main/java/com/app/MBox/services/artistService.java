@@ -4,6 +4,7 @@ import com.app.MBox.common.customException.emailAlreadyExistsException;
 import com.app.MBox.core.model.*;
 import com.app.MBox.dto.artistDto;
 import com.app.MBox.dto.csvParseResultDto;
+import com.app.MBox.dto.songDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,11 @@ public interface artistService {
 
     artist findByUserId(int userId);
 
-    users inviteArtist(String name, String email, HttpServletRequest request) throws emailAlreadyExistsException ;
+    users inviteArtist(String name, String email) throws emailAlreadyExistsException ;
 
     users createUser(String name,String email) ;
 
-    csvParseResultDto addArtistsByCsvFile(MultipartFile file, HttpServletRequest request) throws Exception;
+    csvParseResultDto addArtistsByCsvFile(MultipartFile file) throws Exception;
 
     void deleteArtist(String email);
 
@@ -42,6 +43,11 @@ public interface artistService {
     String addPicture(MultipartFile file,int id);
 
     void saveArtist(artistDto artist);
+
+    artistDto loggedInArtist();
+
+    artistDto findAndMapArtistById(int id);
+
 
 
 }

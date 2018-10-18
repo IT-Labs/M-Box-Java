@@ -71,8 +71,14 @@ function register(event){
 function checkEmail(email)
 {
     //regular expression for email
+
     var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,64})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
     if(pattern.test(email)){
+        var parts=email.split("@");
+            console.log(email + " ----- " + parts)
+            if(parts[0].length>64) {
+                return false;
+            }
         if(email.length<321) {
         return true;
         }   else {

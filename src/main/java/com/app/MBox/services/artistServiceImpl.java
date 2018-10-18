@@ -18,8 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -75,7 +73,7 @@ public class artistServiceImpl implements artistService {
         return artistRepository.findByUserId(userId);
     }
 
-    public users inviteArtist(String name, String email, HttpServletRequest request) throws emailAlreadyExistsException {
+    public users inviteArtist(String name, String email) throws emailAlreadyExistsException {
         users user=userServiceImpl.findByEmail(email);
         if(user!=null) {
             throw new emailAlreadyExistsException(properties.getEmailAlreadyExistsMessage());
@@ -115,7 +113,7 @@ public class artistServiceImpl implements artistService {
         return user;
     }
 
-    public csvParseResultDto addArtistsByCsvFile(MultipartFile file, HttpServletRequest request) throws Exception {
+    public csvParseResultDto addArtistsByCsvFile(MultipartFile file) throws Exception {
         BufferedReader reader=new BufferedReader(new InputStreamReader(file.getInputStream()));
         String line;
         String invalidFormatDetectedRows="Invalid format detected (has to be: Artist Email, Artist Name), row(s):";
@@ -196,7 +194,7 @@ public class artistServiceImpl implements artistService {
             String [] artistsDetails=artist.split(",");
                try {
                    artistAdded++;
-                   inviteArtist(artistsDetails[1], artistsDetails[0], request);
+                   inviteArtist(artistsDetails[1], artistsDetails[0]);
                } catch (emailAlreadyExistsException e) {
                    artistAdded--;
                     continue;
@@ -304,6 +302,22 @@ public class artistServiceImpl implements artistService {
             log.error(e.getMessage());
         }
        save(artist);
+    }
+
+    public artistDto loggedInArtist() {
+        artist artist=springChecks.getLoggedInArtist();
+        List<artist> artists=new LinkedList<>();
+        artists.add(artist);
+        List<artistDto> artistDtos=mapArtistToArtistDto(artists);
+        return artistDtos.get(0);
+    }
+
+    public artistDto findAndMapArtistById(int id) {
+        artist artist=findById(id);
+        List<artist> artists=new LinkedList<>();
+        artists.add(artist);
+        List<artistDto> artistDtos=mapArtistToArtistDto(artists);
+        return artistDtos.get(0);
     }
 
 }

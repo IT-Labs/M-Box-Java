@@ -27,7 +27,6 @@ public class listenerController {
     @RequestMapping(value = "/account",method = RequestMethod.GET)
     public ModelAndView showAccountPage(ModelAndView modelAndView, Model model) {
         listenerDto listener=userService.getListener();
-        listenerDto listenerDto=new listenerDto();
         model.addAttribute("listener",listener);
         modelAndView.setViewName("listenerAccount");
         return modelAndView;

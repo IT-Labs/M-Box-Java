@@ -38,8 +38,7 @@ public class adminController  {
 
     @RequestMapping(value = "/dashboard" , method = RequestMethod.GET)
     public ModelAndView showAdminDashboard(Model model) {
-    List<recordLabelDto> recordLabels=new LinkedList<>();
-    recordLabels=userServiceImpl.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE,RECORD_LABEL_LAZY_LOAD_SIZE));
+    List<recordLabelDto> recordLabels=userServiceImpl.findRecordLabels(PageRequest.of(RECORD_LABEL_LAZY_LOAD_INITIAL_PAGE,RECORD_LABEL_LAZY_LOAD_SIZE));
     model.addAttribute("recordLabels",recordLabels);
     ModelAndView modelAndView=new ModelAndView();
     modelAndView.setViewName("adminDashboard");
